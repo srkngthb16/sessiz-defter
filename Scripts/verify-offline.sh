@@ -15,10 +15,15 @@ SKIP_DIRS = {".git", ".build", "design", "DerivedData", ".build-notes",
              "__Snapshots__", "Fonts", ".swiftpm", "xcuserdata"}
 SCAN_EXT = {".swift", ".plist", ".entitlements"}
 
+# Kelimeyi değil kullanımı arar: "CloudKit" bir test adında geçebilir, ama
+# `import CloudKit` ya da `cloudKitDatabase: .automatic` geçemez.
 YASAK = re.compile(
-    r"URLSession|NSURLSession|CloudKit|CKContainer|Firebase|FirebaseCore|"
-    r"Crashlytics|Analytics|Amplitude|Sentry|Mixpanel|"
-    r"NWConnection|NWPathMonitor|CFNetwork|"
+    r"URLSession|NSURLSession|"
+    r"import\s+CloudKit|CK(Container|Database|Record|Query|Subscription|Asset)\b|"
+    r"cloudKitDatabase\s*:\s*\.(automatic|private)|"
+    r"import\s+Network\b|NWConnection|NWPathMonitor|NWBrowser|CFNetwork|"
+    r"import\s+\w*(Firebase|Analytics|Crashlytics|Amplitude|Sentry|Mixpanel)\w*|"
+    r"FirebaseApp|Crashlytics\.|SentrySDK|"
     r"NSAllowsArbitraryLoads|NSAppTransportSecurity|UIBackgroundModes|BGTaskScheduler|"
     r"https?://"
 )

@@ -10,7 +10,7 @@ FAILED=0
 
 for PKG in Core Domain Persistence ImportPipeline DesignSystem; do
   SCHEME="$PKG"
-  [ "$PKG" = "DesignSystem" ] && SCHEME="DesignSystem-Package"
+  case "$PKG" in DesignSystem|Domain) SCHEME="$PKG-Package";; esac
   echo "───── $PKG"
   ( cd "$ROOT/Packages/$PKG" && \
     xcodebuild test -scheme "$SCHEME" -destination "$DEST" -derivedDataPath "$DERIVED" \

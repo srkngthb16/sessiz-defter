@@ -5,7 +5,8 @@ let package = Package(
     name: "Domain",
     platforms: [.iOS(.v17)],
     products: [
-        .library(name: "Domain", targets: ["Domain"])
+        .library(name: "Domain", targets: ["Domain"]),
+        .library(name: "DomainTestSupport", targets: ["DomainTestSupport"])
     ],
     dependencies: [
         .package(path: "../Core")
@@ -14,6 +15,8 @@ let package = Package(
         // Domain saf Swift kalır: SwiftData/SwiftUI bu hedefte import EDİLMEZ.
         // Kuralı ArchitectureTests kaynak taraması ile doğrular.
         .target(name: "Domain", dependencies: ["Core"]),
-        .testTarget(name: "DomainTests", dependencies: ["Domain"])
+        // Bellek içi repository gerçeklemeleri: SwiftData'sız test için.
+        .target(name: "DomainTestSupport", dependencies: ["Domain", "Core"]),
+        .testTarget(name: "DomainTests", dependencies: ["Domain", "DomainTestSupport"])
     ]
 )
