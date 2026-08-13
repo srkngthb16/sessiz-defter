@@ -11,6 +11,7 @@
 		A00000000000000000000019 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = A00000000000000000000015 /* Domain */; };
 		A0000000000000000000001A /* ImportPipeline in Frameworks */ = {isa = PBXBuildFile; productRef = A00000000000000000000016 /* ImportPipeline */; };
 		A0000000000000000000001B /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = A00000000000000000000017 /* DesignSystem */; };
+		A0000000000000000000001E /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = A0000000000000000000001D /* Persistence */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 				A00000000000000000000019 /* Domain in Frameworks */,
 				A0000000000000000000001A /* ImportPipeline in Frameworks */,
 				A0000000000000000000001B /* DesignSystem in Frameworks */,
+				A0000000000000000000001E /* Persistence in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +88,7 @@
 				A00000000000000000000015 /* Domain */,
 				A00000000000000000000016 /* ImportPipeline */,
 				A00000000000000000000017 /* DesignSystem */,
+				A0000000000000000000001D /* Persistence */,
 			);
 			productName = SessizDefter;
 			productReference = A00000000000000000000005 /* SessizDefter.app */;
@@ -120,6 +123,7 @@
 				A00000000000000000000011 /* XCLocalSwiftPackageReference "Packages/Domain" */,
 				A00000000000000000000012 /* XCLocalSwiftPackageReference "Packages/ImportPipeline" */,
 				A00000000000000000000013 /* XCLocalSwiftPackageReference "Packages/DesignSystem" */,
+				A0000000000000000000001F /* XCLocalSwiftPackageReference "Packages/Persistence" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A00000000000000000000003 /* Products */;
@@ -281,6 +285,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/DesignSystem;
 		};
+		A0000000000000000000001F /* XCLocalSwiftPackageReference "Packages/Persistence" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Persistence;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -299,6 +307,10 @@
 		A00000000000000000000017 /* DesignSystem */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DesignSystem;
+		};
+		A0000000000000000000001D /* Persistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Persistence;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

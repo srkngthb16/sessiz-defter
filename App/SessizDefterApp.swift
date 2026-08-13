@@ -19,13 +19,13 @@ struct RootView: View {
     var body: some View {
         VStack(spacing: 14) {
             Text("Sessiz Defter")
-                .font(.titleScreen)
+                .font(.sd.titleScreen)
                 .foregroundStyle(Color.text.primary)
             Text("Faz 0 · tasarım sistemi iskeleti")
-                .font(.meta)
+                .font(.sd.meta)
                 .foregroundStyle(Color.text.muted)
             Text("₺\u{00A0}48.320,75")
-                .font(.balanceHero)
+                .font(.sd.balanceHero)
                 .foregroundStyle(Color.text.primary)
                 .minimumScaleFactor(0.8)
                 .lineLimit(1)

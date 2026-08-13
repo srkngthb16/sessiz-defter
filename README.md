@@ -16,9 +16,10 @@ otomatik kategorilenir. Ağ katmanı yoktur — eklenmemiştir, kapatılabilir b
 ```
 App ──► DesignSystem ──► Core
     ├─► ImportPipeline ─► Domain ─► Core
-    └─► Domain
+    └─► Persistence ───► Domain ─► Core
 ```
-`Domain` saf Swift'tir; SwiftData/SwiftUI import etmez. Kural `DomainTests/ArchitectureTests` ile test edilir.
+`Domain` saf Swift'tir; SwiftData/SwiftUI import etmez. SwiftData yalnızca `Persistence`
+hedefinde bulunur, bağımlılık yönü Persistence → Domain'dir. Kural `DomainTests/ArchitectureTests` ile test edilir.
 
 ## Komutlar
 Derleme:

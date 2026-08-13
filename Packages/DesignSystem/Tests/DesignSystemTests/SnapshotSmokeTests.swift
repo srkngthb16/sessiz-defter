@@ -25,10 +25,10 @@ private struct TokenProbe: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Toplam bakiye")
-                .font(.captionLabel)
+                .font(.sd.caption)
                 .foregroundStyle(Color.text.muted)
             Text("₺\u{00A0}48.320,75")
-                .font(.balanceHero)
+                .font(.sd.balanceHero)
                 .foregroundStyle(Color.text.primary)
                 .minimumScaleFactor(0.8)
                 .lineLimit(1)
@@ -44,8 +44,8 @@ private struct TokenProbe: View {
 
     private func probe(_ baslik: String, _ tutar: String, _ renk: Color, _ yuzey: Color) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(baslik).font(.captionLabel).foregroundStyle(renk)
-            Text(tutar).font(.amountRow).foregroundStyle(renk)
+            Text(baslik).font(.sd.caption).foregroundStyle(renk)
+            Text(tutar).font(.sd.amountRow).foregroundStyle(renk)
         }
         .padding(.horizontal, 13)
         .padding(.vertical, 11)

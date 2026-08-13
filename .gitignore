@@ -6,3 +6,4 @@ xcuserdata/
 .swiftpm/
 .build-notes/
 *.failed.png
+.venv-tools/
