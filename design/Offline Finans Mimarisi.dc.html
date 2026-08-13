@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+:root{
+  --bg:oklch(0.985 0.003 170);--panel:oklch(1 0 0);--panel2:oklch(0.968 0.004 170);
+  --line:oklch(0.9 0.006 170);--line2:oklch(0.8 0.01 170);
+  --fg:oklch(0.26 0.012 170);--fg2:oklch(0.47 0.012 170);--fg3:oklch(0.62 0.012 170);
+  --accent:oklch(0.6 0.09 175);--accent-soft:oklch(0.955 0.03 175);
+  --danger:oklch(0.57 0.11 27);--danger-soft:oklch(0.96 0.025 27);
+  --lA:oklch(0.6 0.09 175);--lAs:oklch(0.965 0.028 175);
+  --lB:oklch(0.56 0.09 250);--lBs:oklch(0.965 0.026 250);
+  --lC:oklch(0.58 0.09 95);--lCs:oklch(0.965 0.03 95);
+  --lD:oklch(0.55 0.09 305);--lDs:oklch(0.965 0.026 305);
+  --lE:oklch(0.52 0.02 200);--lEs:oklch(0.96 0.008 200);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:oklch(0.185 0.008 170);--panel:oklch(0.235 0.009 170);--panel2:oklch(0.212 0.009 170);
+    --line:oklch(0.32 0.011 170);--line2:oklch(0.44 0.013 170);
+    --fg:oklch(0.95 0.005 170);--fg2:oklch(0.78 0.008 170);--fg3:oklch(0.6 0.01 170);
+    --accent:oklch(0.75 0.1 175);--accent-soft:oklch(0.3 0.04 175);
+    --danger:oklch(0.72 0.12 27);--danger-soft:oklch(0.31 0.05 27);
+    --lA:oklch(0.75 0.1 175);--lAs:oklch(0.3 0.04 175);
+    --lB:oklch(0.72 0.1 250);--lBs:oklch(0.29 0.04 250);
+    --lC:oklch(0.78 0.1 95);--lCs:oklch(0.3 0.04 95);
+    --lD:oklch(0.74 0.1 305);--lDs:oklch(0.29 0.04 305);
+    --lE:oklch(0.72 0.02 200);--lEs:oklch(0.28 0.008 200);
+  }
+}
+[data-theme="light"]{
+  --bg:oklch(0.985 0.003 170);--panel:oklch(1 0 0);--panel2:oklch(0.968 0.004 170);
+  --line:oklch(0.9 0.006 170);--line2:oklch(0.8 0.01 170);
+  --fg:oklch(0.26 0.012 170);--fg2:oklch(0.47 0.012 170);--fg3:oklch(0.62 0.012 170);
+  --accent:oklch(0.6 0.09 175);--accent-soft:oklch(0.955 0.03 175);
+  --danger:oklch(0.57 0.11 27);--danger-soft:oklch(0.96 0.025 27);
+  --lA:oklch(0.6 0.09 175);--lAs:oklch(0.965 0.028 175);
+  --lB:oklch(0.56 0.09 250);--lBs:oklch(0.965 0.026 250);
+  --lC:oklch(0.58 0.09 95);--lCs:oklch(0.965 0.03 95);
+  --lD:oklch(0.55 0.09 305);--lDs:oklch(0.965 0.026 305);
+  --lE:oklch(0.52 0.02 200);--lEs:oklch(0.96 0.008 200);
+}
+[data-theme="dark"]{
+  --bg:oklch(0.185 0.008 170);--panel:oklch(0.235 0.009 170);--panel2:oklch(0.212 0.009 170);
+  --line:oklch(0.32 0.011 170);--line2:oklch(0.44 0.013 170);
+  --fg:oklch(0.95 0.005 170);--fg2:oklch(0.78 0.008 170);--fg3:oklch(0.6 0.01 170);
+  --accent:oklch(0.75 0.1 175);--accent-soft:oklch(0.3 0.04 175);
+  --danger:oklch(0.72 0.12 27);--danger-soft:oklch(0.31 0.05 27);
+  --lA:oklch(0.75 0.1 175);--lAs:oklch(0.3 0.04 175);
+  --lB:oklch(0.72 0.1 250);--lBs:oklch(0.29 0.04 250);
+  --lC:oklch(0.78 0.1 95);--lCs:oklch(0.3 0.04 95);
+  --lD:oklch(0.74 0.1 305);--lDs:oklch(0.29 0.04 305);
+  --lE:oklch(0.72 0.02 200);--lEs:oklch(0.28 0.008 200);
+}
+[data-accent="mavi"]{--accent:oklch(0.58 0.09 245);--accent-soft:oklch(0.96 0.026 245)}
+[data-theme="dark"][data-accent="mavi"]{--accent:oklch(0.74 0.1 245);--accent-soft:oklch(0.29 0.04 245)}
+[data-accent="grafit"]{--accent:oklch(0.45 0.012 200);--accent-soft:oklch(0.95 0.006 200)}
+[data-theme="dark"][data-accent="grafit"]{--accent:oklch(0.8 0.012 200);--accent-soft:oklch(0.3 0.008 200)}
+body{margin:0;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--fg)}
+</style>
+</helmet>
+<div data-theme="{{ tema }}" data-accent="{{ vurgu }}" style="background:var(--bg);color:var(--fg);font-family:-apple-system,'Helvetica Neue',Helvetica,system-ui,sans-serif;padding:56px 40px 80px;display:flex;flex-direction:column;align-items:center;gap:76px">
+
+  <div style="width:100%;max-width:1440px;display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:820px">
+        <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent)">iOS 17+ · SwiftUI · SwiftData · Tamamen çevrimdışı</div>
+        <div style="font-size:34px;font-weight:600;letter-spacing:-0.02em;line-height:1.15">Kişisel Finans Takip Uygulaması — Sistem Mimarisi ve Veri Akışı</div>
+        <div style="font-size:15px;line-height:1.55;color:var(--fg2);text-wrap:pretty">Veri cihazdan asla çıkmaz. Ağ katmanı, analytics, crash reporting ve cloud sync yoktur. Banka ekstresi PDF olarak yüklenir, tüm işleme cihaz üzerinde yapılır.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--fg2)">
+        <div style="display:flex;align-items:center;gap:10px"><div style="display:flex;align-items:center"><div style="height:1.5px;width:22px;background:var(--line2)"></div><div style="width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid var(--line2)"></div></div><span>Bağımlılık / veri akışı</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><div style="height:1.5px;width:28px;background:repeating-linear-gradient(90deg,var(--danger) 0 5px,transparent 5px 10px)"></div><span>Hata dalı</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><div style="height:0;width:28px;border-top:2px dashed var(--accent)"></div><span>Cihaz sınırı (Device Boundary)</span></div>
+      </div>
+    </div>
+    <div style="height:1px;background:var(--line)"></div>
+  </div>
+
+  <!-- ══ DİYAGRAM 1 ══ -->
+  <div style="width:100%;max-width:1440px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;color:var(--bg);background:var(--accent);border-radius:6px;padding:4px 9px;font-weight:600">01</div>
+      <div style="font-size:23px;font-weight:600;letter-spacing:-0.01em">Katmanlı Mimari</div>
+      <div style="font-size:13.5px;color:var(--fg3)">Bağımlılıklar yalnızca aşağı doğru akar — hiçbir katman cihaz sınırını aşmaz.</div>
+    </div>
+
+    <div style="position:relative;border:2px dashed var(--accent);border-radius:26px;padding:38px 34px 34px;background:var(--panel2)">
+      <div style="position:absolute;top:-11px;left:30px;background:var(--bg);padding:0 12px;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);font-weight:600">Cihaz Sınırı · Device Boundary</div>
+
+      <!-- Presentation -->
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px;align-items:center">
+        <div style="border-left:3px solid var(--lA);padding-left:14px;display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:16px;font-weight:600">Sunum</div>
+          <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3)">Presentation · SwiftUI</div>
+        </div>
+        <div style="background:var(--lAs);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-wrap:wrap;gap:10px">
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px">Dashboard</div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px">Transactions</div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px">Import</div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px">Budgets</div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px">Categories</div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px">Reports</div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px">Settings</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px">
+        <div></div>
+        <div style="display:flex;gap:64px;padding:10px 0 10px 40px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:20px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div>
+            <div style="font-size:12px;color:var(--fg3)">Import ekranı içe aktarmayı başlatır</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:20px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div>
+            <div style="font-size:12px;color:var(--fg3)">Dashboard / Reports → Domain servisleri (doğrudan)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Import Pipeline -->
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px;align-items:center">
+        <div style="border-left:3px solid var(--lC);padding-left:14px;display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:16px;font-weight:600">İçe Aktarma Hattı</div>
+          <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3)">Import Pipeline · on-device</div>
+        </div>
+        <div style="background:var(--lCs);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px">
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.3">FileImporter<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">UIDocumentPicker</div></div>
+          <div style="display:flex;align-items:center"><div style="height:1.5px;width:14px;background:var(--line2)"></div><div style="width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid var(--line2)"></div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.3">TextExtractor<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">PDFKit + Vision OCR</div></div>
+          <div style="display:flex;align-items:center"><div style="height:1.5px;width:14px;background:var(--line2)"></div><div style="width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid var(--line2)"></div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.3">BankFormatDetector<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">imza eşleştirme</div></div>
+          <div style="display:flex;align-items:center"><div style="height:1.5px;width:14px;background:var(--line2)"></div><div style="width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid var(--line2)"></div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.3">StatementParser<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">banka bazlı regex</div></div>
+          <div style="display:flex;align-items:center"><div style="height:1.5px;width:14px;background:var(--line2)"></div><div style="width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid var(--line2)"></div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.3">TransactionNormalizer<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">tarih / tutar / kur</div></div>
+          <div style="display:flex;align-items:center"><div style="height:1.5px;width:14px;background:var(--line2)"></div><div style="width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid var(--line2)"></div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.3">DuplicateDetector<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">hash karşılaştırma</div></div>
+          <div style="display:flex;align-items:center"><div style="height:1.5px;width:14px;background:var(--line2)"></div><div style="width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid var(--line2)"></div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.3">ReviewQueue<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">kullanıcı onayı</div></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px">
+        <div></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0 10px 40px">
+          <div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:20px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div>
+          <div style="font-size:12px;color:var(--fg3)">onaylanan işlemler → Domain servisleri</div>
+        </div>
+      </div>
+
+      <!-- Domain -->
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px;align-items:center">
+        <div style="border-left:3px solid var(--lB);padding-left:14px;display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:16px;font-weight:600">Alan Katmanı</div>
+          <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3)">Domain · saf Swift</div>
+        </div>
+        <div style="background:var(--lBs);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-wrap:wrap;gap:10px">
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">TransactionService<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">CRUD, filtre, arama</div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">CategorizationEngine<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">kural tabanlı + on-device NLP</div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">BudgetEngine<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">limit, uyarı eşikleri</div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">ReportBuilder<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">toplam, trend, dağılım</div></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px">
+        <div></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0 10px 40px">
+          <div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:20px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div>
+          <div style="font-size:12px;color:var(--fg3)">yalnızca Repository protokolleri üzerinden</div>
+        </div>
+      </div>
+
+      <!-- Persistence -->
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px;align-items:center">
+        <div style="border-left:3px solid var(--lD);padding-left:14px;display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:16px;font-weight:600">Kalıcılık</div>
+          <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3)">Persistence · yerel</div>
+        </div>
+        <div style="background:var(--lDs);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-wrap:wrap;gap:10px">
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">SwiftData ModelContainer<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">CloudKit kapalı</div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">Repository protokolleri<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">Transaction / Account / Budget</div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">Şifreli store<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">hassas alanlar ayrı</div></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px">
+        <div></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0 10px 40px">
+          <div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:20px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div>
+          <div style="font-size:12px;color:var(--fg3)">anahtar, koruma sınıfı, kimlik doğrulama</div>
+        </div>
+      </div>
+
+      <!-- Platform -->
+      <div style="display:grid;grid-template-columns:224px 1fr;gap:22px;align-items:center">
+        <div style="border-left:3px solid var(--lE);padding-left:14px;display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:16px;font-weight:600">Platform</div>
+          <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3)">iOS sistem servisleri</div>
+        </div>
+        <div style="background:var(--lEs);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">Keychain<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">hassas alan anahtarları</div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">FileProtection<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">.complete</div></div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;line-height:1.3">LocalAuthentication<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">Face ID / parola</div></div>
+          <div style="border:1px dashed var(--line2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--fg3);line-height:1.3">BackgroundTask — yok<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">arka planda iş çalışmaz</div></div>
+          <div style="border:1px dashed var(--line2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--fg3);line-height:1.3">URLSession — yok<div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10px;color:var(--fg3)">ağ katmanı hiç eklenmedi</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:0 6px">
+      <div style="font-size:12.5px;color:var(--fg3);max-width:640px;text-wrap:pretty">Kesikli çerçeveyi kesen tek bir ok yoktur: hiçbir katman dışarıya veri göndermez, dışarıdan veri çekmez. Tek giriş noktası kullanıcının seçtiği yerel PDF dosyasıdır.</div>
+      <div style="display:flex;align-items:center;gap:10px;border:1px solid var(--danger);background:var(--danger-soft);color:var(--danger);border-radius:10px;padding:10px 15px;font-size:13.5px;font-weight:600">
+        <span style="font-size:15px">✕</span><span>Ağ yok · Bulut yok · Telemetri yok</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DİYAGRAM 2 ══ -->
+  <div style="width:100%;max-width:1440px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;color:var(--bg);background:var(--accent);border-radius:6px;padding:4px 9px;font-weight:600">02</div>
+      <div style="font-size:23px;font-weight:600;letter-spacing:-0.01em">PDF İçe Aktarma Veri Akışı</div>
+      <div style="font-size:13.5px;color:var(--fg3)">Tüm adımlar cihaz üzerinde; sağdaki dallar hata durumlarını gösterir.</div>
+    </div>
+
+    <div style="border:1px solid var(--line);border-radius:20px;background:var(--panel2);padding:30px 34px;display:grid;grid-template-columns:minmax(0,1fr) 26px minmax(0,420px);row-gap:0;column-gap:0">
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lA);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">01</div><div><div style="font-size:14.5px;font-weight:600">Kullanıcı PDF ekstreyi seçer</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">UIDocumentPicker · Dosyalar uygulaması</div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lC);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">02</div><div><div style="font-size:14.5px;font-weight:600">Dosya uygulama sandbox'ına kopyalanır</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">FileProtection.complete ile yazılır</div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lC);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">03</div><div><div style="font-size:14.5px;font-weight:600">PDFKit metni çıkarır</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">PDFDocument → sayfa metni</div></div></div>
+      <div style="grid-column:2;display:flex;align-items:center"><div style="height:1.5px;width:100%;background:repeating-linear-gradient(90deg,var(--line2) 0 5px,transparent 5px 10px)"></div></div>
+      <div style="grid-column:3;display:flex;align-items:center"><div style="background:var(--accent-soft);border:1px solid var(--accent);border-radius:11px;padding:10px 14px;width:100%"><div style="font-size:13px;font-weight:600;color:var(--accent)">Yedek yol: metin katmanı yoksa</div><div style="font-size:12px;color:var(--fg2);line-height:1.45">Vision framework ile cihaz üzerinde OCR → aynı akışa geri döner</div></div></div>
+
+      <sc-if value="{{ hataDallari }}" hint-placeholder-val="{{ true }}">
+        <div style="grid-column:2;display:flex;align-items:center;padding:8px 0"><div style="height:1.5px;width:100%;background:repeating-linear-gradient(90deg,var(--danger) 0 5px,transparent 5px 10px)"></div></div>
+        <div style="grid-column:3;padding:8px 0"><div style="background:var(--danger-soft);border:1px solid var(--danger);border-radius:11px;padding:10px 14px"><div style="font-size:13px;font-weight:600;color:var(--danger)">Hata · Şifreli PDF</div><div style="font-size:12px;color:var(--fg2);line-height:1.45">Parola istenir; girilmezse içe aktarma iptal edilir, dosya sandbox'tan silinir.</div></div></div>
+      </sc-if>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lC);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">04</div><div><div style="font-size:14.5px;font-weight:600">Banka formatı tespit edilir</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">BankFormatDetector · başlık/altbilgi imzaları</div></div></div>
+      <sc-if value="{{ hataDallari }}" hint-placeholder-val="{{ true }}">
+        <div style="grid-column:2;display:flex;align-items:center"><div style="height:1.5px;width:100%;background:repeating-linear-gradient(90deg,var(--danger) 0 5px,transparent 5px 10px)"></div></div>
+        <div style="grid-column:3;display:flex;align-items:center"><div style="background:var(--danger-soft);border:1px solid var(--danger);border-radius:11px;padding:10px 14px;width:100%"><div style="font-size:13px;font-weight:600;color:var(--danger)">Hata · Tanınmayan banka formatı</div><div style="font-size:12px;color:var(--fg2);line-height:1.45">Kullanıcıya şablon seçtirilir veya genel tablo modu ile manuel eşleme yapılır.</div></div></div>
+      </sc-if>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lC);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">05</div><div><div style="font-size:14.5px;font-weight:600">Satırlar parse edilir</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">tarih · açıklama · tutar · bakiye</div></div></div>
+      <sc-if value="{{ hataDallari }}" hint-placeholder-val="{{ true }}">
+        <div style="grid-column:2;display:flex;align-items:center"><div style="height:1.5px;width:100%;background:repeating-linear-gradient(90deg,var(--danger) 0 5px,transparent 5px 10px)"></div></div>
+        <div style="grid-column:3;display:flex;align-items:center"><div style="background:var(--danger-soft);border:1px solid var(--danger);border-radius:11px;padding:10px 14px;width:100%"><div style="font-size:13px;font-weight:600;color:var(--danger)">Hata · Bozuk / eksik satır</div><div style="font-size:12px;color:var(--fg2);line-height:1.45">Satır atılmaz; “incelenecek” olarak işaretlenip onay ekranına düşer.</div></div></div>
+      </sc-if>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lC);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">06</div><div><div style="font-size:14.5px;font-weight:600">Para birimi ve tarih normalize edilir</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">TransactionNormalizer · minor units, işaret, yerel format</div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lC);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">07</div><div><div style="font-size:14.5px;font-weight:600">Mevcut kayıtlarla duplicate kontrolü</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">hash = SHA256(tarih + tutar + açıklama)</div></div></div>
+      <sc-if value="{{ hataDallari }}" hint-placeholder-val="{{ true }}">
+        <div style="grid-column:2;display:flex;align-items:center"><div style="height:1.5px;width:100%;background:repeating-linear-gradient(90deg,var(--danger) 0 5px,transparent 5px 10px)"></div></div>
+        <div style="grid-column:3;display:flex;align-items:center"><div style="background:var(--danger-soft);border:1px solid var(--danger);border-radius:11px;padding:10px 14px;width:100%"><div style="font-size:13px;font-weight:600;color:var(--danger)">Dal · Duplicate bulundu</div><div style="font-size:12px;color:var(--fg2);line-height:1.45">Varsayılan olarak atlanır; onay ekranında “yine de ekle” seçeneğiyle listelenir.</div></div></div>
+      </sc-if>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lB);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">08</div><div><div style="font-size:14.5px;font-weight:600">Otomatik kategorileme</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">kural tabanlı eşleşme + on-device NLP · güven skoru</div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lA);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">09</div><div><div style="font-size:14.5px;font-weight:600">Kullanıcı onay ekranı</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">ReviewQueue · düşük güvenli satırlar işaretli</div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lD);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">10</div><div><div style="font-size:14.5px;font-weight:600">SwiftData'ya yazılır</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">tek transaction · başarısızsa tümü geri alınır</div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;display:flex;justify-content:center;padding:8px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:16px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+
+      <div style="grid-column:1;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lE);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:var(--fg3);width:18px">11</div><div><div style="font-size:14.5px;font-weight:600">PDF isteğe bağlı silinir</div><div style="font-size:12px;color:var(--fg3);font-family:ui-monospace,'SF Mono',Menlo,monospace">varsayılan: içe aktarma sonrası sandbox'tan kaldır</div></div></div>
+      <div style="grid-column:2"></div><div style="grid-column:3"></div>
+    </div>
+  </div>
+
+  <!-- ══ DİYAGRAM 3 ══ -->
+  <div style="width:100%;max-width:1440px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;color:var(--bg);background:var(--accent);border-radius:6px;padding:4px 9px;font-weight:600">03</div>
+      <div style="font-size:23px;font-weight:600;letter-spacing:-0.01em">Kullanıcı Akışı</div>
+      <div style="font-size:13.5px;color:var(--fg3)">İlk açılıştan yedeklemeye kadar tek yönlü ana yol.</div>
+    </div>
+
+    <div style="border:1px solid var(--line);border-radius:20px;background:var(--panel2);padding:30px 34px;display:flex;flex-direction:column;gap:0">
+
+      <div style="display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;align-items:stretch">
+        <div style="background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--lA);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">01</div><div style="font-size:15px;font-weight:600">İlk açılış</div><div style="font-size:12.5px;color:var(--fg2);line-height:1.45">Kısa gizlilik açıklaması: veri cihazdan çıkmaz, hesap oluşturma yok.</div></div>
+        <div style="display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:center"><div style="height:1.5px;width:20px;background:var(--line2)"></div><div style="width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid var(--line2)"></div></div></div>
+        <div style="background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--lE);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">02</div><div style="font-size:15px;font-weight:600">Face ID kurulumu</div><div style="font-size:12.5px;color:var(--fg2);line-height:1.45">LocalAuthentication ile uygulama kilidi; yedek olarak cihaz parolası.</div></div>
+        <div style="display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:center"><div style="height:1.5px;width:20px;background:var(--line2)"></div><div style="width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid var(--line2)"></div></div></div>
+        <div style="background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--lA);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">03</div><div style="font-size:15px;font-weight:600">Hesap ekleme (manuel)</div><div style="font-size:12.5px;color:var(--fg2);line-height:1.45">Hesap adı, para birimi, açılış bakiyesi. Banka bağlantısı yok.</div></div>
+      </div>
+
+      <div style="display:flex;justify-content:center;padding:14px 0"><div style="display:flex;align-items:center;gap:10px"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:18px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div></div>
+
+      <div style="display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;align-items:stretch">
+        <div style="background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--lC);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">04</div><div style="font-size:15px;font-weight:600">Veri girişi — iki yol</div><div style="display:flex;gap:8px;flex-wrap:wrap"><div style="background:var(--lCs);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12.5px">PDF ekstre içe aktar</div><div style="background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12.5px">Manuel işlem girişi</div></div></div>
+        <div style="display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:center"><div style="height:1.5px;width:20px;background:var(--line2)"></div><div style="width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid var(--line2)"></div></div></div>
+        <div style="background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--lB);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">05</div><div style="font-size:15px;font-weight:600">Kategori onayı</div><div style="font-size:12.5px;color:var(--fg2);line-height:1.45">Düşük güvenli satırlar üstte; düzeltmeler kural olarak kaydedilebilir.</div></div>
+        <div style="display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:center"><div style="height:1.5px;width:20px;background:var(--line2)"></div><div style="width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid var(--line2)"></div></div></div>
+        <div style="background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--lA);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">06</div><div style="font-size:15px;font-weight:600">Dashboard</div><div style="font-size:12.5px;color:var(--fg2);line-height:1.45">Toplam bakiye, aylık harcama, kategori dağılımı.</div></div>
+      </div>
+
+      <div style="display:flex;justify-content:center;padding:14px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:1.5px;height:18px;background:var(--line2)"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line2)"></div></div></div>
+
+      <div style="display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;align-items:stretch">
+        <div style="background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--lB);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">07</div><div style="font-size:15px;font-weight:600">Bütçe kurma</div><div style="font-size:12.5px;color:var(--fg2);line-height:1.45">Kategori bazlı aylık limit; uyarılar yerel bildirim olarak.</div></div>
+        <div style="display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:center"><div style="height:1.5px;width:20px;background:var(--line2)"></div><div style="width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid var(--line2)"></div></div></div>
+        <div style="background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--lB);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">08</div><div style="font-size:15px;font-weight:600">Rapor görüntüleme</div><div style="font-size:12.5px;color:var(--fg2);line-height:1.45">Aylık trend, kategori kırılımı, hesap bazlı özet.</div></div>
+        <div style="display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:center"><div style="height:1.5px;width:20px;background:var(--line2)"></div><div style="width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid var(--line2)"></div></div></div>
+        <div style="background:var(--panel);border:1px solid var(--accent);border-top:3px solid var(--accent);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:5px"><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:10.5px;color:var(--fg3)">09</div><div style="font-size:15px;font-weight:600">Yedekleme</div><div style="font-size:12.5px;color:var(--fg2);line-height:1.45">Şifreli yerel dosya dışa aktarma; hedef konumu kullanıcı seçer, otomatik yükleme yoktur.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;tema&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Otomatik&quot;,&quot;Açık&quot;,&quot;Koyu&quot;],&quot;default&quot;:&quot;Otomatik&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Görünüm&quot;},&quot;vurguRengi&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Yeşil-teal&quot;,&quot;Mavi&quot;,&quot;Grafit&quot;],&quot;default&quot;:&quot;Yeşil-teal&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Görünüm&quot;},&quot;hataDallari&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Diyagram 2&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const t = { "Otomatik": "auto", "Açık": "light", "Koyu": "dark" };
+    const a = { "Yeşil-teal": "teal", "Mavi": "mavi", "Grafit": "grafit" };
+    return {
+      tema: t[this.props.tema] ?? "auto",
+      vurgu: a[this.props.vurguRengi] ?? "teal",
+      hataDallari: this.props.hataDallari ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>

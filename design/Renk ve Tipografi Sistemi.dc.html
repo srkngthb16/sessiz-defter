@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F8F8;color:#161D1C;-webkit-font-smoothing:antialiased;font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif}
+a{color:#0A7C70;text-decoration:none}
+a:hover{color:#161D1C}
+.tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+</style>
+</helmet>
+<div style="background:#F6F8F8;color:#161D1C;font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;padding:56px 40px 96px;display:flex;flex-direction:column;align-items:center;gap:72px">
+
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:11px;max-width:760px">
+        <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:#0A7C70">Tasarım Sistemi · Renk + Tipografi · iOS 17+ · Offline</div>
+        <div style="font-size:36px;font-weight:700;letter-spacing:-0.022em;line-height:1.12">Sessiz Defter — Renk Paleti ve Tipografi Eşleşmesi</div>
+        <div style="font-size:15.5px;line-height:1.55;color:#4E5958;text-wrap:pretty">Günde birkaç kez, üç saniyelik bakışlar için tasarlandı. Renk hiçbir zaman tek başına anlam taşımaz: her finansal işaret renk + işaret + ikon üçlüsüyle kodlanır. Palet mahremiyet hissini gürültüyle değil, sükûnetle kurar.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:11.5px;color:#687473;min-width:230px">
+        <div style="display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #E1E7E6;padding-bottom:6px"><span>Gri kademe</span><span style="color:#161D1C">10 × 2 mod</span></div>
+        <div style="display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #E1E7E6;padding-bottom:6px"><span>Semantik finans</span><span style="color:#161D1C">5 rol</span></div>
+        <div style="display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #E1E7E6;padding-bottom:6px"><span>Kategori</span><span style="color:#161D1C">12 renk</span></div>
+        <div style="display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #E1E7E6;padding-bottom:6px"><span>Kontrast tabanı</span><span style="color:#161D1C">WCAG 2.2 AA</span></div>
+        <div style="display:flex;justify-content:space-between;gap:16px"><span>Tip ölçeği</span><span style="color:#161D1C">8 stil</span></div>
+      </div>
+    </div>
+    <div style="height:1px;background:#CDD5D4"></div>
+  </div>
+
+  <!-- 01 · NÖTR SKALA -->
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">01</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">Nötr gri skalası</div>
+      <div style="font-size:13.5px;color:#687473">Hue 180 çevresinde, kroma 0,006–0,012. Koyu mod OLED siyahı değil; yumuşak koyu nötr.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px">
+      <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px">
+          <div style="font-size:16px;font-weight:600">Açık mod</div>
+          <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#687473">kontrast tabanı: yüzey #FFFFFF</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#FFFFFF"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.0</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#FFFFFF</div><div style="font-size:10px;color:#8B9695">1,00:1</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#F6F8F8"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.1</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#F6F8F8</div><div style="font-size:10px;color:#8B9695">1,07:1</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#EDF1F0"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.2</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#EDF1F0</div><div style="font-size:10px;color:#8B9695">1,14:1</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#E1E7E6"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.3</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#E1E7E6</div><div style="font-size:10px;color:#8B9695">1,25:1</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#CDD5D4"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.4</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#CDD5D4</div><div style="font-size:10px;color:#8B9695">1,49:1</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#AEB9B8"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.5</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#AEB9B8</div><div style="font-size:10px;color:#8B9695">2,01:1</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#8B9695"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.6</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#8B9695</div><div style="font-size:10px;color:#8B9695">3,05:1</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#687473"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.7</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#687473</div><div style="font-size:10px;color:#0A7C70;font-weight:600">4,85:1 AA</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#4E5958"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.8</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#4E5958</div><div style="font-size:10px;color:#0A7C70;font-weight:600">7,26:1 AAA</div></div></div>
+          <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:46px;background:#161D1C"></div><div style="padding:7px 8px;background:#FBFCFC;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473">gray.9</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500">#161D1C</div><div style="font-size:10px;color:#0A7C70;font-weight:600">17,12:1 AAA</div></div></div>
+        </div>
+      </div>
+
+      <div style="background:#1B2122;border:1px solid #2A3132;border-radius:18px;padding:22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px">
+          <div style="font-size:16px;font-weight:600;color:#ECF1F0">Koyu mod</div>
+          <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#8B9695">kontrast tabanı: yüzey #1B2122</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#14191A"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.0</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#14191A</div><div style="font-size:10px;color:#6B7675">1,09:1</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#1B2122"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.1</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#1B2122</div><div style="font-size:10px;color:#6B7675">1,00:1</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#222829"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.2</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#222829</div><div style="font-size:10px;color:#6B7675">1,09:1</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#2A3132"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.3</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#2A3132</div><div style="font-size:10px;color:#6B7675">1,23:1</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#38403F"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.4</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#38403F</div><div style="font-size:10px;color:#6B7675">1,53:1</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#4B5453"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.5</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#4B5453</div><div style="font-size:10px;color:#6B7675">2,09:1</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#6B7675"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.6</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#6B7675</div><div style="font-size:10px;color:#8B9695">3,48:1</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#8B9695"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.7</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#8B9695</div><div style="font-size:10px;color:#3FCFBC;font-weight:600">5,36:1 AA</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#B3BDBC"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.8</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#B3BDBC</div><div style="font-size:10px;color:#3FCFBC;font-weight:600">8,48:1 AAA</div></div></div>
+          <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:46px;background:#ECF1F0"></div><div style="padding:7px 8px;background:#222829;display:flex;flex-direction:column;gap:1px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8B9695">gray.9</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#ECF1F0">#ECF1F0</div><div style="font-size:10px;color:#3FCFBC;font-weight:600">14,30:1 AAA</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Semantik eşleme tablosu -->
+    <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;gap:0;background:#EDF1F0;padding:11px 20px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:#4E5958">
+        <div>Semantik token</div><div>Açık</div><div>Koyu</div><div>Kontrast</div><div>iOS semantic karşılığı</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.bg.canvas</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#F6F8F8;border:1px solid #CDD5D4"></div><span class="tnum">#F6F8F8</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#14191A;border:1px solid #CDD5D4"></div><span class="tnum">#14191A</span></div>
+        <div style="color:#687473">— (zemin)</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">systemGroupedBackground</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.bg.surface</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#FFFFFF;border:1px solid #CDD5D4"></div><span class="tnum">#FFFFFF</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#1B2122;border:1px solid #CDD5D4"></div><span class="tnum">#1B2122</span></div>
+        <div style="color:#687473">— (kart)</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">secondarySystemGroupedBackground</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.bg.elevated</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#FFFFFF;border:1px solid #CDD5D4"></div><span class="tnum">#FFFFFF + gölge</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#222829;border:1px solid #CDD5D4"></div><span class="tnum">#222829</span></div>
+        <div style="color:#687473">— (sheet)</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">tertiarySystemBackground</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.border.divider</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#E1E7E6;border:1px solid #CDD5D4"></div><span class="tnum">#E1E7E6</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#2A3132;border:1px solid #CDD5D4"></div><span class="tnum">#2A3132</span></div>
+        <div style="color:#687473">1,25 / 1,23:1</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">separator</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.border.default</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#CDD5D4;border:1px solid #CDD5D4"></div><span class="tnum">#CDD5D4</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#38403F;border:1px solid #CDD5D4"></div><span class="tnum">#38403F</span></div>
+        <div style="color:#687473">1,49 / 1,53:1</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">opaqueSeparator</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.text.primary</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#161D1C;border:1px solid #CDD5D4"></div><span class="tnum">#161D1C</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#ECF1F0;border:1px solid #CDD5D4"></div><span class="tnum">#ECF1F0</span></div>
+        <div style="color:#0A7C70;font-weight:600">17,12 / 14,30:1</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">label</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.text.secondary</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#4E5958;border:1px solid #CDD5D4"></div><span class="tnum">#4E5958</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#B3BDBC;border:1px solid #CDD5D4"></div><span class="tnum">#B3BDBC</span></div>
+        <div style="color:#0A7C70;font-weight:600">7,26 / 8,48:1</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">secondaryLabel</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.text.muted</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#687473;border:1px solid #CDD5D4"></div><span class="tnum">#687473</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#8B9695;border:1px solid #CDD5D4"></div><span class="tnum">#8B9695</span></div>
+        <div style="color:#0A7C70;font-weight:600">4,85 / 5,36:1</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">tertiaryLabel (koyulaştırılmış)</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr;padding:12px 20px;border-top:1px solid #EDF1F0;font-size:13px;align-items:center">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px">color.text.disabled</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#8B9695;border:1px solid #CDD5D4"></div><span class="tnum">#8B9695</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;border-radius:4px;background:#6B7675;border:1px solid #CDD5D4"></div><span class="tnum">#6B7675</span></div>
+        <div style="color:#687473">3,05 / 3,48:1</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">quaternaryLabel</div>
+      </div>
+      <div style="padding:12px 20px;border-top:1px solid #EDF1F0;font-size:12.5px;color:#687473;background:#FBFCFC;text-wrap:pretty">Apple'ın <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">tertiaryLabel</span> ve <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">quaternaryLabel</span> varsayılanları AA'yı geçmez. Bu yüzden <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text.muted</span> özel olarak koyulaştırıldı; <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text.disabled</span> yalnızca etkileşimsiz (devre dışı) öğelerde kullanılır — 1.4.3 muafiyeti kapsamındadır.</div>
+    </div>
+  </div>
+
+  <!-- 02 · MARKA + SEMANTİK FİNANS -->
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">02</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">Marka rengi ve semantik finans rolleri</div>
+      <div style="font-size:13.5px;color:#687473">Tek accent. Semantik renkler accent'ten hue olarak en az 40° uzakta.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font-size:16px;font-weight:600">color.brand.primary</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#687473">açık mod</div></div>
+        <div style="display:flex;gap:12px">
+          <div style="flex:2;background:#0A7C70;border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:104px">
+            <div style="color:#FFFFFF;font-size:15px;font-weight:600">Bakiye ekle</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#B7E4DD">#0A7C70 · beyaz üstü 5,08:1 AA</div>
+          </div>
+          <div style="flex:1;background:#E2F2EF;border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:104px">
+            <div style="color:#0A7C70;font-size:15px;font-weight:600">Rozet</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4E5958">brand.surface<br>#E2F2EF</div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#4E5958;line-height:1.5;text-wrap:pretty">Hue 185° — banka mavisinin (220–250°) dışında, "para yeşili" klişesinin (140°) de berisinde. Kroma 0,09: doygun ama neon değil. <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">brand.primary</span> üzerinde <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">brand.surface</span> pastel zemini 4,40:1 verir — bu yüzden rozet metni yalnızca ≥17pt semibold veya ikon olarak kullanılır (AA large ✓); gövde metni için <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text.primary</span> gelir.</div>
+      </div>
+
+      <div style="background:#1B2122;border:1px solid #2A3132;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font-size:16px;font-weight:600;color:#ECF1F0">color.brand.primary</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8B9695">koyu mod</div></div>
+        <div style="display:flex;gap:12px">
+          <div style="flex:2;background:#3FCFBC;border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:104px">
+            <div style="color:#06231F;font-size:15px;font-weight:600">Bakiye ekle</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0B4A42">#3FCFBC · mürekkep üstü 8,57:1</div>
+          </div>
+          <div style="flex:1;background:#123A36;border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:104px">
+            <div style="color:#3FCFBC;font-size:15px;font-weight:600">Rozet</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8B9695">brand.surface<br>#123A36</div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#B3BDBC;line-height:1.5;text-wrap:pretty">Koyu modda accent aynı hue'da kalır, açıklık 0,60'tan 0,79'a çıkar: yüzey üstünde 8,44:1. Dolgu butonlarda metin <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">brand.onPrimary #06231F</span> — beyaz değil, çünkü parlak teal üstünde beyaz yalnızca 2,0:1 verir.</div>
+      </div>
+    </div>
+
+    <!-- Semantik finans -->
+    <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1.4fr 1.15fr 1.15fr 1fr 1.5fr;background:#EDF1F0;padding:11px 20px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:#4E5958">
+        <div>Rol / token</div><div>Açık</div><div>Koyu</div><div>Kontrast</div><div>Renk dışı kodlama</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1.15fr 1.15fr 1fr 1.5fr;padding:14px 20px;border-top:1px solid #EDF1F0;align-items:center;gap:8px">
+        <div><div style="font-size:14px;font-weight:600">Gelir / pozitif</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#687473">color.finance.income</div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#0F7A43"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#0F7A43</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #E3F4EA</div></div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#4FC98A"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#4FC98A</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #123420</div></div></div>
+        <div style="font-size:12.5px;color:#0A7C70;font-weight:600" class="tnum">5,41 / 7,81:1</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4E5958"><span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#E3F4EA;color:#0F7A43;font-size:14px">↙</span><span>işaret <strong>+</strong> · <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">arrow.down.left</span></span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1.15fr 1.15fr 1fr 1.5fr;padding:14px 20px;border-top:1px solid #EDF1F0;align-items:center;gap:8px">
+        <div><div style="font-size:14px;font-weight:600">Gider / negatif</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#687473">color.finance.expense</div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#9C4033"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#9C4033</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #F8E9E5</div></div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#E89A88"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#E89A88</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #3A1E18</div></div></div>
+        <div style="font-size:12.5px;color:#0A7C70;font-weight:600" class="tnum">6,57 / 7,31:1</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4E5958"><span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#F8E9E5;color:#9C4033;font-size:14px">↗</span><span>işaret <strong>−</strong> · <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">arrow.up.right</span></span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1.15fr 1.15fr 1fr 1.5fr;padding:14px 20px;border-top:1px solid #EDF1F0;align-items:center;gap:8px">
+        <div><div style="font-size:14px;font-weight:600">Transfer / nötr hareket</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#687473">color.finance.transfer</div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#4A6785"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#4A6785</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #E9EFF5</div></div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#93B4CE"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#93B4CE</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #1C2A36</div></div></div>
+        <div style="font-size:12.5px;color:#0A7C70;font-weight:600" class="tnum">5,88 / 7,50:1</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4E5958"><span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#E9EFF5;color:#4A6785;font-size:14px">⇄</span><span>işaretsiz · <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">arrow.left.arrow.right</span></span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1.15fr 1.15fr 1fr 1.5fr;padding:14px 20px;border-top:1px solid #EDF1F0;align-items:center;gap:8px">
+        <div><div style="font-size:14px;font-weight:600">Bütçe uyarısı — %80</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#687473">color.finance.warning</div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#9A6100"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#9A6100</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #FAF0DC</div></div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#F2B33D"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#F2B33D</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #37290E</div></div></div>
+        <div style="font-size:12.5px;color:#0A7C70;font-weight:600" class="tnum">5,14 / 8,77:1</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4E5958"><span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#FAF0DC;color:#9A6100;font-size:14px">◔</span><span>%84 etiketi · <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">exclamationmark.circle</span></span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1.15fr 1.15fr 1fr 1.5fr;padding:14px 20px;border-top:1px solid #EDF1F0;align-items:center;gap:8px">
+        <div><div style="font-size:14px;font-weight:600">Bütçe aşımı — kritik</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#687473">color.finance.critical</div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#C21F14"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#C21F14</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #FBE4E1</div></div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:8px;background:#FF7A66"></div><div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">#FF7A66</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">yüzey #3D1A15</div></div></div>
+        <div style="font-size:12.5px;color:#0A7C70;font-weight:600" class="tnum">6,00 / 6,39:1</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4E5958"><span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#C21F14;color:#FFFFFF;font-size:14px">!</span><span>dolgulu rozet + %112 · <span style="font-family:'IBM Plex Mono',monospace;font-size:11px">exclamationmark.triangle.fill</span></span></div>
+      </div>
+
+      <div style="padding:14px 20px;border-top:1px solid #EDF1F0;background:#FBFCFC;font-size:12.5px;color:#4E5958;line-height:1.55;text-wrap:pretty"><strong>Gider ≠ kritik.</strong> Gider kırmızısı bilinçli olarak düşük kromalı bir tuğla tonu (#9C4033): her harcama alarm gibi görünmemeli. Kritik ise tam doygun kırmızı ve <em>daima dolgulu</em> — ayrım renk tonundan değil, dolgu/çerçeve farkından okunur.</div>
+    </div>
+  </div>
+
+  <!-- 03 · RENK KÖRLÜĞÜ -->
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">03</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">Deuteranopia kontrolü</div>
+      <div style="font-size:13.5px;color:#687473">Viénot–Brettel dönüşümüyle simüle edildi. Alt sıra: deuteranop görüş.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:20px">
+      <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-size:15px;font-weight:600">Semantik roller — normal görüş / deuteranopia</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+          <div style="display:flex;flex-direction:column;gap:0;border-radius:10px;overflow:hidden;border:1px solid #E1E7E6"><div style="height:40px;background:#0F7A43"></div><div style="height:40px;background:#686845"></div><div style="padding:6px 7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;background:#FBFCFC">gelir</div></div>
+          <div style="display:flex;flex-direction:column;gap:0;border-radius:10px;overflow:hidden;border:1px solid #E1E7E6"><div style="height:40px;background:#9C4033"></div><div style="height:40px;background:#66662E"></div><div style="padding:6px 7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;background:#FBFCFC">gider</div></div>
+          <div style="display:flex;flex-direction:column;gap:0;border-radius:10px;overflow:hidden;border:1px solid #E1E7E6"><div style="height:40px;background:#4A6785"></div><div style="height:40px;background:#606085"></div><div style="padding:6px 7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;background:#FBFCFC">transfer</div></div>
+          <div style="display:flex;flex-direction:column;gap:0;border-radius:10px;overflow:hidden;border:1px solid #E1E7E6"><div style="height:40px;background:#9A6100"></div><div style="height:40px;background:#757500"></div><div style="padding:6px 7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;background:#FBFCFC">uyarı</div></div>
+          <div style="display:flex;flex-direction:column;gap:0;border-radius:10px;overflow:hidden;border:1px solid #E1E7E6"><div style="height:40px;background:#C21F14"></div><div style="height:40px;background:#727200"></div><div style="padding:6px 7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;background:#FBFCFC">kritik</div></div>
+        </div>
+        <div style="font-size:12.5px;color:#4E5958;line-height:1.55;text-wrap:pretty">Deuteranopide gelir yeşili (#0F7A43 → #686845) ve gider tuğlası (#9C4033 → #66662E) neredeyse aynı zeytin tonuna düşer — <strong>1,08:1</strong>. Bu, paletin kusuru değil, fizyolojinin sınırı: bu yüzden gelir/gider ayrımı renge asla emanet edilmez.</div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:15px;font-weight:600">Üç katmanlı kodlama zorunluluğu</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:12px;align-items:flex-start;background:#F6F8F8;border-radius:12px;padding:12px 14px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;font-weight:600;padding-top:2px">1</div>
+            <div><div style="font-size:13.5px;font-weight:600">İşaret — her zaman</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">Tutarın önünde <strong>+</strong> veya <strong>−</strong>. Transfer işaretsiz. Kültürel yorum gerektirmez, ekran okuyucuya da geçer.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;background:#F6F8F8;border-radius:12px;padding:12px 14px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;font-weight:600;padding-top:2px">2</div>
+            <div><div style="font-size:13.5px;font-weight:600">Yön ikonu — her satırda</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">↙ giren, ↗ çıkan, ⇄ transfer. Kategori ikonundan ayrı, sabit konumda, 16pt.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;background:#F6F8F8;border-radius:12px;padding:12px 14px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;font-weight:600;padding-top:2px">3</div>
+            <div><div style="font-size:13.5px;font-weight:600">Değer farkı — grafiklerde</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">Kategori paleti açıklık bakımından dönüşümlü kuruldu; komşu dilimler deuteranopide bile ≥1,9:1 luminans farkı taşır.</div></div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #EDF1F0;padding-top:12px;font-size:12.5px;color:#687473;line-height:1.5;text-wrap:pretty">Ek olarak Ayarlar › Erişilebilirlik altında <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">accessibilityDifferentiateWithoutColor</span> açıkken gelir tutarları <em>otomatik olarak</em> parantez yerine kalın + işaretiyle ve nötr renkte gösterilir.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · KATEGORİ RENKLERİ -->
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">04</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">Kategori renkleri — 12 adet</div>
+      <div style="font-size:13.5px;color:#687473">Dönüşümlü açıklık kademesi: her komşu hue bir de değerde ayrışır.</div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font-size:15px;font-weight:600">Açık mod</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#687473">üst: renk · orta: deuteranopia · alt: token</div></div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:7px">
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#B84A2E;display:flex;align-items:flex-end;padding:6px"><span style="color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:9.5px">5,18</span></div><div style="height:20px;background:#787825"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Market</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#B84A2E</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#E0A02A;display:flex;align-items:flex-end;padding:6px"><span style="color:#161D1C;font-family:'IBM Plex Mono',monospace;font-size:9.5px">7,53</span></div><div style="height:20px;background:#B6B620"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Ulaşım</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#E0A02A</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#5F6B12;display:flex;align-items:flex-end;padding:6px"><span style="color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:9.5px">5,84</span></div><div style="height:20px;background:#686814"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Faturalar</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#5F6B12</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#57B87A;display:flex;align-items:flex-end;padding:6px"><span style="color:#161D1C;font-family:'IBM Plex Mono',monospace;font-size:9.5px">6,96</span></div><div style="height:20px;background:#A3A37C"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Sağlık</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#57B87A</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#0E6E68;display:flex;align-items:flex-end;padding:6px"><span style="color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:9.5px">6,09</span></div><div style="height:20px;background:#5E5E69"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Abonelik</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#0E6E68</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#57ADD6;display:flex;align-items:flex-end;padding:6px"><span style="color:#161D1C;font-family:'IBM Plex Mono',monospace;font-size:9.5px">6,81</span></div><div style="height:20px;background:#9A9AD7"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Ev</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#57ADD6</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#2A4FA8;display:flex;align-items:flex-end;padding:6px"><span style="color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:9.5px">7,55</span></div><div style="height:20px;background:#4646A8"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Eğitim</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#2A4FA8</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#9A8CE8;display:flex;align-items:flex-end;padding:6px"><span style="color:#161D1C;font-family:'IBM Plex Mono',monospace;font-size:9.5px">5,94</span></div><div style="height:20px;background:#9090E8"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Eğlence</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#9A8CE8</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#6D2E96;display:flex;align-items:flex-end;padding:6px"><span style="color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:9.5px">8,46</span></div><div style="height:20px;background:#484895"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Alışveriş</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#6D2E96</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#E884BC;display:flex;align-items:flex-end;padding:6px"><span style="color:#161D1C;font-family:'IBM Plex Mono',monospace;font-size:9.5px">6,90</span></div><div style="height:20px;background:#AAAABA"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Kişisel</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#E884BC</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#A32348;display:flex;align-items:flex-end;padding:6px"><span style="color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:9.5px">7,26</span></div><div style="height:20px;background:#616144"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Bağış</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#A32348</div></div></div>
+        <div style="border:1px solid #E1E7E6;border-radius:9px;overflow:hidden"><div style="height:52px;background:#92A0A9;display:flex;align-items:flex-end;padding:6px"><span style="color:#161D1C;font-family:'IBM Plex Mono',monospace;font-size:9.5px">6,38</span></div><div style="height:20px;background:#9C9CA9"></div><div style="padding:6px;background:#FBFCFC"><div style="font-size:10.5px;font-weight:600">Diğer</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#687473">#92A0A9</div></div></div>
+      </div>
+      <div style="font-size:12.5px;color:#4E5958;line-height:1.55;text-wrap:pretty">Dolgu üstündeki sayı, o renk üzerinde okunacak metnin kontrast oranı (beyaz veya <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text.primary</span>, hangisi kazanıyorsa). <strong>Kategori renkleri metin rengi olarak kullanılmaz</strong> — dolgu, nokta ve grafik dilimi olarak kullanılır; etiket metni daima <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text.primary</span>'dir.</div>
+    </div>
+
+    <div style="background:#1B2122;border:1px solid #2A3132;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font-size:15px;font-weight:600;color:#ECF1F0">Koyu mod</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8B9695">tümü yüzey üstünde ≥3,6:1 · komşu deuteranopia farkı ≈2:1</div></div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:7px">
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#FFA88C;display:flex;align-items:flex-end;padding:6px"><span style="color:#14191A;font-family:'IBM Plex Mono',monospace;font-size:9.5px">8,73</span></div><div style="height:20px;background:#C7C789"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#FFA88C</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#B07A1C;display:flex;align-items:flex-end;padding:6px"><span style="color:#ECF1F0;font-family:'IBM Plex Mono',monospace;font-size:9.5px">4,39</span></div><div style="height:20px;background:#8D8D12"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#B07A1C</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#CBDA66;display:flex;align-items:flex-end;padding:6px"><span style="color:#14191A;font-family:'IBM Plex Mono',monospace;font-size:9.5px">10,69</span></div><div style="height:20px;background:#D6D667"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#CBDA66</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#3E9E63;display:flex;align-items:flex-end;padding:6px"><span style="color:#14191A;font-family:'IBM Plex Mono',monospace;font-size:9.5px">4,88</span></div><div style="height:20px;background:#8A8A65"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#3E9E63</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#5FDACB;display:flex;align-items:flex-end;padding:6px"><span style="color:#14191A;font-family:'IBM Plex Mono',monospace;font-size:9.5px">9,62</span></div><div style="height:20px;background:#C0C0CD"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#5FDACB</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#3C86B4;display:flex;align-items:flex-end;padding:6px"><span style="color:#ECF1F0;font-family:'IBM Plex Mono',monospace;font-size:9.5px">4,09</span></div><div style="height:20px;background:#7676B5"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#3C86B4</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#9DB6F7;display:flex;align-items:flex-end;padding:6px"><span style="color:#14191A;font-family:'IBM Plex Mono',monospace;font-size:9.5px">8,13</span></div><div style="height:20px;background:#AFAFF7"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#9DB6F7</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#7A68CC;display:flex;align-items:flex-end;padding:6px"><span style="color:#ECF1F0;font-family:'IBM Plex Mono',monospace;font-size:9.5px">3,64</span></div><div style="height:20px;background:#6E6ECC"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#7A68CC</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#D9A3F0;display:flex;align-items:flex-end;padding:6px"><span style="color:#14191A;font-family:'IBM Plex Mono',monospace;font-size:9.5px">8,12</span></div><div style="height:20px;background:#B5B5EF"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#D9A3F0</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#C2568E;display:flex;align-items:flex-end;padding:6px"><span style="color:#ECF1F0;font-family:'IBM Plex Mono',monospace;font-size:9.5px">3,90</span></div><div style="height:20px;background:#82828C"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#C2568E</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#F79CB2;display:flex;align-items:flex-end;padding:6px"><span style="color:#14191A;font-family:'IBM Plex Mono',monospace;font-size:9.5px">8,04</span></div><div style="height:20px;background:#BDBDB0"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#F79CB2</div></div></div>
+        <div style="border:1px solid #38403F;border-radius:9px;overflow:hidden"><div style="height:52px;background:#7B8A93;display:flex;align-items:flex-end;padding:6px"><span style="color:#ECF1F0;font-family:'IBM Plex Mono',monospace;font-size:9.5px">4,58</span></div><div style="height:20px;background:#868693"></div><div style="padding:6px;background:#222829"><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#B3BDBC">#7B8A93</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 · GRAFİK PALETLERİ -->
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">05</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">Veri görselleştirme paletleri</div>
+      <div style="font-size:13.5px;color:#687473">Sıralı skala tek boyutlu büyüklük için; karşılaştırmalı skala kategorik kırılım için.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:18px">
+        <div><div style="font-size:15px;font-weight:600">Sıralı — <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500">chart.sequential.1…6</span></div><div style="font-size:12.5px;color:#687473;margin-top:3px">Isı haritası, aylık yoğunluk, tek kategorinin zaman içindeki payı.</div></div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473;margin-bottom:6px">açık mod</div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px">
+            <div style="height:44px;border-radius:7px 0 0 7px;background:#D7EEEB;border:1px solid #E1E7E6"></div>
+            <div style="height:44px;background:#A9DCD6"></div>
+            <div style="height:44px;background:#74C6BE"></div>
+            <div style="height:44px;background:#3FA99F"></div>
+            <div style="height:44px;background:#0A7C70"></div>
+            <div style="height:44px;border-radius:0 7px 7px 0;background:#05564D"></div>
+          </div>
+          <div class="tnum" style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:5px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#687473"><div>D7EEEB</div><div>A9DCD6</div><div>74C6BE</div><div>3FA99F</div><div>0A7C70</div><div>05564D</div></div>
+        </div>
+        <div style="background:#1B2122;border-radius:12px;padding:14px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8B9695;margin-bottom:6px">koyu mod</div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px">
+            <div style="height:44px;border-radius:7px 0 0 7px;background:#10352F"></div>
+            <div style="height:44px;background:#164F47"></div>
+            <div style="height:44px;background:#1E7369"></div>
+            <div style="height:44px;background:#2F9C8E"></div>
+            <div style="height:44px;background:#4EC5B4"></div>
+            <div style="height:44px;border-radius:0 7px 7px 0;background:#86E2D5"></div>
+          </div>
+          <div class="tnum" style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:5px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#8B9695"><div>10352F</div><div>164F47</div><div>1E7369</div><div>2F9C8E</div><div>4EC5B4</div><div>86E2D5</div></div>
+        </div>
+        <div style="font-size:12.5px;color:#4E5958;line-height:1.5;text-wrap:pretty">Tek hue, monoton artan luminans: renk körlüğünden bağımsız olarak sıra korunur. Kademe 1–2 yalnızca zemin dolgusu; üzerine metin yazılmaz.</div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:18px">
+        <div><div style="font-size:15px;font-weight:600">Karşılaştırmalı — <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500">chart.categorical.1…8</span></div><div style="font-size:12.5px;color:#687473;margin-top:3px">Donut, yığılmış bar, çoklu çizgi. 8'den fazla dilim varsa kalanlar "Diğer"de toplanır.</div></div>
+        <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:5px">
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:7px;background:#0E6E68"></div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#687473">0E6E68</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:7px;background:#E0A02A"></div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#687473">E0A02A</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:7px;background:#2A4FA8"></div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#687473">2A4FA8</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:7px;background:#E884BC"></div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#687473">E884BC</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:7px;background:#5F6B12"></div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#687473">5F6B12</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:7px;background:#57ADD6"></div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#687473">57ADD6</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:7px;background:#6D2E96"></div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#687473">6D2E96</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:7px;background:#92A0A9"></div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#687473">92A0A9</div></div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473;margin-bottom:8px">yığılmış bar — gerçek kullanım</div>
+          <div style="display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid #E1E7E6">
+            <div style="width:27%;background:#0E6E68;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:10.5px">27%</div>
+            <div style="width:21%;background:#E0A02A;display:flex;align-items:center;justify-content:center;color:#161D1C;font-family:'IBM Plex Mono',monospace;font-size:10.5px">21%</div>
+            <div style="width:18%;background:#2A4FA8;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:10.5px">18%</div>
+            <div style="width:14%;background:#E884BC;display:flex;align-items:center;justify-content:center;color:#161D1C;font-family:'IBM Plex Mono',monospace;font-size:10.5px">14%</div>
+            <div style="width:11%;background:#5F6B12;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:10.5px">11%</div>
+            <div style="width:9%;background:#57ADD6"></div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#4E5958;line-height:1.5;text-wrap:pretty">Sıra kategori numarasına göre değil, <strong>komşu ayrımı en yüksek</strong> olacak şekilde sabitlendi: koyu–açık–koyu–açık. Bitişik dilimler arasında 1px <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">bg.surface</span> ayırıcı zorunlu.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 · TİPOGRAFİ -->
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">06</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">Tipografi — iki öneri seti</div>
+      <div style="font-size:13.5px;color:#687473">Bir arayüz fontu, bir veri fontu. Türkçe tam kapsam ve tabular rakam şart.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:baseline;gap:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#0A7C70">Set 1 · Sistem öncelikli</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">0 KB</div></div>
+        <div style="font-size:26px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;font-family:-apple-system,'SF Pro Text','Helvetica Neue',sans-serif">SF Pro Display / Text<br><span style="font-size:17px;font-weight:400;color:#4E5958">+ SF Pro <span style="font-family:'IBM Plex Mono',monospace;font-size:14px">monospacedDigit()</span></span></div>
+        <div style="font-size:13px;color:#4E5958;line-height:1.55;text-wrap:pretty">Ayrı bir sayı fontu yerine <em>aynı ailenin</em> tabular varyantı. <span style="font-family:'IBM Plex Mono',monospace;font-size:12px">Font.system(.body, design:.default).monospacedDigit()</span> rakam genişliklerini eşitler, harfleri değiştirmez — tutar sütunu hizalanır ama satır SF Pro dokusunu korur.</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;gap:9px;align-items:center"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;width:78px;flex-shrink:0">TÜRKÇE</div><div style="font-family:-apple-system,'SF Pro Text',sans-serif;font-size:21px;letter-spacing:0.01em">ğ ı İ i ş ç ö ü Ğ Ş Ç Ö Ü</div></div>
+          <div style="display:flex;gap:9px;align-items:center"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;width:78px;flex-shrink:0">AYIRIM</div><div style="font-family:-apple-system,'SF Pro Text',sans-serif;font-size:21px">0 O · 1 l I · ₺ 8.420,50</div></div>
+          <div style="display:flex;gap:9px;align-items:center"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;width:78px;flex-shrink:0">İBAN</div><div style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:15px">TR33 0006 1005 1978 6457 8413 26</div></div>
+        </div>
+        <div style="border-top:1px solid #EDF1F0;padding-top:14px;display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:#4E5958">
+          <div style="display:flex;gap:8px"><span style="color:#0F7A43;font-weight:700">+</span><span>Dynamic Type, optik boyutlandırma ve tüm erişilebilirlik kademeleri bedava gelir.</span></div>
+          <div style="display:flex;gap:8px"><span style="color:#0F7A43;font-weight:700">+</span><span>İndirme yok, lisans yok, ilk açılışta font yükleme gecikmesi yok — "offline" iddiasıyla birebir tutarlı.</span></div>
+          <div style="display:flex;gap:8px"><span style="color:#9C4033;font-weight:700">−</span><span>Uygulamaya ait bir ses yok: ekran görüntüsü diğer 400 finans uygulamasından ayrışmaz.</span></div>
+        </div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #0A7C70;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#0A7C70">Set 2 · Karakterli · SIL OFL</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#687473">≈ 190 KB (alt küme)</div></div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.02em;line-height:1.2">Archivo<br><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;letter-spacing:-0.01em;color:#0A7C70">IBM Plex Mono</span></div>
+        <div style="font-size:13px;color:#4E5958;line-height:1.55;text-wrap:pretty"><strong>Neden birlikte çalışıyorlar:</strong> Archivo (Omnibus-Type) yüksek x-yüksekliği ve dar aperturlarıyla küçük puntolarda bile sıkı ve ciddi durur — gişe/tabela kökenli bir grotesk, bu yüzden "ürkek startup" değil "kurumsal ama modern" okunur. Plex Mono ise IBM'in mühendislik ailesinden gelir: eğik kesikli sıfır, kuyruklu <em>l</em>, serifli <em>I</em>. İkisi de <strong>düşük kontrastlı, dikey eksenli, geometrik-grotesk</strong> iskelet paylaşır; yan yana geldiklerinde "iki farklı font" gibi değil, aynı ailenin metin ve rakam yüzü gibi durur. Rakam yükseklikleri neredeyse birebir örtüşür (cap 0,72 em / 0,71 em), bu yüzden başlık ile tutar aynı temel çizgide oturur.</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;gap:9px;align-items:center"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;width:78px;flex-shrink:0">TÜRKÇE</div><div style="font-size:21px;font-weight:500;letter-spacing:0.01em">ğ ı İ i ş ç ö ü Ğ Ş Ç Ö Ü</div></div>
+          <div style="display:flex;gap:9px;align-items:center"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;width:78px;flex-shrink:0">AYIRIM</div><div style="font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:500">0 O · 1 l I · ₺ 8.420,50</div></div>
+          <div style="display:flex;gap:9px;align-items:center"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#687473;width:78px;flex-shrink:0">İBAN</div><div style="font-family:'IBM Plex Mono',monospace;font-size:15px">TR33 0006 1005 1978 6457 8413 26</div></div>
+        </div>
+        <div style="background:#F6F8F8;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#687473">Tabular hizalama testi</div>
+          <div style="display:flex;gap:28px">
+            <div style="display:flex;flex-direction:column;gap:3px"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#8B9695">tnum ✓</div><div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:16px;text-align:right">₺ 1.111,11<br>₺ 24.500,00<br>₺ 842,60<br>₺ 9,05</div></div>
+            <div style="display:flex;flex-direction:column;gap:3px"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#8B9695">₺ glif testi</div><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;line-height:1.5">₺ U+20BA<br><span style="font-size:26px">₺</span> Plex Mono<br><span style="font-size:26px;font-family:'Archivo',sans-serif;font-weight:600">₺</span> Archivo</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 · TİP ÖLÇEĞİ -->
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">07</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">Tip ölçeği</div>
+      <div style="font-size:13.5px;color:#687473">Puntolar Dynamic Type "Large" (varsayılan) kademesindedir; ölçek relativeTo ile büyür.</div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;background:#EDF1F0;padding:11px 22px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:#4E5958">
+        <div>Token</div><div>Örnek</div><div>Font / ağırlık</div><div>Boyut / LH</div><div>Letter-spacing</div><div>iOS text style</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;padding:18px 22px;border-top:1px solid #EDF1F0;align-items:center;gap:10px">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px">text.balance.hero</div><div style="font-size:11.5px;color:#687473;margin-top:2px">Dashboard bakiye</div></div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:40px;font-weight:500;letter-spacing:-0.025em;line-height:1.05">₺ 48.320,75</div>
+        <div style="font-size:12.5px;color:#4E5958">Plex Mono<br>Medium 500</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">44 / 48</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">−0,02 em</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">.largeTitle<br><span style="color:#687473">cap: .accessibility2</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;padding:18px 22px;border-top:1px solid #EDF1F0;align-items:center;gap:10px">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px">text.title.screen</div><div style="font-size:11.5px;color:#687473;margin-top:2px">Ekran başlığı</div></div>
+        <div style="font-size:28px;font-weight:700;letter-spacing:-0.01em;line-height:1.21">İşlemler</div>
+        <div style="font-size:12.5px;color:#4E5958">Archivo<br>Bold 700</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">28 / 34</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">−0,01 em</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">.title1</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;padding:18px 22px;border-top:1px solid #EDF1F0;align-items:center;gap:10px">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px">text.title.section</div><div style="font-size:11.5px;color:#687473;margin-top:2px">Bölüm başlığı</div></div>
+        <div style="font-size:17px;font-weight:600;line-height:1.29">Ağustos 2026 özeti</div>
+        <div style="font-size:12.5px;color:#4E5958">Archivo<br>SemiBold 600</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">17 / 22</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">0</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">.headline</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;padding:18px 22px;border-top:1px solid #EDF1F0;align-items:center;gap:10px">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px">text.body.item</div><div style="font-size:11.5px;color:#687473;margin-top:2px">İşlem açıklaması</div></div>
+        <div style="font-size:16px;font-weight:500;line-height:1.31">Migros Ataşehir Şubesi</div>
+        <div style="font-size:12.5px;color:#4E5958">Archivo<br>Medium 500</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">16 / 21</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">0</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">.body</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;padding:18px 22px;border-top:1px solid #EDF1F0;align-items:center;gap:10px">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px">text.amount.row</div><div style="font-size:11.5px;color:#687473;margin-top:2px">İşlem tutarı</div></div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;line-height:1.31">−₺ 842,60</div>
+        <div style="font-size:12.5px;color:#4E5958">Plex Mono<br>Medium 500</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">16 / 21</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">0 · tnum</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">.body<br><span style="color:#687473">monospacedDigit</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;padding:18px 22px;border-top:1px solid #EDF1F0;align-items:center;gap:10px">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px">text.meta</div><div style="font-size:11.5px;color:#687473;margin-top:2px">Meta / tarih</div></div>
+        <div style="font-size:13px;font-weight:400;line-height:1.31;color:#4E5958;letter-spacing:0.01em">Market · 12 Ağu · Ziraat ••3412</div>
+        <div style="font-size:12.5px;color:#4E5958">Archivo<br>Regular 400</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">13 / 17</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">+0,01 em</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">.footnote</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;padding:18px 22px;border-top:1px solid #EDF1F0;align-items:center;gap:10px">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px">text.button</div><div style="font-size:11.5px;color:#687473;margin-top:2px">Buton</div></div>
+        <div><span style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:12px;background:#0A7C70;color:#FFFFFF;font-size:16px;font-weight:600;letter-spacing:0.01em">Ekstre içe aktar</span></div>
+        <div style="font-size:12.5px;color:#4E5958">Archivo<br>SemiBold 600</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">16 / 20</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">+0,01 em</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">.body semibold<br><span style="color:#687473">min 44×44 pt</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 2fr 1.1fr 0.85fr 1.15fr 1.25fr;padding:18px 22px;border-top:1px solid #EDF1F0;align-items:center;gap:10px">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px">text.caption</div><div style="font-size:11.5px;color:#687473;margin-top:2px">Caption / etiket</div></div>
+        <div style="font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#687473">Bu ayki bütçe</div>
+        <div style="font-size:12.5px;color:#4E5958">Archivo<br>Medium 500</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">11 / 14</div>
+        <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:12px">+0,06 em</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4E5958">.caption2</div>
+      </div>
+    </div>
+
+    <!-- Dynamic Type XXL -->
+    <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:16px;font-weight:600">XXL / erişilebilirlik kademelerinde layout davranışı</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        <div style="background:#F6F8F8;border-radius:12px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;margin-bottom:5px">balance.hero</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">44 → 56 pt'ta durur (<span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">.accessibility2</span> sınırı). Daha büyüğünde punto sabit kalır, bunun yerine <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">minimumScaleFactor(0.8)</span> devreye girer — bakiye asla kırpılmaz, asla iki satıra düşmez.</div></div>
+        <div style="background:#F6F8F8;border-radius:12px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;margin-bottom:5px">İşlem satırı</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">.accessibility1</span>'den itibaren yatay <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">HStack</span> dikey <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">VStack</span>'e döner (<span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">ViewThatFits</span>): açıklama üstte, tutar altta sola dayalı. Yön ikonu ve işaret korunur.</div></div>
+        <div style="background:#F6F8F8;border-radius:12px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;margin-bottom:5px">Bütçe çubuğu</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">Yükseklik 8 → 12 pt. Yüzde etiketi çubuğun içinden çıkıp üst satıra taşınır; çubuk hiçbir kademede metin barındırmaz.</div></div>
+        <div style="background:#F6F8F8;border-radius:12px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;margin-bottom:5px">Sekme çubuğu</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">.accessibility3</span>'ten itibaren iOS sekme etiketlerini gizler; ikonlar 28 pt'a çıkar. Her sekmenin <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">accessibilityLabel</span>'ı bu yüzden zorunlu.</div></div>
+        <div style="background:#F6F8F8;border-radius:12px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;margin-bottom:5px">caption / meta</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">Büyük kademelerde <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text-transform: uppercase</span> kaldırılır — büyük harf blokları büyük puntoda okunabilirliği düşürür. <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">letter-spacing</span> 0,06 → 0,02 em.</div></div>
+        <div style="background:#F6F8F8;border-radius:12px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0A7C70;margin-bottom:5px">Genel kural</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">Hiçbir metin <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">.fixedSize()</span> ile dondurulmaz; sabit yükseklikli hiçbir satır yoktur. Tutar ve tarih hariç her şey sarabilir.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 · UYGULAMALI ÖRNEK -->
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">08</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">Gerçek kullanım</div>
+      <div style="font-size:13.5px;color:#687473">390 pt genişlik · Set 2 tipografisi · her iki mod.</div>
+    </div>
+
+    <div style="display:flex;gap:28px;flex-wrap:wrap;justify-content:center">
+
+      <!-- LIGHT -->
+      <div style="width:390px;background:#F6F8F8;border:1px solid #CDD5D4;border-radius:26px;padding:20px 16px 26px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px">
+          <div style="font-size:28px;font-weight:700;letter-spacing:-0.01em">Özet</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#0A7C70">Açık mod</div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#687473">Toplam bakiye</div>
+          <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:44px;font-weight:500;letter-spacing:-0.025em;line-height:1;color:#161D1C">₺ 48.320,75</div>
+          <div style="display:flex;gap:10px">
+            <div style="flex:1;background:#E3F4EA;border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:#0F7A43"><span style="font-size:13px">↙</span>Gelir</div>
+              <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:500;color:#0F7A43">+₺ 24.500,00</div>
+            </div>
+            <div style="flex:1;background:#F8E9E5;border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:#9C4033"><span style="font-size:13px">↗</span>Gider</div>
+              <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:500;color:#9C4033">−₺ 16.179,25</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;overflow:hidden">
+          <div style="padding:14px 18px 10px;font-size:17px;font-weight:600">Son işlemler</div>
+
+          <div style="display:flex;align-items:center;gap:13px;padding:12px 18px;border-top:1px solid #E1E7E6">
+            <div style="width:38px;height:38px;border-radius:11px;background:#E3F4EA;display:flex;align-items:center;justify-content:center;color:#0F7A43;font-size:17px;flex-shrink:0">↙</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:500;color:#161D1C">Maaş — Ağustos</div>
+              <div style="font-size:13px;color:#4E5958;letter-spacing:0.01em">Gelir · 1 Ağu · Ziraat ••3412</div>
+            </div>
+            <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;color:#0F7A43;white-space:nowrap">+₺ 24.500,00</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:13px;padding:12px 18px;border-top:1px solid #E1E7E6">
+            <div style="width:38px;height:38px;border-radius:11px;background:#B84A2E;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:16px;flex-shrink:0">↗</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:500;color:#161D1C">Migros Ataşehir</div>
+              <div style="font-size:13px;color:#4E5958;letter-spacing:0.01em">Market · 12 Ağu · Ziraat ••3412</div>
+            </div>
+            <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;color:#161D1C;white-space:nowrap">−₺ 842,60</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:13px;padding:12px 18px;border-top:1px solid #E1E7E6;background:#FBE4E1">
+            <div style="width:38px;height:38px;border-radius:11px;background:#C21F14;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:17px;font-weight:700;flex-shrink:0">!</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:500;color:#161D1C">Bi Nevi Deli Fişek</div>
+              <div style="font-size:13px;color:#9C4033;letter-spacing:0.01em">Yeme-içme · 12 Ağu · bütçe aşıldı</div>
+            </div>
+            <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#C21F14;white-space:nowrap">−₺ 1.240,00</div>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font-size:17px;font-weight:600">Yeme-içme bütçesi</div>
+            <div style="display:flex;align-items:center;gap:6px;background:#C21F14;border-radius:7px;padding:3px 8px"><span style="color:#FFFFFF;font-size:12px;font-weight:700">!</span><span class="tnum" style="color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">%112</span></div>
+          </div>
+          <div style="height:10px;border-radius:5px;background:#EDF1F0;display:flex;overflow:hidden">
+            <div style="width:89%;background:#C21F14"></div>
+            <div style="width:11%;background:repeating-linear-gradient(45deg,#C21F14 0 3px,#FBE4E1 3px 6px)"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#4E5958;letter-spacing:0.01em">
+            <span class="tnum" style="font-family:'IBM Plex Mono',monospace">₺ 3.360 / ₺ 3.000</span>
+            <span class="tnum" style="font-family:'IBM Plex Mono',monospace;color:#C21F14;font-weight:500">₺ 360 aşım</span>
+          </div>
+          <div style="height:1px;background:#E1E7E6"></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font-size:15px;font-weight:500;color:#4E5958">Market bütçesi</div>
+            <div style="display:flex;align-items:center;gap:6px;background:#FAF0DC;border-radius:7px;padding:3px 8px"><span style="color:#9A6100;font-size:12px">◔</span><span class="tnum" style="color:#9A6100;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">%84</span></div>
+          </div>
+          <div style="height:10px;border-radius:5px;background:#EDF1F0;overflow:hidden"><div style="width:84%;height:100%;background:#9A6100"></div></div>
+        </div>
+      </div>
+
+      <!-- DARK -->
+      <div style="width:390px;background:#14191A;border:1px solid #2A3132;border-radius:26px;padding:20px 16px 26px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px">
+          <div style="font-size:28px;font-weight:700;letter-spacing:-0.01em;color:#ECF1F0">Özet</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#3FCFBC">Koyu mod</div>
+        </div>
+
+        <div style="background:#1B2122;border:1px solid #2A3132;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#8B9695">Toplam bakiye</div>
+          <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:44px;font-weight:500;letter-spacing:-0.025em;line-height:1;color:#ECF1F0">₺ 48.320,75</div>
+          <div style="display:flex;gap:10px">
+            <div style="flex:1;background:#123420;border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:#4FC98A"><span style="font-size:13px">↙</span>Gelir</div>
+              <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:500;color:#4FC98A">+₺ 24.500,00</div>
+            </div>
+            <div style="flex:1;background:#3A1E18;border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:#E89A88"><span style="font-size:13px">↗</span>Gider</div>
+              <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:500;color:#E89A88">−₺ 16.179,25</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#1B2122;border:1px solid #2A3132;border-radius:18px;overflow:hidden">
+          <div style="padding:14px 18px 10px;font-size:17px;font-weight:600;color:#ECF1F0">Son işlemler</div>
+
+          <div style="display:flex;align-items:center;gap:13px;padding:12px 18px;border-top:1px solid #2A3132">
+            <div style="width:38px;height:38px;border-radius:11px;background:#123420;display:flex;align-items:center;justify-content:center;color:#4FC98A;font-size:17px;flex-shrink:0">↙</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:500;color:#ECF1F0">Maaş — Ağustos</div>
+              <div style="font-size:13px;color:#B3BDBC;letter-spacing:0.01em">Gelir · 1 Ağu · Ziraat ••3412</div>
+            </div>
+            <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;color:#4FC98A;white-space:nowrap">+₺ 24.500,00</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:13px;padding:12px 18px;border-top:1px solid #2A3132">
+            <div style="width:38px;height:38px;border-radius:11px;background:#FFA88C;display:flex;align-items:center;justify-content:center;color:#14191A;font-size:16px;flex-shrink:0">↗</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:500;color:#ECF1F0">Migros Ataşehir</div>
+              <div style="font-size:13px;color:#B3BDBC;letter-spacing:0.01em">Market · 12 Ağu · Ziraat ••3412</div>
+            </div>
+            <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;color:#ECF1F0;white-space:nowrap">−₺ 842,60</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:13px;padding:12px 18px;border-top:1px solid #2A3132;background:#3D1A15">
+            <div style="width:38px;height:38px;border-radius:11px;background:#FF7A66;display:flex;align-items:center;justify-content:center;color:#14191A;font-size:17px;font-weight:700;flex-shrink:0">!</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:500;color:#ECF1F0">Bi Nevi Deli Fişek</div>
+              <div style="font-size:13px;color:#E89A88;letter-spacing:0.01em">Yeme-içme · 12 Ağu · bütçe aşıldı</div>
+            </div>
+            <div class="tnum" style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#FF7A66;white-space:nowrap">−₺ 1.240,00</div>
+          </div>
+        </div>
+
+        <div style="background:#1B2122;border:1px solid #2A3132;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font-size:17px;font-weight:600;color:#ECF1F0">Yeme-içme bütçesi</div>
+            <div style="display:flex;align-items:center;gap:6px;background:#FF7A66;border-radius:7px;padding:3px 8px"><span style="color:#14191A;font-size:12px;font-weight:700">!</span><span class="tnum" style="color:#14191A;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">%112</span></div>
+          </div>
+          <div style="height:10px;border-radius:5px;background:#2A3132;display:flex;overflow:hidden">
+            <div style="width:89%;background:#FF7A66"></div>
+            <div style="width:11%;background:repeating-linear-gradient(45deg,#FF7A66 0 3px,#3D1A15 3px 6px)"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#B3BDBC;letter-spacing:0.01em">
+            <span class="tnum" style="font-family:'IBM Plex Mono',monospace">₺ 3.360 / ₺ 3.000</span>
+            <span class="tnum" style="font-family:'IBM Plex Mono',monospace;color:#FF7A66;font-weight:500">₺ 360 aşım</span>
+          </div>
+          <div style="height:1px;background:#2A3132"></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font-size:15px;font-weight:500;color:#B3BDBC">Market bütçesi</div>
+            <div style="display:flex;align-items:center;gap:6px;background:#37290E;border-radius:7px;padding:3px 8px"><span style="color:#F2B33D;font-size:12px">◔</span><span class="tnum" style="color:#F2B33D;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600">%84</span></div>
+          </div>
+          <div style="height:10px;border-radius:5px;background:#2A3132;overflow:hidden"><div style="width:84%;height:100%;background:#F2B33D"></div></div>
+        </div>
+      </div>
+
+      <!-- ANNOTATION -->
+      <div style="width:300px;display:flex;flex-direction:column;gap:12px;padding-top:52px">
+        <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:14px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0A7C70;margin-bottom:5px">Gider tutarı nötr</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">Sıradan giderin tutarı <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text.primary</span>'dir, kırmızı değil. Kırmızı yalnızca <em>anormal</em> olana ayrılır; her satır kırmızıysa hiçbir satır uyarmaz.</div></div>
+        <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:14px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0A7C70;margin-bottom:5px">Üç sinyal, tek satır</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">Aşım satırı aynı anda: dolgulu ünlem ikonu, zemin tonu, kalın tutar ve "bütçe aşıldı" metni taşır. Ekran gri basılsa dahi ayırt edilir.</div></div>
+        <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:14px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0A7C70;margin-bottom:5px">Aşım çubuğu</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">%100'ü aşan kısım çapraz taramayla gösterilir — dolgunun kendisi zaten dolu olduğu için tek başına "ne kadar aştım" bilgisini veremez.</div></div>
+        <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:14px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#0A7C70;margin-bottom:5px">Bakiye hizası</div><div style="font-size:12.5px;color:#4E5958;line-height:1.5">Tüm tutarlar tabular ve sağa dayalı: göz tek bir dikey eksende aşağı iner, binlik ayraçları üst üste oturur. Üç saniyelik bakışın tamamı bu hizada geçer.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 · SWIFTUI -->
+  <sc-if value="{{ kodBlogu }}" hint-placeholder-val="{{ true }}">
+  <div style="width:100%;max-width:1320px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;color:#FFFFFF;background:#0A7C70;border-radius:6px;padding:4px 9px;font-weight:600">09</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.012em">SwiftUI token dosyası</div>
+      <div style="font-size:13.5px;color:#687473">Asset Catalog olmadan, tek dosyada; mod geçişi UITraitCollection üzerinden.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+      <div style="background:#161D1C;border-radius:18px;overflow:hidden">
+        <div style="padding:12px 20px;background:#0F1615;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8B9695;display:flex;justify-content:space-between"><span>DesignTokens+Color.swift</span><span style="color:#3FCFBC">Swift 5.9</span></div>
+        <pre style="margin:0;padding:20px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.65;color:#DDE5E3;overflow-x:auto"><span style="color:#8B9695">import</span> SwiftUI
+
+<span style="color:#8B9695">// Tek giriş: her token açık/koyu çiftini kendi taşır.</span>
+<span style="color:#8B9695">extension</span> <span style="color:#3FCFBC">Color</span> {
+    <span style="color:#8B9695">static func</span> <span style="color:#F2B33D">dynamic</span>(_ light: UInt32, _ dark: UInt32) -&gt; Color {
+        Color(UIColor { $0.userInterfaceStyle == .dark
+            ? UIColor(hex: dark) : UIColor(hex: light) })
+    }
+
+    <span style="color:#8B9695">enum</span> <span style="color:#3FCFBC">bg</span> {
+        <span style="color:#8B9695">static let</span> canvas   = Color.dynamic(<span style="color:#9DB6F7">0xF6F8F8</span>, <span style="color:#9DB6F7">0x14191A</span>)
+        <span style="color:#8B9695">static let</span> surface  = Color.dynamic(<span style="color:#9DB6F7">0xFFFFFF</span>, <span style="color:#9DB6F7">0x1B2122</span>)
+        <span style="color:#8B9695">static let</span> elevated = Color.dynamic(<span style="color:#9DB6F7">0xFFFFFF</span>, <span style="color:#9DB6F7">0x222829</span>)
+        <span style="color:#8B9695">static let</span> subtle   = Color.dynamic(<span style="color:#9DB6F7">0xEDF1F0</span>, <span style="color:#9DB6F7">0x2A3132</span>)
+    }
+
+    <span style="color:#8B9695">enum</span> <span style="color:#3FCFBC">border</span> {
+        <span style="color:#8B9695">static let</span> divider = Color.dynamic(<span style="color:#9DB6F7">0xE1E7E6</span>, <span style="color:#9DB6F7">0x2A3132</span>)
+        <span style="color:#8B9695">static let</span> `default` = Color.dynamic(<span style="color:#9DB6F7">0xCDD5D4</span>, <span style="color:#9DB6F7">0x38403F</span>)
+        <span style="color:#8B9695">static let</span> strong  = Color.dynamic(<span style="color:#9DB6F7">0xAEB9B8</span>, <span style="color:#9DB6F7">0x4B5453</span>)
+    }
+
+    <span style="color:#8B9695">enum</span> <span style="color:#3FCFBC">text</span> {
+        <span style="color:#8B9695">static let</span> primary   = Color.dynamic(<span style="color:#9DB6F7">0x161D1C</span>, <span style="color:#9DB6F7">0xECF1F0</span>) <span style="color:#6B7675">// 17.12 / 14.30</span>
+        <span style="color:#8B9695">static let</span> secondary = Color.dynamic(<span style="color:#9DB6F7">0x4E5958</span>, <span style="color:#9DB6F7">0xB3BDBC</span>) <span style="color:#6B7675">//  7.26 /  8.48</span>
+        <span style="color:#8B9695">static let</span> muted     = Color.dynamic(<span style="color:#9DB6F7">0x687473</span>, <span style="color:#9DB6F7">0x8B9695</span>) <span style="color:#6B7675">//  4.85 /  5.36</span>
+        <span style="color:#8B9695">static let</span> disabled  = Color.dynamic(<span style="color:#9DB6F7">0x8B9695</span>, <span style="color:#9DB6F7">0x6B7675</span>)
+        <span style="color:#8B9695">static let</span> onBrand   = Color.dynamic(<span style="color:#9DB6F7">0xFFFFFF</span>, <span style="color:#9DB6F7">0x06231F</span>)
+    }
+
+    <span style="color:#8B9695">enum</span> <span style="color:#3FCFBC">brand</span> {
+        <span style="color:#8B9695">static let</span> primary = Color.dynamic(<span style="color:#9DB6F7">0x0A7C70</span>, <span style="color:#9DB6F7">0x3FCFBC</span>)
+        <span style="color:#8B9695">static let</span> surface = Color.dynamic(<span style="color:#9DB6F7">0xE2F2EF</span>, <span style="color:#9DB6F7">0x123A36</span>)
+    }
+
+    <span style="color:#8B9695">enum</span> <span style="color:#3FCFBC">finance</span> {
+        <span style="color:#8B9695">static let</span> income   = Color.dynamic(<span style="color:#9DB6F7">0x0F7A43</span>, <span style="color:#9DB6F7">0x4FC98A</span>)
+        <span style="color:#8B9695">static let</span> expense  = Color.dynamic(<span style="color:#9DB6F7">0x9C4033</span>, <span style="color:#9DB6F7">0xE89A88</span>)
+        <span style="color:#8B9695">static let</span> transfer = Color.dynamic(<span style="color:#9DB6F7">0x4A6785</span>, <span style="color:#9DB6F7">0x93B4CE</span>)
+        <span style="color:#8B9695">static let</span> warning  = Color.dynamic(<span style="color:#9DB6F7">0x9A6100</span>, <span style="color:#9DB6F7">0xF2B33D</span>)
+        <span style="color:#8B9695">static let</span> critical = Color.dynamic(<span style="color:#9DB6F7">0xC21F14</span>, <span style="color:#9DB6F7">0xFF7A66</span>)
+
+        <span style="color:#8B9695">static let</span> incomeSurface   = Color.dynamic(<span style="color:#9DB6F7">0xE3F4EA</span>, <span style="color:#9DB6F7">0x123420</span>)
+        <span style="color:#8B9695">static let</span> expenseSurface  = Color.dynamic(<span style="color:#9DB6F7">0xF8E9E5</span>, <span style="color:#9DB6F7">0x3A1E18</span>)
+        <span style="color:#8B9695">static let</span> transferSurface = Color.dynamic(<span style="color:#9DB6F7">0xE9EFF5</span>, <span style="color:#9DB6F7">0x1C2A36</span>)
+        <span style="color:#8B9695">static let</span> warningSurface  = Color.dynamic(<span style="color:#9DB6F7">0xFAF0DC</span>, <span style="color:#9DB6F7">0x37290E</span>)
+        <span style="color:#8B9695">static let</span> criticalSurface = Color.dynamic(<span style="color:#9DB6F7">0xFBE4E1</span>, <span style="color:#9DB6F7">0x3D1A15</span>)
+    }
+
+    <span style="color:#8B9695">enum</span> <span style="color:#3FCFBC">category</span> {
+        <span style="color:#8B9695">static let</span> all: [Color] = [
+            .dynamic(<span style="color:#9DB6F7">0xB84A2E</span>, <span style="color:#9DB6F7">0xFFA88C</span>), <span style="color:#6B7675">// 01 market</span>
+            .dynamic(<span style="color:#9DB6F7">0xE0A02A</span>, <span style="color:#9DB6F7">0xB07A1C</span>), <span style="color:#6B7675">// 02 ulaşım</span>
+            .dynamic(<span style="color:#9DB6F7">0x5F6B12</span>, <span style="color:#9DB6F7">0xCBDA66</span>), <span style="color:#6B7675">// 03 faturalar</span>
+            .dynamic(<span style="color:#9DB6F7">0x57B87A</span>, <span style="color:#9DB6F7">0x3E9E63</span>), <span style="color:#6B7675">// 04 sağlık</span>
+            .dynamic(<span style="color:#9DB6F7">0x0E6E68</span>, <span style="color:#9DB6F7">0x5FDACB</span>), <span style="color:#6B7675">// 05 abonelik</span>
+            .dynamic(<span style="color:#9DB6F7">0x57ADD6</span>, <span style="color:#9DB6F7">0x3C86B4</span>), <span style="color:#6B7675">// 06 ev</span>
+            .dynamic(<span style="color:#9DB6F7">0x2A4FA8</span>, <span style="color:#9DB6F7">0x9DB6F7</span>), <span style="color:#6B7675">// 07 eğitim</span>
+            .dynamic(<span style="color:#9DB6F7">0x9A8CE8</span>, <span style="color:#9DB6F7">0x7A68CC</span>), <span style="color:#6B7675">// 08 eğlence</span>
+            .dynamic(<span style="color:#9DB6F7">0x6D2E96</span>, <span style="color:#9DB6F7">0xD9A3F0</span>), <span style="color:#6B7675">// 09 alışveriş</span>
+            .dynamic(<span style="color:#9DB6F7">0xE884BC</span>, <span style="color:#9DB6F7">0xC2568E</span>), <span style="color:#6B7675">// 10 kişisel bakım</span>
+            .dynamic(<span style="color:#9DB6F7">0xA32348</span>, <span style="color:#9DB6F7">0xF79CB2</span>), <span style="color:#6B7675">// 11 bağış</span>
+            .dynamic(<span style="color:#9DB6F7">0x92A0A9</span>, <span style="color:#9DB6F7">0x7B8A93</span>)  <span style="color:#6B7675">// 12 diğer</span>
+        ]
+    }
+
+    <span style="color:#8B9695">enum</span> <span style="color:#3FCFBC">chart</span> {
+        <span style="color:#8B9695">static let</span> sequential: [Color] = [
+            .dynamic(<span style="color:#9DB6F7">0xD7EEEB</span>, <span style="color:#9DB6F7">0x10352F</span>),
+            .dynamic(<span style="color:#9DB6F7">0xA9DCD6</span>, <span style="color:#9DB6F7">0x164F47</span>),
+            .dynamic(<span style="color:#9DB6F7">0x74C6BE</span>, <span style="color:#9DB6F7">0x1E7369</span>),
+            .dynamic(<span style="color:#9DB6F7">0x3FA99F</span>, <span style="color:#9DB6F7">0x2F9C8E</span>),
+            .dynamic(<span style="color:#9DB6F7">0x0A7C70</span>, <span style="color:#9DB6F7">0x4EC5B4</span>),
+            .dynamic(<span style="color:#9DB6F7">0x05564D</span>, <span style="color:#9DB6F7">0x86E2D5</span>)
+        ]
+        <span style="color:#8B9695">// Karşılaştırmalı skala: komşu ayrımı en yüksek sıra</span>
+        <span style="color:#8B9695">static let</span> categorical: [Color] = [4, 1, 6, 9, 2, 5, 8, 11]
+            .map { Color.category.all[$0] }
+    }
+}
+
+<span style="color:#8B9695">extension</span> <span style="color:#3FCFBC">UIColor</span> {
+    <span style="color:#8B9695">convenience init</span>(hex: UInt32) {
+        <span style="color:#8B9695">self</span>.init(
+            red:   CGFloat((hex &gt;&gt; <span style="color:#9DB6F7">16</span>) &amp; <span style="color:#9DB6F7">0xFF</span>) / <span style="color:#9DB6F7">255</span>,
+            green: CGFloat((hex &gt;&gt; <span style="color:#9DB6F7">8</span>)  &amp; <span style="color:#9DB6F7">0xFF</span>) / <span style="color:#9DB6F7">255</span>,
+            blue:  CGFloat( hex        &amp; <span style="color:#9DB6F7">0xFF</span>) / <span style="color:#9DB6F7">255</span>,
+            alpha: <span style="color:#9DB6F7">1</span>)
+    }
+}</pre>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="background:#161D1C;border-radius:18px;overflow:hidden">
+          <div style="padding:12px 20px;background:#0F1615;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8B9695;display:flex;justify-content:space-between"><span>DesignTokens+Font.swift</span><span style="color:#3FCFBC">Set 2</span></div>
+          <pre style="margin:0;padding:20px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.65;color:#DDE5E3;overflow-x:auto"><span style="color:#8B9695">import</span> SwiftUI
+
+<span style="color:#8B9695">enum</span> <span style="color:#3FCFBC">TypeFace</span> {
+    <span style="color:#8B9695">static let</span> ui   = <span style="color:#F2B33D">"Archivo"</span>
+    <span style="color:#8B9695">static let</span> data = <span style="color:#F2B33D">"IBMPlexMono"</span>
+}
+
+<span style="color:#8B9695">extension</span> <span style="color:#3FCFBC">Font</span> {
+    <span style="color:#8B9695">// Dynamic Type'a bağlı özel font — relativeTo şart,</span>
+    <span style="color:#8B9695">// aksi halde ölçek kullanıcı ayarını takip etmez.</span>
+    <span style="color:#8B9695">private static func</span> <span style="color:#F2B33D">scaled</span>(_ name: String, _ size: CGFloat,
+                                     _ style: TextStyle) -&gt; Font {
+        .custom(name, size: size, relativeTo: style)
+    }
+
+    <span style="color:#8B9695">static let</span> balanceHero  = scaled(TypeFace.data, <span style="color:#9DB6F7">44</span>, .largeTitle)
+                                 .weight(.medium).monospacedDigit()
+    <span style="color:#8B9695">static let</span> titleScreen  = scaled(TypeFace.ui,   <span style="color:#9DB6F7">28</span>, .title).weight(.bold)
+    <span style="color:#8B9695">static let</span> titleSection = scaled(TypeFace.ui,   <span style="color:#9DB6F7">17</span>, .headline).weight(.semibold)
+    <span style="color:#8B9695">static let</span> bodyItem     = scaled(TypeFace.ui,   <span style="color:#9DB6F7">16</span>, .body).weight(.medium)
+    <span style="color:#8B9695">static let</span> amountRow    = scaled(TypeFace.data, <span style="color:#9DB6F7">16</span>, .body)
+                                 .weight(.medium).monospacedDigit()
+    <span style="color:#8B9695">static let</span> meta         = scaled(TypeFace.ui,   <span style="color:#9DB6F7">13</span>, .footnote)
+    <span style="color:#8B9695">static let</span> button       = scaled(TypeFace.ui,   <span style="color:#9DB6F7">16</span>, .body).weight(.semibold)
+    <span style="color:#8B9695">static let</span> caption      = scaled(TypeFace.ui,   <span style="color:#9DB6F7">11</span>, .caption2).weight(.medium)
+}
+
+<span style="color:#8B9695">// Sistem-öncelikli set (Set 1) — dosya gerekmez:</span>
+<span style="color:#8B9695">extension</span> <span style="color:#3FCFBC">Font</span> {
+    <span style="color:#8B9695">static let</span> balanceHeroSystem =
+        Font.system(size: <span style="color:#9DB6F7">44</span>, weight: .semibold, design: .default)
+            .monospacedDigit()
+    <span style="color:#8B9695">static let</span> amountRowSystem =
+        Font.system(.body, design: .default).monospacedDigit()
+}
+
+<span style="color:#8B9695">// Türkçe: küçük/büyük harf dönüşümü ASLA varsayılan locale ile yapılmaz.</span>
+<span style="color:#8B9695">// "İstanbul".lowercased() → "i̇stanbul" hatası bu satırla önlenir:</span>
+<span style="color:#8B9695">extension</span> <span style="color:#3FCFBC">String</span> {
+    <span style="color:#8B9695">var</span> trUpper: String { uppercased(with: Locale(identifier: <span style="color:#F2B33D">"tr_TR"</span>)) }
+    <span style="color:#8B9695">var</span> trLower: String { lowercased(with: Locale(identifier: <span style="color:#F2B33D">"tr_TR"</span>)) }
+}</pre>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E1E7E6;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:15px;font-weight:600">Uygulama notları</div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:12.5px;color:#4E5958;line-height:1.5">
+            <div style="display:flex;gap:9px"><span style="font-family:'IBM Plex Mono',monospace;color:#0A7C70;flex-shrink:0">01</span><span>Tutar biçimlendirmesi <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">Decimal</span> + <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">.currency(code:"TRY")</span> ile; <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">Double</span> asla. Kuruş <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">Int</span> minor unit olarak saklanır.</span></div>
+            <div style="display:flex;gap:9px"><span style="font-family:'IBM Plex Mono',monospace;color:#0A7C70;flex-shrink:0">02</span><span>Font alt kümesi: Latin + Latin Extended-A (Türkçe) + <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">U+20BA</span>. Archivo Variable yerine 4 statik ağırlık kullanmak paketi ~90 KB küçültür.</span></div>
+            <div style="display:flex;gap:9px"><span style="font-family:'IBM Plex Mono',monospace;color:#0A7C70;flex-shrink:0">03</span><span>Yüksek Kontrast açıkken (<span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">accessibilityContrast == .high</span>) <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text.muted</span> → <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">text.secondary</span>'ye, <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">border.default</span> → <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">border.strong</span>'a yükseltilir.</span></div>
+            <div style="display:flex;gap:9px"><span style="font-family:'IBM Plex Mono',monospace;color:#0A7C70;flex-shrink:0">04</span><span>Uygulama arka plana alındığında ekran görüntüsü maskesi <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">bg.canvas</span> ile doldurulur — App Switcher'da bakiye görünmez.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;kodBlogu&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Bölümler&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return { kodBlogu: this.props.kodBlogu ?? true };
+  }
+}
+</script>
+</body>
+</html>
