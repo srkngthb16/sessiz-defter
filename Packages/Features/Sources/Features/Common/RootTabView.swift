@@ -30,7 +30,8 @@ public struct RootTabView: View {
                     reloadToken: dataVersion,
                     onImport: { isImportPresented = true },
                     onAddManual: { isComposerPresented = true },
-                    onSeeAllTransactions: { selection = .transactions })
+                    onSeeAllTransactions: { selection = .transactions },
+                    onSeeAllBudgets: { selection = .budgets })
                     .tabItem { Label("Özet", systemImage: "square.grid.2x2") }
                     .tag(Tab.summary)
 
@@ -38,7 +39,7 @@ public struct RootTabView: View {
                     .tabItem { Label("İşlemler", systemImage: "list.bullet") }
                     .tag(Tab.transactions)
 
-                ComingSoonView(title: "Bütçe", message: "Bütçe ekranı bir sonraki adımda geliyor.")
+                BudgetsView(environment: environment, reloadToken: dataVersion)
                     .tabItem { Label("Bütçe", systemImage: "chart.pie") }
                     .tag(Tab.budgets)
 

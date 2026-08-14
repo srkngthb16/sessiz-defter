@@ -10,6 +10,7 @@ public final class DashboardModel {
         public var summary: PeriodSummary
         public var breakdown: [CategoryBreakdownItem]
         public var recent: [TransactionEntity]
+        public var budgets: [BudgetStatus]
         public var accountCount: Int
         public var periodTitle: String
         public var categories: CategoryLookup
@@ -44,11 +45,19 @@ public final class DashboardModel {
                                         calendar: environment.calendar)
             let monthRows = rows.filter { interval.contains($0.date) }
 
+            let budgets = try await environment.budgets.all(includeArchived: false)
+            let engine = BudgetEngine(calendar: environment.calendar)
+            // Dashboard yalnızca dikkat isteyenleri gösterir; tamamı Bütçe sekmesinde.
+            let statuses = engine.statuses(budgets: budgets, transactions: monthRows,
+                                           period: interval, now: environment.now())
+                .filter { $0.state != .onTrack }
+
             state = .loaded(Content(
                 netWorth: Balances.netWorth(accounts: accounts, transactions: rows),
                 summary: PeriodSummary.make(from: monthRows),
                 breakdown: CategoryBreakdown.make(from: monthRows, limit: 5),
                 recent: Array(rows.prefix(3)),
+                budgets: Array(statuses.prefix(2)),
                 accountCount: accounts.count,
                 periodTitle: Self.monthTitle(interval.start, calendar: environment.calendar),
                 categories: CategoryLookup(categories),

@@ -31,6 +31,30 @@ enum Fixtures {
     static let maas = CategoryEntity(name: "Maaş", colorIndex: 3, symbolName: "banknote",
                                      direction: .income, sortIndex: 2)
 
+    static let eglence = CategoryEntity(name: "Eğlence", colorIndex: 7,
+                                        symbolName: "theatermasks", sortIndex: 3)
+
+    /// Market %91 (limite yakın), Eğlence %120 (aşıldı) — tasarımdaki iki durum.
+    static var budgets: [BudgetEntity] {
+        [
+            BudgetEntity(categoryID: market.id, limit: Money(minorUnits: 1_200_000),
+                         startDate: date(1)),
+            BudgetEntity(categoryID: eglence.id, limit: Money(minorUnits: 260_000),
+                         startDate: date(1))
+        ]
+    }
+
+    static var budgetTransactions: [TransactionEntity] {
+        [
+            TransactionEntity(date: date(6), amount: Money(minorUnits: 1_006_280),
+                              direction: .expense, detail: "Market alışverişleri",
+                              categoryID: market.id, accountID: ziraat.id),
+            TransactionEntity(date: date(7), amount: Money(minorUnits: 311_620),
+                              direction: .expense, detail: "Sinema ve konser",
+                              categoryID: eglence.id, accountID: garanti.id)
+        ]
+    }
+
     static var transactions: [TransactionEntity] {
         [
             TransactionEntity(date: date(12), amount: Money(minorUnits: 84_260),
@@ -46,12 +70,14 @@ enum Fixtures {
     }
 
     @MainActor
-    static func environment(seeded: Bool = true) async -> AppEnvironment {
+    static func environment(seeded: Bool = true,
+                            withBudgets: Bool = false) async -> AppEnvironment {
         let store = InMemoryStore()
         if seeded {
             await store.seed(accounts: [ziraat, garanti],
-                             categories: [market, ulasim, maas],
-                             transactions: transactions)
+                             categories: [market, ulasim, maas, eglence],
+                             transactions: transactions + (withBudgets ? budgetTransactions : []),
+                             budgets: withBudgets ? budgets : [])
         }
         return AppEnvironment(
             transactions: InMemoryTransactionRepository(store: store),

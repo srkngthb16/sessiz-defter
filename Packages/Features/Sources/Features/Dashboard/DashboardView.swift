@@ -10,19 +10,22 @@ public struct DashboardView: View {
     var onImport: () -> Void
     var onAddManual: () -> Void
     var onSeeAllTransactions: () -> Void
+    var onSeeAllBudgets: () -> Void
 
     public init(
         environment: AppEnvironment,
         reloadToken: Int = 0,
         onImport: @escaping () -> Void = {},
         onAddManual: @escaping () -> Void = {},
-        onSeeAllTransactions: @escaping () -> Void = {}
+        onSeeAllTransactions: @escaping () -> Void = {},
+        onSeeAllBudgets: @escaping () -> Void = {}
     ) {
         self.environment = environment
         self.reloadToken = reloadToken
         self.onImport = onImport
         self.onAddManual = onAddManual
         self.onSeeAllTransactions = onSeeAllTransactions
+        self.onSeeAllBudgets = onSeeAllBudgets
         _model = State(initialValue: DashboardModel(environment: environment))
     }
 
@@ -31,6 +34,7 @@ public struct DashboardView: View {
             DashboardScreen(state: model.state, onImport: onImport,
                             onAddManual: onAddManual,
                             onSeeAllTransactions: onSeeAllTransactions,
+                            onSeeAllBudgets: onSeeAllBudgets,
                             calendar: environment.calendar)
                 .navigationTitle("Özet")
                 .task(id: reloadToken) { await model.load() }
@@ -45,6 +49,7 @@ public struct DashboardScreen: View {
     var onImport: () -> Void = {}
     var onAddManual: () -> Void = {}
     var onSeeAllTransactions: () -> Void = {}
+    var onSeeAllBudgets: () -> Void = {}
     var calendar: Calendar = .current
 
     public init(
@@ -52,12 +57,14 @@ public struct DashboardScreen: View {
         onImport: @escaping () -> Void = {},
         onAddManual: @escaping () -> Void = {},
         onSeeAllTransactions: @escaping () -> Void = {},
+        onSeeAllBudgets: @escaping () -> Void = {},
         calendar: Calendar = .current
     ) {
         self.state = state
         self.onImport = onImport
         self.onAddManual = onAddManual
         self.onSeeAllTransactions = onSeeAllTransactions
+        self.onSeeAllBudgets = onSeeAllBudgets
         self.calendar = calendar
     }
 
@@ -119,6 +126,7 @@ public struct DashboardScreen: View {
     private func loaded(_ content: DashboardModel.Content) -> some View {
         VStack(spacing: Spacing.l) {
             balanceCard(content)
+            if !content.budgets.isEmpty { budgetCard(content) }
             if !content.breakdown.isEmpty { breakdownCard(content) }
             recentCard(content)
         }
@@ -144,6 +152,35 @@ public struct DashboardScreen: View {
                 HStack(spacing: Spacing.s) {
                     summaryTile("Gelir", content.summary.income, .income)
                     summaryTile("Gider", content.summary.expense, .expense)
+                }
+            }
+        }
+    }
+
+    /// D1 — yalnızca dikkat isteyen bütçeler; tamamı Bütçe sekmesinde.
+    private func budgetCard(_ content: DashboardModel.Content) -> some View {
+        Card {
+            VStack(alignment: .leading, spacing: Spacing.m) {
+                SectionHeader(title: "Bütçe · \(content.periodTitle)",
+                              actionTitle: "Tümü", action: onSeeAllBudgets)
+                ForEach(content.budgets) { status in
+                    VStack(alignment: .leading, spacing: Spacing.xs) {
+                        HStack {
+                            Text(content.categories.name(status.budget.categoryID))
+                                .font(.sd.bodyItem)
+                                .foregroundStyle(Color.text.primary)
+                            Spacer()
+                            Text(Fmt.percent(status.ratio))
+                                .font(.sd.amountRow)
+                                .foregroundStyle(status.state == .exceeded
+                                                 ? Color.finance.critical
+                                                 : Color.finance.warning)
+                        }
+                        BudgetBar(ratio: status.ratio)
+                        Text("\(Fmt.amount(status.spent)) / \(Fmt.amount(status.effectiveLimit)) ₺")
+                            .font(.sd.meta)
+                            .foregroundStyle(Color.text.muted)
+                    }
                 }
             }
         }
