@@ -16,7 +16,8 @@ public struct BudgetsView: View {
     public init(environment: AppEnvironment, reloadToken: Int = 0) {
         self.environment = environment
         self.reloadToken = reloadToken
-        _model = State(initialValue: BudgetsModel(environment: environment))
+        _model = State(initialValue: BudgetsModel(environment: environment,
+                                                   notifier: SystemBudgetNotifier()))
     }
 
     public var body: some View {

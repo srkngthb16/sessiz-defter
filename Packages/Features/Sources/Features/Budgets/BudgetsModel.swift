@@ -21,9 +21,12 @@ public final class BudgetsModel {
 
     public private(set) var state: State = .loading
     private let environment: AppEnvironment
+    private let notifier: (any BudgetNotifying)?
+    private let planner = BudgetNotificationPlanner()
 
-    public init(environment: AppEnvironment) {
+    public init(environment: AppEnvironment, notifier: (any BudgetNotifying)? = nil) {
         self.environment = environment
+        self.notifier = notifier
     }
 
     public func load() async {
@@ -51,9 +54,23 @@ public final class BudgetsModel {
                                                        calendar: environment.calendar),
                 daysRemaining: daysRemaining,
                 categories: CategoryLookup(categories)))
+            await notifyIfNeeded(statuses: statuses, categories: CategoryLookup(categories),
+                                 periodStart: period.start)
         } catch {
             state = .empty
         }
+    }
+
+    /// Eşiği geçen bütçeler için yerel bildirim. Aynı bütçe, dönem ve eşik için
+    /// yalnızca bir kez gönderilir.
+    private func notifyIfNeeded(statuses: [BudgetStatus], categories: CategoryLookup,
+                                periodStart: Date) async {
+        guard let notifier else { return }
+        let pending = await notifier.pendingIdentifiers()
+        let requests = planner.requests(for: statuses, categories: categories,
+                                        periodStart: periodStart, alreadyScheduled: pending)
+        guard !requests.isEmpty, await notifier.requestAuthorizationIfNeeded() else { return }
+        await notifier.schedule(requests)
     }
 
     public func delete(_ status: BudgetStatus) async {

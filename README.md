@@ -11,6 +11,9 @@ otomatik kategorilenir. Ağ katmanı yoktur — eklenmemiştir, kapatılabilir b
 - Hesap/giriş/e-posta yok. Tek koruma LocalAuthentication.
 - BackgroundTask yok.
 - Üçüncü parti bağımlılık yok. Tek istisna: gömülü Archivo + IBM Plex Mono (SIL OFL).
+- `UserNotifications` yalnızca bütçe uyarısı için ve tek dosyada
+  (`Features/Budgets/BudgetNotifications.swift`); kural `verify-offline.sh` ile korunuyor.
+  Bildirim gövdesinde tutar yazılmaz — kilit ekranı bakiye sızdırmamalı.
 
 ## Modüller
 ```

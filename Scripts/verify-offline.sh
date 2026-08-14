@@ -57,6 +57,11 @@ def strip_xml_comments(text: str) -> str:
     text = re.sub(r"<!DOCTYPE[^>]*>", " ", text, flags=re.S)
     return text
 
+# Yerel bildirim tek dosyada toplanır: kilit ekranında görünen metnin nerede
+# üretildiği tek yerden okunabilsin.
+BILDIRIM_IZINLI = "BudgetNotifications.swift"
+BILDIRIM = re.compile(r"UNUserNotificationCenter|UNMutableNotificationContent|import\s+UserNotifications")
+
 findings = []
 for dirpath, dirnames, filenames in os.walk(root):
     dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS and not d.endswith(".xcodeproj")]
@@ -73,6 +78,12 @@ for dirpath, dirnames, filenames in os.walk(root):
             match = YASAK.search(line)
             if match:
                 findings.append(f"{rel}:{number}: {match.group(0)} — {line.strip()[:100]}")
+            if name != BILDIRIM_IZINLI:
+                notification = BILDIRIM.search(line)
+                if notification:
+                    findings.append(
+                        f"{rel}:{number}: {notification.group(0)} — bildirim kodu yalnızca "
+                        f"{BILDIRIM_IZINLI} içinde olmalı")
 
 if findings:
     print("FAIL · ağ izi bulundu (design/ ve yorumlar hariç):", file=sys.stderr)
