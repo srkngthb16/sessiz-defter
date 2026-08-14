@@ -13,9 +13,9 @@ struct StoreConfigurationTests {
         return description.contains("_none: true") && description.contains("_automatic: false")
     }
 
-    @Test("Şema altı modeli de içerir")
+    @Test("Şema yedi modeli de içerir")
     func sema() {
-        #expect(SchemaV1.models.count == 6)
+        #expect(SchemaV1.models.count == 7)
     }
 
     @Test("Üretim kabı CloudKit'siz kurulur ve dosyaya FileProtection.complete uygular")

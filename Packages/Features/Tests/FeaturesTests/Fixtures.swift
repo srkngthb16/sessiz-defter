@@ -58,6 +58,8 @@ enum Fixtures {
             accounts: InMemoryAccountRepository(store: store),
             categories: InMemoryCategoryRepository(store: store),
             budgets: InMemoryBudgetRepository(store: store),
+            categoryRules: InMemoryCategoryRuleRepository(store: store),
+            importBatches: InMemoryImportBatchRepository(store: store),
             calendar: calendar,
             now: { today })
     }

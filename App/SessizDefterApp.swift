@@ -50,7 +50,9 @@ final class Bootstrap {
                 transactions: store.transactions,
                 accounts: store.accounts,
                 categories: store.categories,
-                budgets: store.budgets))
+                budgets: store.budgets,
+                categoryRules: store.categoryRules,
+                importBatches: store.importBatches))
         } catch {
             state = .failed(String(describing: error))
         }

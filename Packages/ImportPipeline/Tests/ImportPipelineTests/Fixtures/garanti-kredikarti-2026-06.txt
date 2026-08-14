@@ -1,0 +1,14 @@
+GARANTI BBVA
+KREDI KARTI HESAP OZETI
+Kart No: 4358 **** **** 8871
+Hesap Kesim Tarihi: 09.06.2026
+Son Odeme Tarihi: 20.06.2026
+
+ISLEM TARIHI   ACIKLAMA                                TUTAR
+08.06.2026     TRENDYOL SIPARISI                    2.340,00 TL
+05.06.2026     KAHVE DUNYASI ATASEHIR                 128,00 TL
+02.06.2026     BIM MARKET                             394,25 TL
+01.06.2026     IADE - TRENDYOL                        -180,00 TL
+
+Donem Borcu: 2.682,25 TL
+Asgari Odeme Tutari: 536,45 TL

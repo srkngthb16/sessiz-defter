@@ -10,12 +10,13 @@ let package = Package(
     dependencies: [
         .package(path: "../Core"),
         .package(path: "../Domain"),
-        .package(path: "../DesignSystem")
+        .package(path: "../DesignSystem"),
+        .package(path: "../ImportPipeline")
     ],
     targets: [
         // Ekranlar App hedefinde değil ayrı pakette: App hedefi test edilemiyor,
         // ekran snapshot'ları ise zorunlu.
-        .target(name: "Features", dependencies: ["Core", "Domain", "DesignSystem"]),
+        .target(name: "Features", dependencies: ["Core", "Domain", "DesignSystem", "ImportPipeline"]),
         .testTarget(
             name: "FeaturesTests",
             dependencies: [

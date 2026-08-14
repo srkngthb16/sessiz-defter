@@ -11,6 +11,7 @@ public actor InMemoryStore {
     public private(set) var budgets: [UUID: BudgetEntity] = [:]
     public private(set) var batches: [UUID: ImportBatchEntity] = [:]
     public private(set) var profiles: [UUID: ParserProfileEntity] = [:]
+    public private(set) var rules: [UUID: CategoryRuleEntity] = [:]
 
     public init() {}
 
@@ -32,6 +33,7 @@ public actor InMemoryStore {
     func put(_ item: BudgetEntity) { budgets[item.id] = item }
     func put(_ item: ImportBatchEntity) { batches[item.id] = item }
     func put(_ item: ParserProfileEntity) { profiles[item.id] = item }
+    func put(_ item: CategoryRuleEntity) { rules[item.id] = item }
 
     func removeAccount(_ id: UUID) { accounts[id] = nil }
     func removeCategory(_ id: UUID) { categories[id] = nil }
@@ -39,12 +41,13 @@ public actor InMemoryStore {
     func removeBudget(_ id: UUID) { budgets[id] = nil }
     func removeBatch(_ id: UUID) { batches[id] = nil }
     func removeProfile(_ id: UUID) { profiles[id] = nil }
+    func removeRule(_ id: UUID) { rules[id] = nil }
 
     func removeAllTransactions() { transactions.removeAll() }
 
     func removeEverything() {
         accounts.removeAll(); categories.removeAll(); transactions.removeAll()
-        budgets.removeAll(); batches.removeAll(); profiles.removeAll()
+        budgets.removeAll(); batches.removeAll(); profiles.removeAll(); rules.removeAll()
     }
 }
 
@@ -145,6 +148,17 @@ public struct InMemoryParserProfileRepository: ParserProfileRepository {
     }
     public func save(_ profile: ParserProfileEntity) async throws { await store.put(profile) }
     public func delete(id: UUID) async throws { await store.removeProfile(id) }
+}
+
+public struct InMemoryCategoryRuleRepository: CategoryRuleRepository {
+    let store: InMemoryStore
+    public init(store: InMemoryStore) { self.store = store }
+
+    public func all() async throws -> [CategoryRuleEntity] {
+        await store.rules.values.sorted { $0.createdAt < $1.createdAt }
+    }
+    public func save(_ rule: CategoryRuleEntity) async throws { await store.put(rule) }
+    public func delete(id: UUID) async throws { await store.removeRule(id) }
 }
 
 public struct InMemoryDataResetter: DataResetting {

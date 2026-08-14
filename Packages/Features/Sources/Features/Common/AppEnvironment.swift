@@ -10,12 +10,15 @@ public final class AppEnvironment: @unchecked Sendable {
     public let accounts: any AccountRepository
     public let categories: any CategoryRepository
     public let budgets: any BudgetRepository
+    public let categoryRules: any CategoryRuleRepository
+    public let importBatches: any ImportBatchRepository
     /// Test ve önizlemede "bugün"ü sabitlemek için; üretimde Date().
     public let now: @Sendable () -> Date
     public let calendar: Calendar
 
     public var service: TransactionService {
-        TransactionService(transactions: transactions, accounts: accounts, categories: categories)
+        TransactionService(transactions: transactions, accounts: accounts,
+                           categories: categories, categoryRules: categoryRules)
     }
 
     public init(
@@ -23,6 +26,8 @@ public final class AppEnvironment: @unchecked Sendable {
         accounts: any AccountRepository,
         categories: any CategoryRepository,
         budgets: any BudgetRepository,
+        categoryRules: any CategoryRuleRepository,
+        importBatches: any ImportBatchRepository,
         calendar: Calendar = .current,
         now: @escaping @Sendable () -> Date = { Date() }
     ) {
@@ -30,6 +35,8 @@ public final class AppEnvironment: @unchecked Sendable {
         self.accounts = accounts
         self.categories = categories
         self.budgets = budgets
+        self.categoryRules = categoryRules
+        self.importBatches = importBatches
         self.calendar = calendar
         self.now = now
     }

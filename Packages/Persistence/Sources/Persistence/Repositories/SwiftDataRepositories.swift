@@ -13,6 +13,9 @@ public actor PersistenceStore {
     public nonisolated var budgets: BudgetRepository { SwiftDataBudgetRepository(store: self) }
     public nonisolated var importBatches: ImportBatchRepository { SwiftDataImportBatchRepository(store: self) }
     public nonisolated var parserProfiles: ParserProfileRepository { SwiftDataParserProfileRepository(store: self) }
+    public nonisolated var categoryRules: CategoryRuleRepository {
+        SwiftDataCategoryRuleRepository(store: self)
+    }
     public nonisolated var resetter: DataResetting { SwiftDataResetter(store: self) }
 
     // MARK: Account
@@ -225,9 +228,31 @@ public actor PersistenceStore {
         try modelContext.save()
     }
 
+    // MARK: CategoryRule
+
+    func fetchRules() throws -> [CategoryRuleEntity] {
+        let descriptor = FetchDescriptor<SDCategoryRule>(sortBy: [SortDescriptor(\.createdAt)])
+        return try modelContext.fetch(descriptor).map(\.entity)
+    }
+
+    func upsert(_ entity: CategoryRuleEntity) throws {
+        if let existing = try model(SDCategoryRule.self, id: entity.id) {
+            existing.apply(entity)
+        } else {
+            modelContext.insert(SDCategoryRule.make(entity))
+        }
+        try modelContext.save()
+    }
+
+    func deleteRule(id: UUID) throws {
+        if let existing = try model(SDCategoryRule.self, id: id) { modelContext.delete(existing) }
+        try modelContext.save()
+    }
+
     // MARK: Hepsini sil
 
     func deleteEverything() throws {
+        try modelContext.delete(model: SDCategoryRule.self)
         try modelContext.delete(model: SDTransaction.self)
         try modelContext.delete(model: SDBudget.self)
         try modelContext.delete(model: SDImportBatch.self)
@@ -257,6 +282,9 @@ public actor PersistenceStore {
         case is SDParserProfile.Type:
             return try modelContext.fetch(
                 FetchDescriptor<SDParserProfile>(predicate: #Predicate { $0.id == id })).first as? T
+        case is SDCategoryRule.Type:
+            return try modelContext.fetch(
+                FetchDescriptor<SDCategoryRule>(predicate: #Predicate { $0.id == id })).first as? T
         default:
             return nil
         }
@@ -336,6 +364,13 @@ struct SwiftDataParserProfileRepository: ParserProfileRepository {
     }
     func save(_ profile: ParserProfileEntity) async throws { try await store.upsert(profile) }
     func delete(id: UUID) async throws { try await store.deleteProfile(id: id) }
+}
+
+struct SwiftDataCategoryRuleRepository: CategoryRuleRepository {
+    let store: PersistenceStore
+    func all() async throws -> [CategoryRuleEntity] { try await store.fetchRules() }
+    func save(_ rule: CategoryRuleEntity) async throws { try await store.upsert(rule) }
+    func delete(id: UUID) async throws { try await store.deleteRule(id: id) }
 }
 
 struct SwiftDataResetter: DataResetting {

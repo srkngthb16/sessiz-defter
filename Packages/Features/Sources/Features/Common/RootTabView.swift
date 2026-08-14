@@ -5,6 +5,7 @@ public struct RootTabView: View {
     let environment: AppEnvironment
     @State private var selection: Tab = .summary
     @State private var isComposerPresented = false
+    @State private var isImportPresented = false
     /// Sheet'te yazılan işlem sekmelerdeki listeleri de tazelemeli; her kayıt bu
     /// sayacı artırır ve ekranların .task(id:) bağı yeniden çalışır.
     @State private var dataVersion = 0
@@ -27,7 +28,7 @@ public struct RootTabView: View {
                 DashboardView(
                     environment: environment,
                     reloadToken: dataVersion,
-                    onImport: { isComposerPresented = true },
+                    onImport: { isImportPresented = true },
                     onAddManual: { isComposerPresented = true },
                     onSeeAllTransactions: { selection = .transactions })
                     .tabItem { Label("Özet", systemImage: "square.grid.2x2") }
@@ -50,6 +51,9 @@ public struct RootTabView: View {
         }
         .sheet(isPresented: $isComposerPresented) {
             TransactionEditorView(environment: environment) { dataVersion += 1 }
+        }
+        .sheet(isPresented: $isImportPresented) {
+            ImportFlowView(environment: environment) { dataVersion += 1 }
         }
     }
 

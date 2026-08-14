@@ -163,6 +163,23 @@ struct PersistenceStoreTests {
         #expect(loaded.sourceFileRetained == false)
     }
 
+    @Test("Kategori kuralı yazılır ve silinir")
+    func kategoriKurali() async throws {
+        let store = try makeStore()
+        let categoryID = UUID()
+        let rule = CategoryRuleEntity(keyword: "MIGROS", categoryID: categoryID,
+                                      direction: .expense)
+        try await store.categoryRules.save(rule)
+
+        let loaded = try #require(try await store.categoryRules.all().first)
+        #expect(loaded.keyword == "MIGROS")
+        #expect(loaded.direction == .expense)
+        #expect(loaded.isUserDefined)
+
+        try await store.categoryRules.delete(id: rule.id)
+        #expect(try await store.categoryRules.all().isEmpty)
+    }
+
     @Test("deleteEverything her tabloyu boşaltır")
     func hepsiniSil() async throws {
         let store = try makeStore()
@@ -178,6 +195,8 @@ struct PersistenceStoreTests {
         try await store.importBatches.save(ImportBatchEntity(fileName: "a.pdf"))
         try await store.parserProfiles.save(
             ParserProfileEntity(bankName: "X", formatIdentifier: "x.v1"))
+        try await store.categoryRules.save(
+            CategoryRuleEntity(keyword: "K", categoryID: categoryID))
 
         try await store.resetter.deleteEverything()
 
@@ -187,5 +206,6 @@ struct PersistenceStoreTests {
         #expect(try await store.budgets.all(includeArchived: true).isEmpty)
         #expect(try await store.importBatches.all().isEmpty)
         #expect(try await store.parserProfiles.all().isEmpty)
+        #expect(try await store.categoryRules.all().isEmpty)
     }
 }

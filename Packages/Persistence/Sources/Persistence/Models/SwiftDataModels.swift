@@ -184,9 +184,29 @@ final class SDParserProfile {
     }
 }
 
+@Model
+final class SDCategoryRule {
+    @Attribute(.unique) var id: UUID
+    var keyword: String
+    var categoryID: UUID
+    var directionRaw: String?
+    var isUserDefined: Bool
+    var createdAt: Date
+
+    init(id: UUID, keyword: String, categoryID: UUID, directionRaw: String?,
+         isUserDefined: Bool, createdAt: Date) {
+        self.id = id
+        self.keyword = keyword
+        self.categoryID = categoryID
+        self.directionRaw = directionRaw
+        self.isUserDefined = isUserDefined
+        self.createdAt = createdAt
+    }
+}
+
 enum SchemaV1 {
     static let models: [any PersistentModel.Type] = [
         SDAccount.self, SDCategory.self, SDTransaction.self,
-        SDBudget.self, SDImportBatch.self, SDParserProfile.self
+        SDBudget.self, SDImportBatch.self, SDParserProfile.self, SDCategoryRule.self
     ]
 }

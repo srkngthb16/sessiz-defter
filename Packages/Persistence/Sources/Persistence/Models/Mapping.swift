@@ -206,3 +206,26 @@ extension SDParserProfile {
         lastUsedAt = entity.lastUsedAt
     }
 }
+
+extension SDCategoryRule {
+    var entity: CategoryRuleEntity {
+        CategoryRuleEntity(
+            id: id, keyword: keyword, categoryID: categoryID,
+            direction: directionRaw.flatMap(TransactionDirection.init(rawValue:)),
+            isUserDefined: isUserDefined, createdAt: createdAt)
+    }
+
+    static func make(_ entity: CategoryRuleEntity) -> SDCategoryRule {
+        SDCategoryRule(
+            id: entity.id, keyword: entity.keyword, categoryID: entity.categoryID,
+            directionRaw: entity.direction?.rawValue, isUserDefined: entity.isUserDefined,
+            createdAt: entity.createdAt)
+    }
+
+    func apply(_ entity: CategoryRuleEntity) {
+        keyword = entity.keyword
+        categoryID = entity.categoryID
+        directionRaw = entity.direction?.rawValue
+        isUserDefined = entity.isUserDefined
+    }
+}

@@ -1,0 +1,18 @@
+T.C. ZIRAAT BANKASI A.S.
+HESAP OZETI
+Hesap No: ****3412        Sube: 1234
+Donem: 01.08.2026 - 12.08.2026
+Para Birimi: TRY
+
+TARIH      ACIKLAMA                             TUTAR          BAKIYE
+12/08/26   MIGROS ATASEHIR                      842,60-        18.402,15
+11/08/26   SHELL OTOYOL                       1.180,00-        19.244,75
+09/08/26   PAPARA ODEME                       1.250,00-        20.424,75
+07/08/26   ISKI SU FATURASI                     318,40-        21.674,75
+05/08/26   MAAS ODEMESI                      52.400,00+        21.993,15
+03/08/26   SPOTIFY ABONELIK                      59,99-       -30.406,85
+01/08/26   DEVIR BAKIYE                           0,00+       -30.346,86
+
+Toplam Borc: 3.651,99
+Toplam Alacak: 52.400,00
+Bu belge musteri talebi uzerine duzenlenmistir.

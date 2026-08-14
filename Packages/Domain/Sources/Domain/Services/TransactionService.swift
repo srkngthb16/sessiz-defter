@@ -23,15 +23,18 @@ public struct TransactionService: Sendable {
     let transactions: any TransactionRepository
     let accounts: any AccountRepository
     let categories: any CategoryRepository
+    let categoryRules: (any CategoryRuleRepository)?
 
     public init(
         transactions: any TransactionRepository,
         accounts: any AccountRepository,
-        categories: any CategoryRepository
+        categories: any CategoryRepository,
+        categoryRules: (any CategoryRuleRepository)? = nil
     ) {
         self.transactions = transactions
         self.accounts = accounts
         self.categories = categories
+        self.categoryRules = categoryRules
     }
 
     public func list(_ query: TransactionQuery = .all) async throws -> [TransactionEntity] {
@@ -101,8 +104,15 @@ public struct TransactionService: Sendable {
     @discardableResult
     public func seedDefaultCategoriesIfNeeded() async throws -> Bool {
         guard try await categories.all(includeArchived: true).isEmpty else { return false }
-        for category in DefaultCategories.seed() {
+        let seeded = DefaultCategories.seed()
+        for category in seeded {
             try await categories.save(category)
+        }
+        // Kategoriler yeni yazıldıysa varsayılan kurallar da onlara bağlanır.
+        if let categoryRules, try await categoryRules.all().isEmpty {
+            for rule in DefaultCategoryRules.seed(categories: seeded) {
+                try await categoryRules.save(rule)
+            }
         }
         return true
     }
