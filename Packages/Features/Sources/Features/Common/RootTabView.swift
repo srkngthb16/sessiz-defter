@@ -43,7 +43,7 @@ public struct RootTabView: View {
                     .tabItem { Label("Bütçe", systemImage: "chart.pie") }
                     .tag(Tab.budgets)
 
-                ComingSoonView(title: "Raporlar", message: "Rapor ekranı bir sonraki adımda geliyor.")
+                ReportsView(environment: environment, reloadToken: dataVersion)
                     .tabItem { Label("Raporlar", systemImage: "chart.bar") }
                     .tag(Tab.reports)
             }
