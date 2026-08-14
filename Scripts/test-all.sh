@@ -8,7 +8,7 @@ DEST="${SD_DEST:-platform=iOS Simulator,name=iPhone 17 Pro}"
 DERIVED="$ROOT/DerivedData"
 FAILED=0
 
-for PKG in Core Domain Persistence ImportPipeline DesignSystem; do
+for PKG in Core Domain Persistence ImportPipeline DesignSystem Features; do
   SCHEME="$PKG"
   case "$PKG" in DesignSystem|Domain) SCHEME="$PKG-Package";; esac
   echo "───── $PKG"

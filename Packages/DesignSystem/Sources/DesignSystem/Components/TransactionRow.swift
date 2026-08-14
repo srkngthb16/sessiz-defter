@@ -37,13 +37,19 @@ public struct TransactionRow: View {
     }
 
     let model: Model
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     public init(model: Model) { self.model = model }
 
+    /// Tasarım "accessibility1'den itibaren HStack VStack'e döner" diyor ve bunu
+    /// ViewThatFits ile tarif ediyor. ViewThatFits adaylarını ideal (sarmasız)
+    /// genişlikte ölçtüğü için standart kademede bile dikey adayı seçiyordu —
+    /// istenen eşiği vermiyor. Eşik doğrudan uygulanıyor; sonuç tasarımın tarifi.
+    private var usesVerticalLayout: Bool { dynamicTypeSize.isAccessibilitySize }
+
     public var body: some View {
-        ViewThatFits(in: .horizontal) {
-            horizontal
-            vertical
+        Group {
+            if usesVerticalLayout { vertical } else { horizontal }
         }
         .padding(.horizontal, Spacing.l)
         .padding(.vertical, Spacing.m)
@@ -55,6 +61,9 @@ public struct TransactionRow: View {
         HStack(spacing: Spacing.m) {
             leading
             texts
+                // maxWidth: .infinity burada verilmez: ViewThatFits adayı ideal
+                // boyutta ölçüyor ve sonsuz genişlik yatay adayı hep "sığmıyor"
+                // yapıyor. Genişlemeyi Spacer üstlenir.
             Spacer(minLength: Spacing.s)
             AmountText(amount: model.amount, direction: model.direction,
                        style: .row, isCritical: model.isCritical)
@@ -66,6 +75,7 @@ public struct TransactionRow: View {
             HStack(spacing: Spacing.m) {
                 leading
                 texts
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             AmountText(amount: model.amount, direction: model.direction,
                        style: .row, isCritical: model.isCritical)
@@ -104,6 +114,5 @@ public struct TransactionRow: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

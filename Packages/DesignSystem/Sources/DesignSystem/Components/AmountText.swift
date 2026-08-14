@@ -90,9 +90,15 @@ public struct AmountText: View {
     }
 
     private var signPrefix: String {
+        // Yönsüz tutarda (bakiye) işaret yönden değil değerin kendisinden gelir:
+        // eksi bakiyeyi mutlak değerle göstermek yanlış rakam gösterir.
+        if direction == .neutral { return amount.isNegative ? "\u{2212}" : "" }
         guard showsSign else { return "" }
         return direction.signPrefix
     }
+
+    /// Test görünürlüğü: işaret mantığı gösterimin en kritik parçası.
+    var debugSignPrefix: String { signPrefix }
 
     private var text: String {
         signPrefix + Fmt.currency(amount)
