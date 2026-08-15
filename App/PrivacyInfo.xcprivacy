@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Uygulama izleme yapmaz: ağ katmanı yok, üçüncü parti SDK yok, reklam kimliği okunmaz. -->
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<!-- Hiçbir veri toplanmaz. İşlem, hesap, bütçe ve ekstre verisi cihazda kalır;
+	     uygulamadan çıkan tek şey kullanıcının kendi başlattığı şifreli yedek dosyasıdır. -->
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<!-- Kullanım yeri: Packages/Features/Sources/Features/Settings/AppSettings.swift
+		     Saklananlar: kilit tercihi, arka planda gizleme, otomatik kilit süresi,
+		     tema ve onboarding tamamlandı bayrağı. Yalnızca bu uygulama okur.
+		     Taranan ve bulunmayan diğer kategoriler: dosya zaman damgası (yalnız test
+		     kodunda), disk alanı, sistem açılma zamanı, aktif klavyeler. -->
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>CA92.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
