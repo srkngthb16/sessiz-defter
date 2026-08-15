@@ -111,6 +111,13 @@ public struct SettingsView: View {
                 if let message {
                     Section { Text(message).font(.sd.meta) }
                 }
+
+                Section {
+                    LabeledContent("Sürüm", value: AppVersion().displayString)
+                } footer: {
+                    Text("Sessiz Defter · çevrimdışı kişisel finans defteri")
+                        .font(.sd.caption)
+                }
             }
             .navigationTitle("Ayarlar")
             .task { await loadCounts() }
