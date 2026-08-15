@@ -20,9 +20,11 @@ func color(_ hex: UInt32) -> CGColor {
 }
 
 let colorSpace = CGColorSpaceCreateDeviceRGB()
+// Alfa kanalı YOK: App Store saydamlık taşıyan uygulama ikonunu reddeder.
+// noneSkipLast dört baytlık pikselin son baytını yok sayar, saydamlık üretmez.
 guard let context = CGContext(data: nil, width: Int(size), height: Int(size),
                               bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace,
-                              bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+                              bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue) else {
     fatalError("bağlam oluşturulamadı")
 }
 
@@ -77,6 +79,7 @@ context.fillPath()
 
 guard let image = context.makeImage() else { fatalError("görüntü üretilemedi") }
 let bitmap = NSBitmapImageRep(cgImage: image)
+bitmap.hasAlpha = false
 guard let data = bitmap.representation(using: .png, properties: [:]) else {
     fatalError("PNG kodlanamadı")
 }
