@@ -7,3 +7,4 @@ xcuserdata/
 .build-notes/
 *.failed.png
 .venv-tools/
+Config/Local.xcconfig

@@ -1,0 +1,11 @@
+#include "Shared.xcconfig"
+
+SWIFT_OPTIMIZATION_LEVEL = -O
+SWIFT_COMPILATION_MODE = wholemodule
+// Release'de test erişimi kapalı: @testable sembolleri dışa açmak hem ikiliyi
+// büyütür hem de iç yapıyı gereksiz yere görünür kılar.
+ENABLE_TESTABILITY = NO
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+ENABLE_NS_ASSERTIONS = NO
+VALIDATE_PRODUCT = YES
+MTL_ENABLE_DEBUG_INFO = NO

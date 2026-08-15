@@ -1,0 +1,7 @@
+// Bu dosyayı Config/Local.xcconfig olarak kopyalayın ve Team ID'nizi yazın.
+// Local.xcconfig gitignore'ludur, repoya girmez.
+//
+// Team ID'yi bulmak için: developer.apple.com/account · Membership Details ·
+// "Team ID" alanı (10 karakterli, örn. A1B2C3D4E5).
+
+TEAM_ID = 
