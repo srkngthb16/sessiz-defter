@@ -31,7 +31,7 @@ public enum TransactionSource: String, Codable, Sendable {
     case statement
 }
 
-public struct TransactionEntity: Identifiable, Hashable, Sendable {
+public struct TransactionEntity: Identifiable, Hashable, Sendable, Codable {
     public let id: UUID
     public var date: Date
     /// Daima pozitif; yön `direction` alanında.

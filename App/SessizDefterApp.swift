@@ -20,8 +20,8 @@ struct SessizDefterApp: App {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.bg.canvas)
                     .task { await bootstrap.start() }
-            case .ready(let environment):
-                RootTabView(environment: environment)
+            case .ready(let environment, let settings, let backup):
+                AppRootView(environment: environment, settings: settings, backup: backup)
             case .failed(let message):
                 StoreFailureView(message: message)
             }
@@ -36,7 +36,7 @@ struct SessizDefterApp: App {
 final class Bootstrap {
     enum State {
         case loading
-        case ready(AppEnvironment)
+        case ready(AppEnvironment, AppSettings, BackupService)
         case failed(String)
     }
 
@@ -46,13 +46,17 @@ final class Bootstrap {
         do {
             let container = try StoreFactory.makeContainer()
             let store = PersistenceStore(modelContainer: container)
-            state = .ready(AppEnvironment(
-                transactions: store.transactions,
-                accounts: store.accounts,
-                categories: store.categories,
-                budgets: store.budgets,
-                categoryRules: store.categoryRules,
-                importBatches: store.importBatches))
+            state = .ready(
+                AppEnvironment(
+                    transactions: store.transactions,
+                    accounts: store.accounts,
+                    categories: store.categories,
+                    budgets: store.budgets,
+                    categoryRules: store.categoryRules,
+                    importBatches: store.importBatches,
+                    parserProfiles: store.parserProfiles),
+                AppSettings(),
+                BackupService(store: store))
         } catch {
             state = .failed(String(describing: error))
         }

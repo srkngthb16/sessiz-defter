@@ -1,8 +1,11 @@
 import DesignSystem
+import Domain
 import SwiftUI
 
 public struct RootTabView: View {
     let environment: AppEnvironment
+    let settings: AppSettings
+    let backup: (any BackupServing)?
     @State private var selection: Tab = .summary
     @State private var isComposerPresented = false
     @State private var isImportPresented = false
@@ -14,8 +17,13 @@ public struct RootTabView: View {
         case summary, transactions, budgets, reports
     }
 
-    public init(environment: AppEnvironment) {
+    @State private var isSettingsPresented = false
+
+    public init(environment: AppEnvironment, settings: AppSettings,
+                backup: (any BackupServing)? = nil) {
         self.environment = environment
+        self.settings = settings
+        self.backup = backup
     }
 
     /// (+) butonu sekme çubuğunun üstünde duruyor; listelerin son satırını
@@ -31,7 +39,8 @@ public struct RootTabView: View {
                     onImport: { isImportPresented = true },
                     onAddManual: { isComposerPresented = true },
                     onSeeAllTransactions: { selection = .transactions },
-                    onSeeAllBudgets: { selection = .budgets })
+                    onSeeAllBudgets: { selection = .budgets },
+                    onOpenSettings: { isSettingsPresented = true })
                     .tabItem { Label("Özet", systemImage: "square.grid.2x2") }
                     .tag(Tab.summary)
 
@@ -52,6 +61,9 @@ public struct RootTabView: View {
         }
         .sheet(isPresented: $isComposerPresented) {
             TransactionEditorView(environment: environment) { dataVersion += 1 }
+        }
+        .sheet(isPresented: $isSettingsPresented) {
+            SettingsView(environment: environment, settings: settings, backup: backup)
         }
         .sheet(isPresented: $isImportPresented) {
             ImportFlowView(environment: environment) { dataVersion += 1 }

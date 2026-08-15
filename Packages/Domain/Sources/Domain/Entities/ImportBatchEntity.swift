@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ImportBatchEntity: Identifiable, Hashable, Sendable {
+public struct ImportBatchEntity: Identifiable, Hashable, Sendable, Codable {
     public let id: UUID
     public var fileName: String
     public var importedAt: Date

@@ -7,7 +7,7 @@ public enum AccountKind: String, Codable, Sendable, CaseIterable {
     case cash
 }
 
-public struct AccountEntity: Identifiable, Hashable, Sendable {
+public struct AccountEntity: Identifiable, Hashable, Sendable, Codable {
     public let id: UUID
     public var name: String
     public var kind: AccountKind

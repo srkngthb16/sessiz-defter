@@ -10,7 +10,7 @@ public enum ColumnRole: String, Codable, Sendable, CaseIterable {
     case ignored
 }
 
-public struct ParserProfileEntity: Identifiable, Hashable, Sendable {
+public struct ParserProfileEntity: Identifiable, Hashable, Sendable, Codable {
     public let id: UUID
     public var bankName: String
     public var formatIdentifier: String

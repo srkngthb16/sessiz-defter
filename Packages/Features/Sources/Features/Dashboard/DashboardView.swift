@@ -11,6 +11,7 @@ public struct DashboardView: View {
     var onAddManual: () -> Void
     var onSeeAllTransactions: () -> Void
     var onSeeAllBudgets: () -> Void
+    var onOpenSettings: () -> Void
 
     public init(
         environment: AppEnvironment,
@@ -18,7 +19,8 @@ public struct DashboardView: View {
         onImport: @escaping () -> Void = {},
         onAddManual: @escaping () -> Void = {},
         onSeeAllTransactions: @escaping () -> Void = {},
-        onSeeAllBudgets: @escaping () -> Void = {}
+        onSeeAllBudgets: @escaping () -> Void = {},
+        onOpenSettings: @escaping () -> Void = {}
     ) {
         self.environment = environment
         self.reloadToken = reloadToken
@@ -26,6 +28,7 @@ public struct DashboardView: View {
         self.onAddManual = onAddManual
         self.onSeeAllTransactions = onSeeAllTransactions
         self.onSeeAllBudgets = onSeeAllBudgets
+        self.onOpenSettings = onOpenSettings
         _model = State(initialValue: DashboardModel(environment: environment))
     }
 
@@ -37,6 +40,15 @@ public struct DashboardView: View {
                             onSeeAllBudgets: onSeeAllBudgets,
                             calendar: environment.calendar)
                 .navigationTitle("Özet")
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            onOpenSettings()
+                        } label: {
+                            Label("Ayarlar", systemImage: "gearshape")
+                        }
+                    }
+                }
                 .task(id: reloadToken) { await model.load() }
         }
     }

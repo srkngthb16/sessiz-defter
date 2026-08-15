@@ -2,7 +2,7 @@ import Foundation
 
 /// C4 — "PAPARA içeren satırlar → Transfer". Kullanıcının onay ekranında yaptığı
 /// düzeltme kural olarak kaydedilebilir ve sonraki içe aktarmalarda uygulanır.
-public struct CategoryRuleEntity: Identifiable, Hashable, Sendable {
+public struct CategoryRuleEntity: Identifiable, Hashable, Sendable, Codable {
     public let id: UUID
     /// Açıklamada aranan anahtar. Karşılaştırma ASCII'ye katlanmış büyük harfle yapılır.
     public var keyword: String

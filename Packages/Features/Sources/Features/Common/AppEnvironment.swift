@@ -12,6 +12,7 @@ public final class AppEnvironment: @unchecked Sendable {
     public let budgets: any BudgetRepository
     public let categoryRules: any CategoryRuleRepository
     public let importBatches: any ImportBatchRepository
+    public let parserProfiles: (any ParserProfileRepository)?
     /// Test ve önizlemede "bugün"ü sabitlemek için; üretimde Date().
     public let now: @Sendable () -> Date
     public let calendar: Calendar
@@ -28,6 +29,7 @@ public final class AppEnvironment: @unchecked Sendable {
         budgets: any BudgetRepository,
         categoryRules: any CategoryRuleRepository,
         importBatches: any ImportBatchRepository,
+        parserProfiles: (any ParserProfileRepository)? = nil,
         calendar: Calendar = .current,
         now: @escaping @Sendable () -> Date = { Date() }
     ) {
@@ -37,6 +39,7 @@ public final class AppEnvironment: @unchecked Sendable {
         self.budgets = budgets
         self.categoryRules = categoryRules
         self.importBatches = importBatches
+        self.parserProfiles = parserProfiles
         self.calendar = calendar
         self.now = now
     }

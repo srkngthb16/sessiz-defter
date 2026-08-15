@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CategoryEntity: Identifiable, Hashable, Sendable {
+public struct CategoryEntity: Identifiable, Hashable, Sendable, Codable {
     public static let colorSlotCount = 12
 
     public let id: UUID

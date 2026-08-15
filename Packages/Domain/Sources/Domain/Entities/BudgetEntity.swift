@@ -5,7 +5,7 @@ public enum BudgetPeriod: String, Codable, Sendable, CaseIterable {
     case monthly
 }
 
-public struct BudgetEntity: Identifiable, Hashable, Sendable {
+public struct BudgetEntity: Identifiable, Hashable, Sendable, Codable {
     public let id: UUID
     public var categoryID: UUID
     public var period: BudgetPeriod
