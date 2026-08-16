@@ -84,6 +84,7 @@ zorunluydu.
 | 9.2 | Kaydedilebilir sütun eşlemesi, ayrıştırma raporu, anonim örnek paylaşımı | `fbd9f15` |
 | 9.3 | Örnek veri modu, B1 illüstrasyonu, kategori simge eşlemesi | `036eee5`, `bb2cca0` |
 | 9.4 | Geri bildirim yolu, anonim hata sayacı | `feb1156` |
+| 10.1 | Erişilebilirlik: tutar okunuşu, ekran etiketleri, grafik özeti, XXXL yerleşim | `b4db490` |
 
 **Ekranlar (tasarım dosyasındaki kodlarla):** A1–A3 onboarding, A4 kilit,
 B1 boş durum, B2 iskelet, C1–C8 içe aktarma ve hata dalları, D1 dashboard,
@@ -95,16 +96,16 @@ F1 ayarlar, F2 mahremiyet raporu, F3 tüm verileri sil.
 
 ## 4. Test durumu
 
-211 test geçiyor. `./Scripts/test-all.sh` hepsini koşar.
+228 test geçiyor. `./Scripts/test-all.sh` hepsini koşar.
 
 | Paket | Test |
 |---|---|
-| Core | 25 — biçimlendirme, kuruş aritmetiği, hash, şifreleme, gizlilik manifesti |
+| Core | 30 — biçimlendirme, kuruş aritmetiği, hash, şifreleme, gizlilik manifesti |
 | Domain | 51 — varlık değişmezleri, filtre, bütçe eşikleri, raporlar, katman kuralı, örnek defter |
 | Persistence | 20 — CRUD, sorgu eşdeğerliği, CloudKit kapalı, dosya koruma, yedek |
 | ImportPipeline | 32 — golden parser testleri, hat akışı, hata dalları, rapor, anonimleştirme |
-| DesignSystem | 21 — 17 kontrast oranı, font çözümleme, düzen kuralı, snapshot |
-| Features | 62 — ekran modelleri, hesap yönetimi, eşleme, sürüm, snapshot, örnek veri, kategori simgeleri, geri bildirim ve hata sayacı |
+| DesignSystem | 26 — 17 kontrast oranı, font çözümleme, düzen kuralı, snapshot |
+| Features | 69 — ekran modelleri, hesap yönetimi, eşleme, sürüm, snapshot, örnek veri, kategori simgeleri, geri bildirim ve hata sayacı |
 
 **Doğrulama araçları:**
 - `Scripts/verify-offline.sh` — kaynak ağacında ağ izi arar, bulursa build'i düşürür.
@@ -193,6 +194,21 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
 - Gönderim `ShareLink` ile sistem paylaşım sayfasından; uygulama hiçbir yere
   bağlanmaz. Paylaşılacak metnin tamamı gönderimden önce ekranda.
 
+**Erişilebilirlik (Faz 10.1):**
+- Okunan dize ekrandaki dizeden ayrı: "₺ 842,60" seslendirmede para gibi
+  duyulmuyor. `Fmt.spoken` "eksi 842 lira 60 kuruş" üretiyor.
+- Kuruş sıfırsa okunmuyor; liste taramasında her satırda "sıfır kuruş" duymak
+  yoruyor.
+- Yön sözcüğü ("gider") etikete yazılmıyor: işaretin karşılığı zaten okunuyor.
+- Kartlar tek erişilebilirlik öğesi (bakiye, bütçe, dağılım satırı): parçalar
+  ayrı okununca aralarındaki ilişki kayboluyordu.
+- Grafik tek öğe, değeri sözlü özet. Çubukları tek tek dinlemek eğilimi
+  anlatmıyor.
+- Erişilebilirlik kademelerinde yan yana tutarlar alt alta geçiyor
+  (`AdaptiveStack`); eşik `ViewThatFits` değil `dynamicTypeSize.isAccessibilitySize`
+  — gerekçe `TransactionRow` ile aynı.
+- Ayrıntı ve açık kalanlar: `docs/A11Y-AUDIT.md`.
+
 **Ürün kararları:**
 - Varsayılan kategoriler: 13 gider (tasarımdaki 12 + "Yeme-içme") + 3 gelir
   (Maaş, Serbest çalışma, Diğer gelir). "Yeme-içme" renk yuvasını Bağış ile paylaşır.
@@ -239,7 +255,9 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
 15. **Yedek dosya akışı simülatörde uçtan uca denenmedi** (Faz 10.3).
 
 ### Kalite
-16. Erişilebilirlik denetimi yapılmadı (Faz 10.1).
+16. ~~Erişilebilirlik denetimi yapılmadı.~~ Yapıldı (Faz 10.1),
+    `docs/A11Y-AUDIT.md`. **Kalan:** VoiceOver ile gerçek cihazda uçtan uca
+    gezinme; simülatörde betikle sürülemedi.
 17. Performans ölçülmedi — 10k işlemlik defter testi yok (Faz 10.2).
 18. Bellek/sızıntı profillemesi yapılmadı (Faz 10.2).
 19. Dayanıklılık senaryoları denenmedi: uçak modu, düşük depolama, içe aktarma

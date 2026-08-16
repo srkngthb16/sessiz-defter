@@ -64,10 +64,26 @@ Simülatörde yakalanan üç hata (yalnızca orada görünürdü):
 Simülatörde doğrulandı: metin ekranda tam görünüyor, paylaşım sayfası açılıyor,
 sayaçlar 0 iken de satırlar yazılıyor.
 
-## Sıradaki iş: Faz 10.1
+## Faz 10.1'de ne yapıldı
 
-**10.1 Erişilebilirlik** — VoiceOver ile her ekran, tutar okunuşu ("eksi 842 lira 60 kuruş"),
-grafik özetleri, `docs/A11Y-AUDIT.md`.
+Ayrıntısı `docs/A11Y-AUDIT.md`. Özet:
+
+- **Tutar okunuşu** (`Core/Fmt.spoken`): "eksi 842 lira 60 kuruş". Kuruş sıfırsa
+  okunmuyor. Yüzde de sözcükle: "yüzde 93".
+- **Ekran etiketleri**: bakiye kartı, bütçe kartı, dağılım satırı, işlem satırı ve
+  gün başlığı tek cümleye indirildi. Hesap maskesi "••3412" artık "son dört hane
+  3412" diye okunuyor.
+- **Grafik özeti**: trend grafiği tek öğe, değeri "3 dönem. En yüksek gider Tem…"
+  biçiminde sözlü özet.
+- **XXXL yerleşim** (simülatörde yakalandı): dashboard ve raporlarda tutarlar
+  "+₺ 25.…" diye kırpılıyordu. `DesignSystem/AdaptiveStack` erişilebilirlik
+  kademesinde yan yana tutarları alt alta alıyor.
+
+**Kalan:** VoiceOver ile gerçek cihazda uçtan uca gezinme — simülatörde betikle
+sürülemedi, kullanıcının bir tur atması gerekiyor (`docs/A11Y-AUDIT.md`,
+"Açık kalanlar").
+
+## Sıradaki iş: Faz 10.2
 
 **10.2 Performans** — 10.000 işlemlik defter üreten test yardımcısı; liste kaydırma,
 dashboard açılış, rapor hesaplama, arama gecikmesi ölçümü. 250 ms üstü her işlem düzeltilir.
