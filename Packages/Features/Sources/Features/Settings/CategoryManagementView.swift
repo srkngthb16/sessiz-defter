@@ -94,14 +94,14 @@ struct CategoryEditorView: View {
         self.onSaved = onSaved
         _name = State(initialValue: existing?.name ?? "")
         _colorIndex = State(initialValue: existing?.colorIndex ?? 0)
-        _symbolName = State(initialValue: existing?.symbolName ?? "tag")
+        _symbolName = State(initialValue: existing?.symbolName
+                            ?? DefaultCategories.fallbackSymbol)
         _direction = State(initialValue: existing?.direction ?? .expense)
     }
 
-    private static let symbolChoices = [
-        "cart", "car", "doc.text", "cross.case", "repeat", "house", "book",
-        "theatermasks", "bag", "scissors", "heart", "fork.knife", "banknote", "tag"
-    ]
+    /// Liste Domain'den gelir: varsayılan kategorilerin simgeleri burada elle
+    /// tekrarlanınca eşleme değiştiğinde seçici geride kalıyordu.
+    private static let symbolChoices = DefaultCategories.symbolChoices()
 
     var body: some View {
         NavigationStack {

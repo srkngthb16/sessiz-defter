@@ -32,7 +32,7 @@ public struct EmptyState<Actions: View>: View {
     public var body: some View {
         VStack(spacing: Spacing.l) {
             if kind == .firstRun {
-                placeholderArtwork
+                LedgerBoxArtwork(height: 120)
             } else {
                 Image(systemName: "line.3.horizontal.decrease.circle")
                     .font(.system(size: 40, weight: .light))
@@ -63,24 +63,6 @@ public struct EmptyState<Actions: View>: View {
         .frame(maxWidth: .infinity)
     }
 
-    /// Tasarım notu: "defter + kapalı kutu" metaforu, tek çizgi, accent tek renk.
-    /// Gerçek varlık henüz yok — üretimde değiştirilecek yer tutucu.
-    private var placeholderArtwork: some View {
-        RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-            .strokeBorder(Color.border.default, style: StrokeStyle(lineWidth: 1, dash: [5, 4]))
-            .frame(height: 132)
-            .overlay {
-                VStack(spacing: Spacing.s) {
-                    Image(systemName: "book.closed")
-                        .font(.system(size: 34, weight: .light))
-                        .foregroundStyle(Color.brand.primary)
-                    Text("Yer tutucu · ilk açılış görseli")
-                        .font(.sd.caption)
-                        .foregroundStyle(Color.text.muted)
-                }
-            }
-            .accessibilityHidden(true)
-    }
 }
 
 /// Birincil eylem butonu: dolgu marka rengi, metin onBrand, en az 44 pt.

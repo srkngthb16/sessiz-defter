@@ -33,13 +33,24 @@ public struct CategoryBreakdownItem: Hashable, Sendable, Identifiable {
     public let amount: Money
     /// 0...1 — dönemin toplam giderindeki payı.
     public let share: Double
+    /// Limit dışında kalan kategorilerin toplamı. `categoryID` burada da nil ama
+    /// anlamı "kategorisiz işlem" değil "kalan kategoriler"; ikisi ayrılmayınca
+    /// kategorili harcama ekranda "Kategorisiz" görünüyordu.
+    public let isRemainder: Bool
 
-    public var id: UUID { categoryID ?? UUID(uuidString: "00000000-0000-0000-0000-000000000000")! }
+    /// Kimlik metin: iki nil kovası (kategorisiz + kalanlar) aynı defterde
+    /// bulunabiliyor, tek bir sıfır UUID ikisini birden temsil edemez.
+    public var id: String {
+        if isRemainder { return "remainder" }
+        return categoryID?.uuidString ?? "uncategorized"
+    }
 
-    public init(categoryID: UUID?, amount: Money, share: Double) {
+    public init(categoryID: UUID?, amount: Money, share: Double,
+                isRemainder: Bool = false) {
         self.categoryID = categoryID
         self.amount = amount
         self.share = share
+        self.isRemainder = isRemainder
     }
 }
 
@@ -72,7 +83,8 @@ public enum CategoryBreakdown {
             items.append(CategoryBreakdownItem(
                 categoryID: nil,
                 amount: Money(minorUnits: rest),
-                share: Double(rest) / Double(grandTotal)))
+                share: Double(rest) / Double(grandTotal),
+                isRemainder: true))
         }
         return items
     }

@@ -12,6 +12,7 @@ public struct SettingsView: View {
     let backup: (any BackupServing)?
 
     @State private var counts = Counts()
+    @State private var hasSampleData = false
     @State private var isExporting = false
     @State private var isImporting = false
     @State private var passwordPrompt: PasswordPrompt?
@@ -73,7 +74,7 @@ public struct SettingsView: View {
                     }
                 }
 
-                Section("Veri") {
+                Section {
                     Button("Yedek dışa aktar") {
                         passwordPrompt = PasswordPrompt(purpose: .export)
                     }
@@ -86,6 +87,18 @@ public struct SettingsView: View {
                     }
                     NavigationLink("Kategoriler") {
                         CategoryManagementView(environment: environment)
+                    }
+                    if hasSampleData {
+                        Button("Örnek veriyi temizle") {
+                            Task { await clearSampleData() }
+                        }
+                    }
+                } header: {
+                    Text("Veri")
+                } footer: {
+                    if hasSampleData {
+                        Text("Örnek defter yüklü: \(SampleLedger.transactionCount) işlem ve “\(SampleLedger.accountName)” hesabı. Temizleme yalnızca bunları siler, kendi kayıtlarınıza dokunmaz.")
+                            .font(.sd.caption)
                     }
                 }
 
@@ -153,6 +166,17 @@ public struct SettingsView: View {
         counts.budgets = (try? await environment.budgets.all(includeArchived: true).count) ?? 0
         counts.rules = (try? await environment.categoryRules.all())?.count ?? 0
         counts.profiles = ((try? await environment.parserProfiles?.all()) ?? [])?.count ?? 0
+        hasSampleData = await SampleData.isLoaded(in: environment)
+    }
+
+    private func clearSampleData() async {
+        do {
+            try await SampleData.clear(from: environment)
+            await loadCounts()
+            message = "Örnek veri silindi."
+        } catch {
+            message = "Örnek veri silinemedi."
+        }
     }
 
     private func handle(_ purpose: PasswordPrompt.Purpose, password: String) async {

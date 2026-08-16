@@ -83,6 +83,30 @@ struct ServiceTests {
         #expect(capped.count == 3)
         #expect(capped.last?.categoryID == nil)
         #expect(capped.last?.amount.minorUnits == 30_000)
+        #expect(capped.last?.isRemainder == true)
+        #expect(full.allSatisfy { $0.isRemainder == false })
+    }
+
+    @Test("Kategorisiz harcama ile kalanlar kovası ayrı satır")
+    func kalanlarVeKategorisiz() {
+        let accountID = UUID()
+        let ids = (0..<3).map { _ in UUID() }
+        var rows = [(ids[0], 40_000), (ids[1], 30_000), (ids[2], 20_000)].map { pair in
+            TransactionEntity(date: Self.date(1), amount: Money(minorUnits: pair.1),
+                              direction: .expense, detail: "X",
+                              categoryID: pair.0, accountID: accountID)
+        }
+        // Kategorisiz kova listenin başında olmalı; kuyruğa düşerse zaten
+        // kalanların içinde erir ve iki kova bir arada görünmez.
+        rows.append(TransactionEntity(date: Self.date(1), amount: Money(minorUnits: 50_000),
+                                      direction: .expense, detail: "Kategorisiz",
+                                      accountID: accountID))
+
+        let items = CategoryBreakdown.make(from: rows, limit: 2)
+        // Aynı defterde iki nil kovası var; kimlikleri çakışırsa liste tek satıra düşer.
+        #expect(Set(items.map(\.id)).count == items.count)
+        #expect(items.filter { $0.isRemainder }.count == 1)
+        #expect(items.contains { $0.categoryID == nil && $0.isRemainder == false })
     }
 
     @Test("Gün grupları azalan tarihte, gün toplamı transfer içermez")

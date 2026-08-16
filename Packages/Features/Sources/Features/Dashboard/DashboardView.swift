@@ -226,10 +226,14 @@ public struct DashboardScreen: View {
                 ForEach(content.breakdown) { item in
                     HStack(spacing: Spacing.s) {
                         CategoryBadge(
-                            symbolName: content.categories.symbolName(item.categoryID),
+                            symbolName: item.isRemainder
+                                ? "ellipsis"
+                                : content.categories.symbolName(item.categoryID),
                             colorIndex: content.categories.colorIndex(item.categoryID),
                             size: 26)
-                        Text(content.categories.name(item.categoryID))
+                        Text(item.isRemainder
+                             ? "Diğer kategoriler"
+                             : content.categories.name(item.categoryID))
                             .font(.sd.bodyItem)
                             .foregroundStyle(Color.text.primary)
                         Spacer(minLength: Spacing.s)

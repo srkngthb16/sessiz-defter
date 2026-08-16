@@ -38,7 +38,10 @@ public struct AppRootView: View {
     @ViewBuilder
     private var content: some View {
         if !settings.hasCompletedOnboarding {
-            OnboardingView(settings: settings, appLock: appLock) { isUnlocked = true }
+            OnboardingView(settings: settings, appLock: appLock,
+                           loadSampleData: { try? await SampleData.load(into: environment) }) {
+                isUnlocked = true
+            }
         } else if settings.isLockEnabled && !isUnlocked {
             LockView(appLock: appLock) {
                 withAnimation(.easeInOut(duration: 0.25)) { isUnlocked = true }
