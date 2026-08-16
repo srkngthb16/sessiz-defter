@@ -4,8 +4,8 @@ Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 ## Durum
 
-- **26 commit.** Son beşi henüz `origin/main`'e itilmedi (Faz 9.3 ve 9.4).
-- **211 test geçiyor.** `./Scripts/test-all.sh`
+- **31 commit.** Son onu henüz `origin/main`'e itilmedi (Faz 9.3 – 10.2).
+- **240 test geçiyor.** `./Scripts/test-all.sh`
 - `Scripts/verify-offline.sh` yeşil, pre-commit hook'una bağlı.
 - Uygulama simülatörde çalışıyor; Release yapılandırmasında da derlenip çalıştırıldı.
 - Sürüm 1.0.0, build 2.
@@ -15,7 +15,7 @@ Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 **Faz 0–7** ürün geliştirmesi (tasarım dosyalarına göre tüm ekranlar).
 **Faz 8** yayın altyapısı — bitti.
-**Faz 9.1, 9.2, 9.3, 9.4** — bitti.
+**Faz 9.1 – 9.4, 10.1, 10.2** — bitti.
 
 ## Faz 9.3'te ne yapıldı
 
@@ -83,10 +83,37 @@ Ayrıntısı `docs/A11Y-AUDIT.md`. Özet:
 sürülemedi, kullanıcının bir tur atması gerekiyor (`docs/A11Y-AUDIT.md`,
 "Açık kalanlar").
 
-## Sıradaki iş: Faz 10.2
+## Faz 10.2'de ne yapıldı
 
-**10.2 Performans** — 10.000 işlemlik defter üreten test yardımcısı; liste kaydırma,
-dashboard açılış, rapor hesaplama, arama gecikmesi ölçümü. 250 ms üstü her işlem düzeltilir.
+Ayrıntısı `docs/PERFORMANCE.md`. Özet: 10.000 kayıtlık ölçüm yardımcısı
+(`DomainTestSupport/LargeLedger`), altı ölçüm testi, beş düzeltme.
+
+| İşlem | Önce | Sonra |
+|---|---|---|
+| 10.000 kayıt yazımı | ~130 s | ~1,5 s |
+| Liste (ilk sayfa) | 456 ms | eşik altı |
+| Arama | 718 ms | eşik altı |
+| Sayım | 458 ms | eşik altı |
+| Dashboard (sekme değişimi) | ~450 ms | eşik altı |
+
+- `upsertAll` kayıt başına sorgu atmayı bıraktı (en büyük kazanç).
+- Arama `searchIndex` sütunuyla store tarafına indi; sütun açılışta bir kez geri
+  doldurulur.
+- İşlem listesi 200'er satır, sona gelince devamı yükleniyor.
+- Dashboard defterin tamamını okumuyor; net varlık hesap toplamlarından, toplam
+  önbellekte, her yazma düşürüyor.
+- `Fmt` biçimlendiricileri tek örneğe alındı.
+
+**Simülatörde yakalanan hata:** arama hiçbir şey bulmuyordu — `searchIndex` sonradan
+eklendiği için eski satırlarda NULL kalıyor, `isEmpty` yüklemi onları görmüyordu.
+Geri doldurma artık satırları okuyup karşılaştırıyor.
+
+**Karar bekleyen:** net varlığın ilk hesabı 10.000 kayıtta ~460 ms. iOS 17
+SwiftData'da toplama sorgusu yok. Ya denormalize toplam tablosu yazılacak
+(tutarlılık riski) ya da şimdiki hâl kabul edilecek (açılışta tek sefer, B2
+iskeleti örtüyor).
+
+## Sıradaki iş: Faz 10.3
 
 **10.3 Dayanıklılık** — yedek al/geri yükle simülatörde uçtan uca; uçak modu, düşük depolama,
 içe aktarma sırasında uygulamayı öldürme, yarım kalan ImportBatch.
