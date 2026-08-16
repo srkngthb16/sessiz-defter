@@ -4,7 +4,7 @@ Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 ## Durum
 
-- **25 commit.** Son üçü henüz `origin/main`'e itilmedi.
+- **26 commit.** Son beşi henüz `origin/main`'e itilmedi (Faz 9.3 ve 9.4).
 - **211 test geçiyor.** `./Scripts/test-all.sh`
 - `Scripts/verify-offline.sh` yeşil, pre-commit hook'una bağlı.
 - Uygulama simülatörde çalışıyor; Release yapılandırmasında da derlenip çalıştırıldı.
