@@ -29,6 +29,10 @@ public final class ImportModel {
     public private(set) var step: Step = .picking
     public private(set) var draft: ImportDraft?
     public private(set) var categories = CategoryLookup()
+    public private(set) var accounts: [AccountEntity] = []
+    /// İçe aktarılan ekstrenin hangi hesaba yazılacağı. Birden fazla hesap varsa
+    /// kullanıcı seçmeden başlanamaz: Garanti ekstresi Ziraat'e yazılmamalı.
+    public var selectedAccountID: UUID?
     public var password = ""
     /// C5 — kullanıcı isterse kasadaki kopya silinir. Varsayılan: silinir.
     public var deletesSourceFile = true
@@ -43,6 +47,21 @@ public final class ImportModel {
         self.pipeline = pipeline
     }
 
+    /// Dosya seçiciden önce çağrılır: hesap listesi yüklenir, tek hesap varsa
+    /// seçim kullanıcıya sorulmadan yapılır.
+    public func loadAccounts() async {
+        accounts = ((try? await environment.accounts.all(includeArchived: false)) ?? [])
+            .sorted { $0.sortIndex < $1.sortIndex }
+        if selectedAccountID == nil || !accounts.contains(where: { $0.id == selectedAccountID }) {
+            selectedAccountID = accounts.count == 1 ? accounts.first?.id : nil
+        }
+    }
+
+    /// Hesap seçilmeden dosya seçtirilmez.
+    public var canPickFile: Bool {
+        accounts.isEmpty || selectedAccountID != nil
+    }
+
     public func start(url: URL, allowOCR: Bool = false,
                       fallback: GenericColumnParser? = nil) async {
         pendingURL = url
@@ -51,7 +70,12 @@ public final class ImportModel {
             categories = CategoryLookup(
                 try await environment.categories.all(includeArchived: false))
             let rules = try await environment.categoryRules.all()
-            let accountID = try await defaultAccountID()
+            let accountID: UUID
+            if let selectedAccountID {
+                accountID = selectedAccountID
+            } else {
+                accountID = try await defaultAccountID()
+            }
 
             step = .processing(stage: .detectingFormat)
             let hashes = Set<String>()
@@ -122,7 +146,12 @@ public final class ImportModel {
     public func confirm() async {
         guard let draft else { return }
         do {
-            let accountID = try await defaultAccountID()
+            let accountID: UUID
+            if let selectedAccountID {
+                accountID = selectedAccountID
+            } else {
+                accountID = try await defaultAccountID()
+            }
             let batchID = UUID()
             let builder = DraftBuilder(categorizer: CategorizationEngine(rules: []),
                                        accountID: accountID)

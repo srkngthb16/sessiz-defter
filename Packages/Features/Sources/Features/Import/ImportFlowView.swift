@@ -27,6 +27,7 @@ public struct ImportFlowView: View {
                 .background(Color.bg.canvas)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { toolbar }
+                .task { await model.loadAccounts() }
                 .fileImporter(isPresented: $isFilePickerPresented,
                               allowedContentTypes: [.pdf]) { result in
                     guard case .success(let url) = result else { return }
@@ -92,10 +93,38 @@ public struct ImportFlowView: View {
     private var pickingStep: some View {
         ScrollView {
             VStack(spacing: Spacing.l) {
+                if model.accounts.count > 1 {
+                    Card {
+                        VStack(alignment: .leading, spacing: Spacing.s) {
+                            Text("Hangi hesaba aktarılacak?")
+                                .font(.sd.titleSection)
+                                .foregroundStyle(Color.text.primary)
+                            Text("Ekstredeki işlemler seçtiğiniz hesaba yazılır.")
+                                .font(.sd.meta)
+                                .foregroundStyle(Color.text.muted)
+                            Picker("Hesap", selection: $model.selectedAccountID) {
+                                Text("Seçiniz").tag(UUID?.none)
+                                ForEach(model.accounts) { account in
+                                    Text(account.displayName).tag(UUID?.some(account.id))
+                                }
+                            }
+                            .pickerStyle(.inline)
+                            .labelsHidden()
+                        }
+                    }
+                }
+
                 Card {
                     VStack(alignment: .leading, spacing: Spacing.m) {
                         PrimaryButton("Dosyalar'dan PDF seç", systemImage: "doc.badge.plus") {
                             isFilePickerPresented = true
+                        }
+                        .disabled(!model.canPickFile)
+                        .opacity(model.canPickFile ? 1 : 0.5)
+                        if !model.canPickFile {
+                            Text("Önce hedef hesabı seçin.")
+                                .font(.sd.meta)
+                                .foregroundStyle(Color.finance.warning)
                         }
                         Text("Ekstre kopyası uygulama kasasına alınır, işlem bitince silinir.")
                             .font(.sd.meta)

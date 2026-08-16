@@ -81,6 +81,9 @@ public struct SettingsView: View {
                     NavigationLink("İçe aktarma kuralları") {
                         RulesView(environment: environment)
                     }
+                    NavigationLink("Hesaplar") {
+                        AccountManagementView(environment: environment)
+                    }
                     NavigationLink("Kategoriler") {
                         CategoryManagementView(environment: environment)
                     }
