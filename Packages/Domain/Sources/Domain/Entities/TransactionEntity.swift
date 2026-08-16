@@ -92,6 +92,20 @@ public struct TransactionEntity: Identifiable, Hashable, Sendable, Codable {
         self.createdAt = createdAt
     }
 
+    /// Aramanın taradığı tek metin: açıklama, not, etiketler ve tutarın yazılı hali,
+    /// tr_TR büyük harfe çevrilmiş ("İ" ve "ı" bozulmasın).
+    ///
+    /// Kalıcılık katmanı bunu ayrı bir sütunda saklıyor ve aramayı store tarafında
+    /// yapıyor; 10.000 kaydı belleğe çevirip taramak 490 ms sürüyordu. Kural tek
+    /// yerde durduğu için iki yol da aynı sonucu veriyor.
+    public var searchIndexText: String {
+        var parts = [detail.trUpper]
+        if let note { parts.append(note.trUpper) }
+        parts.append(contentsOf: tags.map(\.trUpper))
+        parts.append(Fmt.amount(amount))
+        return parts.joined(separator: " ")
+    }
+
     /// Bakiyeye etkisi: gider negatif, transfer nötr (iki hesap arasında yer değiştirir).
     public var signedAmount: Money {
         switch direction {

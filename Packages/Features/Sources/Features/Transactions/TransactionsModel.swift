@@ -12,7 +12,25 @@ public final class TransactionsModel {
     public private(set) var isLoading = true
 
     public var searchText: String = "" { didSet { scheduleReload(oldValue) } }
-    public var query = TransactionQuery.all
+    public var query = TransactionQuery.all {
+        didSet { visibleLimit = Self.pageSize }
+    }
+
+    /// Liste sayfa sayfa yükleniyor: 10.000 kayıtlık defterde tümünü tek seferde
+    /// okumak 494 ms sürüyordu. Ekranda en çok birkaç düzine satır var, gerisi
+    /// kullanıcı sona yaklaşınca geliyor.
+    static let pageSize = 200
+
+    private(set) var visibleLimit = pageSize
+
+    /// Yüklenmiş satır sayısı.
+    public var loadedCount: Int { groups.reduce(0) { $0 + $1.transactions.count } }
+
+    /// Sayfa dolduysa devamı vardır.
+    public var canLoadMore: Bool { loadedCount >= visibleLimit }
+
+    /// Listenin son satırı — görünürlüğü sonraki sayfayı tetikler.
+    public var lastLoadedTransactionID: UUID? { groups.last?.transactions.last?.id }
 
     private let environment: AppEnvironment
 
@@ -81,6 +99,7 @@ public final class TransactionsModel {
             accounts = AccountLookup(try await environment.accounts.all(includeArchived: true))
             var effective = query
             effective.searchText = searchText.isEmpty ? nil : searchText
+            effective.limit = visibleLimit
             let rows = try await environment.transactions.transactions(matching: effective)
             groups = TransactionService.group(rows, calendar: environment.calendar)
             totalCount = try await environment.transactions.count(matching: .all)
@@ -89,6 +108,14 @@ public final class TransactionsModel {
             groups = []
             totalCount = 0
         }
+    }
+
+    /// Liste sonuna gelindiğinde çağrılır. Zaten yükleniyorsa ya da devamı yoksa
+    /// hiçbir şey yapmaz — kaydırma sırasında üst üste sorgu atılmasın.
+    public func loadMore() async {
+        guard !isLoading, canLoadMore else { return }
+        visibleLimit += Self.pageSize
+        await load()
     }
 
     public func delete(_ transaction: TransactionEntity) async {

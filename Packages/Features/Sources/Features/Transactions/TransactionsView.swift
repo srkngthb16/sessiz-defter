@@ -84,6 +84,14 @@ public struct TransactionsView: View {
                     Section {
                         ForEach(group.transactions) { transaction in
                             row(transaction)
+                                // Sona yaklaşınca sonraki sayfa: liste 200'er
+                                // satır yükleniyor, hepsini birden okumak
+                                // 10.000 kayıtta kaydırmayı takıyordu.
+                                .onAppear {
+                                    guard transaction.id == model.lastLoadedTransactionID
+                                    else { return }
+                                    Task { await model.loadMore() }
+                                }
                             Divider().overlay(Color.border.divider)
                         }
                     } header: {

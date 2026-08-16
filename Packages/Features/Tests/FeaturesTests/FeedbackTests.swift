@@ -118,6 +118,7 @@ private struct FailingTransactionRepository: TransactionRepository {
     func saveAll(_ transactions: [TransactionEntity]) async throws { throw Failure() }
     func delete(id: UUID) async throws { throw Failure() }
     func deleteAll() async throws { throw Failure() }
+    func signedTotalsByAccount() async throws -> [UUID: Money] { throw Failure() }
     func existingDuplicateHashes(among hashes: Set<String>) async throws -> Set<String> {
         throw Failure()
     }

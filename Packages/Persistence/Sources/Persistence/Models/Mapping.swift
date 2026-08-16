@@ -90,7 +90,8 @@ extension SDTransaction {
             statementLineNumber: entity.statementLineNumber,
             duplicateHash: entity.duplicateHash,
             categoryConfidence: entity.categoryConfidence,
-            needsReview: entity.needsReview, createdAt: entity.createdAt)
+            needsReview: entity.needsReview, createdAt: entity.createdAt,
+            searchIndex: entity.searchIndexText)
     }
 
     func apply(_ entity: TransactionEntity) {
@@ -110,6 +111,9 @@ extension SDTransaction {
         duplicateHash = entity.duplicateHash
         categoryConfidence = entity.categoryConfidence
         needsReview = entity.needsReview
+        // Arama sütunu her yazımda tazelenmeli: açıklama ya da tutar değişip
+        // indeks eski kalırsa arama kaydı bulamaz.
+        searchIndex = entity.searchIndexText
     }
 }
 

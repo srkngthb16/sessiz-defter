@@ -9,13 +9,28 @@ public enum Fmt {
 
     /// Simgesiz: "10.905,40"
     public static func amount(_ money: Money) -> String {
+        decimalFormatter.string(from: money.magnitude.decimalValue as NSDecimalNumber) ?? ""
+    }
+
+    /// Biçimlendirici kurmak ucuz değil: 10.000 satırlık aramada satır başına
+    /// yeni `NumberFormatter` kurmak sorguyu 700 ms'ye çıkarıyordu. Formatlama
+    /// iş parçacığı güvenli olduğu için tek örnek paylaşılıyor.
+    nonisolated(unsafe) private static let decimalFormatter: NumberFormatter = {
         let f = NumberFormatter()
         f.numberStyle = .decimal
         f.locale = TurkishLocale.locale
         f.minimumFractionDigits = 2
         f.maximumFractionDigits = 2
-        return f.string(from: money.magnitude.decimalValue as NSDecimalNumber) ?? ""
-    }
+        return f
+    }()
+
+    nonisolated(unsafe) private static let integerFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.locale = TurkishLocale.locale
+        f.maximumFractionDigits = 0
+        return f
+    }()
 
     /// Tutarın işaret durumu — okunuşta "eksi"/"artı" sözcüğü buradan gelir.
     public enum SpokenSign: Sendable {
@@ -62,11 +77,7 @@ public enum Fmt {
     }
 
     private static func grouped(_ value: Int) -> String {
-        let f = NumberFormatter()
-        f.numberStyle = .decimal
-        f.locale = TurkishLocale.locale
-        f.maximumFractionDigits = 0
-        return f.string(from: NSNumber(value: value)) ?? "\(value)"
+        integerFormatter.string(from: NSNumber(value: value)) ?? "\(value)"
     }
 
     /// "12.08.2026"
@@ -86,11 +97,7 @@ public enum Fmt {
 
     /// "%91" — Türkçede yüzde işareti sayının önünde.
     public static func percent(_ ratio: Double) -> String {
-        let f = NumberFormatter()
-        f.numberStyle = .decimal
-        f.locale = TurkishLocale.locale
-        f.maximumFractionDigits = 0
-        return "%" + (f.string(from: NSNumber(value: (ratio * 100).rounded())) ?? "0")
+        "%" + (integerFormatter.string(from: NSNumber(value: (ratio * 100).rounded())) ?? "0")
     }
 
     static func symbol(for currencyCode: String) -> String {

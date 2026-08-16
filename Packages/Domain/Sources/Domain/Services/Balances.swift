@@ -39,4 +39,16 @@ public enum Balances {
             running + balance(of: account, transactions: transactions)
         }
     }
+
+    /// Hazır toplamlarla net varlık: satır listesi elde yokken kullanılır.
+    /// Sonuç `netWorth(accounts:transactions:)` ile aynı, yol farklı — dashboard
+    /// 10.000 satırı belleğe çekmek zorunda kalmasın diye.
+    public static func netWorth(
+        accounts: [AccountEntity],
+        signedTotals: [UUID: Money]
+    ) -> Money {
+        accounts.reduce(Money.zero) { running, account in
+            running + account.openingBalance + (signedTotals[account.id] ?? .zero)
+        }
+    }
 }

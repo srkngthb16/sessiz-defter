@@ -2,6 +2,15 @@ import Core
 import Foundation
 
 extension TransactionQuery {
+    /// Tarih dışında koşul var mı. Tarih store tarafında süzülebiliyor, gerisi
+    /// bellekte; sayım gibi işlemler bunu sorup satırları hiç okumadan sonuç
+    /// verebiliyor.
+    public var needsInMemoryFiltering: Bool {
+        !categoryIDs.isEmpty || !accountIDs.isEmpty || !directions.isEmpty
+            || minimumAmount != nil || maximumAmount != nil || onlyNeedsReview
+            || (searchText.map { !$0.isEmpty } ?? false)
+    }
+
     /// Filtre semantiği tek yerde: in-memory ve SwiftData gerçeklemeleri aynı kuralı kullanır,
     /// böylece testte geçen davranış üretimde de aynı kalır.
     public func matches(_ transaction: TransactionEntity) -> Bool {
@@ -24,12 +33,7 @@ extension TransactionQuery {
     /// Arama açıklamada, notta ve tutarın yazılı halinde çalışır ("İşlem, hesap veya tutar ara").
     /// Karşılaştırma tr_TR büyük harfe çevrilerek yapılır: "İ" ve "ı" bozulmasın.
     static func textMatches(_ needle: String, _ transaction: TransactionEntity) -> Bool {
-        let query = needle.trUpper
-        if transaction.detail.trUpper.contains(query) { return true }
-        if let note = transaction.note, note.trUpper.contains(query) { return true }
-        if transaction.tags.contains(where: { $0.trUpper.contains(query) }) { return true }
-        if Fmt.amount(transaction.amount).contains(query) { return true }
-        return false
+        transaction.searchIndexText.contains(needle.trUpper)
     }
 
     public func apply(to transactions: [TransactionEntity]) -> [TransactionEntity] {

@@ -46,6 +46,14 @@ final class Bootstrap {
         do {
             let container = try StoreFactory.makeContainer()
             let store = PersistenceStore(modelContainer: container)
+            // Arama sütunu 10.2'de eklendi; ondan önce yazılmış kayıtlarda boş
+            // kalıyor ve arama onları bulamıyor. Tarama defterin tamamını gezdiği
+            // için bir kez çalışır; sonraki yazımlar sütunu kendisi dolduruyor.
+            let backfillKey = "searchIndex.backfilled.v1"
+            if !UserDefaults.standard.bool(forKey: backfillKey) {
+                try await store.backfillSearchIndex()
+                UserDefaults.standard.set(true, forKey: backfillKey)
+            }
             state = .ready(
                 AppEnvironment(
                     transactions: store.transactions,

@@ -34,8 +34,10 @@ public final class DashboardModel {
         do {
             try await environment.service.seedDefaultCategoriesIfNeeded()
             try await environment.service.seedDefaultAccountIfNeeded()
-            let rows = try await environment.transactions.transactions(matching: .all)
-            guard !rows.isEmpty else {
+            // Defterin tamamı okunmuyor: bakiye toplamlardan, ay kartları dönem
+            // sorgusundan, son işlemler sınırlı sorgudan geliyor. 10.000 kayıtta
+            // hepsini çekmek açılışı 450 ms'ye çıkarıyordu.
+            guard try await environment.transactions.count(matching: .all) > 0 else {
                 state = .empty
                 return
             }
@@ -43,7 +45,13 @@ public final class DashboardModel {
             let categories = try await environment.categories.all(includeArchived: true)
             let interval = Period.month(containing: environment.now(),
                                         calendar: environment.calendar)
-            let monthRows = rows.filter { interval.contains($0.date) }
+            var monthQuery = TransactionQuery.all
+            monthQuery.dateRange = interval.start...interval.end
+            let monthRows = try await environment.transactions.transactions(matching: monthQuery)
+            var recentQuery = TransactionQuery.all
+            recentQuery.limit = 3
+            let recentRows = try await environment.transactions.transactions(matching: recentQuery)
+            let signedTotals = try await environment.transactions.signedTotalsByAccount()
 
             let budgets = try await environment.budgets.all(includeArchived: false)
             let engine = BudgetEngine(calendar: environment.calendar)
@@ -53,10 +61,10 @@ public final class DashboardModel {
                 .filter { $0.state != .onTrack }
 
             state = .loaded(Content(
-                netWorth: Balances.netWorth(accounts: accounts, transactions: rows),
+                netWorth: Balances.netWorth(accounts: accounts, signedTotals: signedTotals),
                 summary: PeriodSummary.make(from: monthRows),
                 breakdown: CategoryBreakdown.make(from: monthRows, limit: 5),
-                recent: Array(rows.prefix(3)),
+                recent: recentRows,
                 budgets: Array(statuses.prefix(2)),
                 accountCount: accounts.count,
                 periodTitle: Self.monthTitle(interval.start, calendar: environment.calendar),

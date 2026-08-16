@@ -18,6 +18,12 @@ public actor PersistenceStore {
     }
     public nonisolated var resetter: DataResetting { SwiftDataResetter(store: self) }
 
+    /// Hesap toplamları. İşlem yazan her yol bunu düşürür; okuma yolu yeniden
+    /// hesaplar. Actor içinde olduğu için eşzamanlılık sorunu yok.
+    var signedTotalsCache: [UUID: Money]?
+
+    func invalidateSignedTotals() { signedTotalsCache = nil }
+
     // MARK: Account
 
     func fetchAccounts(includeArchived: Bool) throws -> [AccountEntity] {
@@ -81,14 +87,64 @@ public actor PersistenceStore {
         var descriptor = FetchDescriptor<SDTransaction>(
             sortBy: [SortDescriptor(\.date, order: .reverse),
                      SortDescriptor(\.createdAt, order: .reverse)])
-        if let range = query.dateRange {
+        let search = query.searchText.flatMap { $0.isEmpty ? nil : $0.trUpper }
+        // Arama da store tarafında: 10.000 kaydı varlığa çevirip taramak 490 ms
+        // sürüyordu. Aranan metin yazarken hazırlanan searchIndex sütununda.
+        switch (query.dateRange, search) {
+        case (let range?, let text?):
+            let lower = range.lowerBound, upper = range.upperBound
+            descriptor.predicate = #Predicate {
+                $0.date >= lower && $0.date <= upper && $0.searchIndex.contains(text)
+            }
+        case (let range?, nil):
             let lower = range.lowerBound, upper = range.upperBound
             descriptor.predicate = #Predicate { $0.date >= lower && $0.date <= upper }
+        case (nil, let text?):
+            descriptor.predicate = #Predicate { $0.searchIndex.contains(text) }
+        case (nil, nil):
+            break
         }
-        let rows = try modelContext.fetch(descriptor).map(\.entity)
+        // Sınır yalnızca başka filtre kalmadığında store tarafında uygulanabilir;
+        // yoksa elenecek satırlar sınırı doldurup sonucu eksiltir.
         var narrowed = query
         narrowed.dateRange = nil
+        narrowed.searchText = nil
+        if let limit = query.limit, narrowed.needsInMemoryFiltering == false {
+            descriptor.fetchLimit = limit
+        }
+        let rows = try modelContext.fetch(descriptor).map(\.entity)
         return narrowed.apply(to: rows)
+    }
+
+    /// Arama sütunu sonradan eklendi; eski kayıtlarda boş kalıyor ve arama onları
+    /// bulamıyor. Uygulama açılışında bir kez doldurulur, dolu defterde hiçbir şey
+    /// yapmaz. Kaç satır düzeltildiğini döndürür.
+    @discardableResult
+    public func backfillSearchIndex() throws -> Int {
+        // Yüklemle ("searchIndex boş olanlar") süzülmüyor: sütun sonradan
+        // eklendiği için eski satırlarda değer boş dize değil NULL kalıyor ve
+        // yüklem onları hiç görmüyordu — arama sessizce hiçbir şey bulmuyordu
+        // (simülatörde yakalandı). Satırlar okunup gerçek değerle karşılaştırılıyor.
+        var fixed = 0
+        for row in try modelContext.fetch(FetchDescriptor<SDTransaction>()) {
+            let expected = row.entity.searchIndexText
+            guard row.searchIndex != expected else { continue }
+            row.searchIndex = expected
+            fixed += 1
+        }
+        guard fixed > 0 else { return 0 }
+        try modelContext.save()
+        return fixed
+    }
+
+    /// Yalnız test için: sütunun eklenmesinden önce yazılmış kayıtları taklit eder.
+    /// Geri doldurmanın gerçekten çalıştığı başka türlü doğrulanamıyor.
+    @discardableResult
+    public func clearSearchIndexForTesting() throws -> Int {
+        let rows = try modelContext.fetch(FetchDescriptor<SDTransaction>())
+        for row in rows { row.searchIndex = "" }
+        try modelContext.save()
+        return rows.count
     }
 
     func fetchTransaction(id: UUID) throws -> TransactionEntity? {
@@ -98,13 +154,28 @@ public actor PersistenceStore {
     func upsert(_ entity: TransactionEntity) throws {
         try insertOrUpdate(entity)
         try modelContext.save()
+        invalidateSignedTotals()
     }
 
     /// İçe aktarma tek yazma işlemi: herhangi biri düşerse hiçbiri kalmaz.
     func upsertAll(_ entities: [TransactionEntity]) throws {
         do {
-            for entity in entities { try insertOrUpdate(entity) }
+            // Kayıt başına "var mı" sorgusu atmak 10.000 satırda dakikalara
+            // çıkıyordu (her sorgu büyüyen tabloyu tarıyor). Var olanlar tek
+            // sorguyla alınıp sözlüğe konuyor.
+            let ids = entities.map(\.id)
+            let existing = try modelContext.fetch(
+                FetchDescriptor<SDTransaction>(predicate: #Predicate { ids.contains($0.id) }))
+            let byID = Dictionary(existing.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+            for entity in entities {
+                if let model = byID[entity.id] {
+                    model.apply(entity)
+                } else {
+                    modelContext.insert(SDTransaction.make(entity))
+                }
+            }
             try modelContext.save()
+            invalidateSignedTotals()
         } catch {
             modelContext.rollback()
             throw error
@@ -122,11 +193,49 @@ public actor PersistenceStore {
     func deleteTransaction(id: UUID) throws {
         if let existing = try model(SDTransaction.self, id: id) { modelContext.delete(existing) }
         try modelContext.save()
+        invalidateSignedTotals()
     }
 
     func deleteAllTransactions() throws {
         try modelContext.delete(model: SDTransaction.self)
         try modelContext.save()
+        invalidateSignedTotals()
+    }
+
+    /// Hesap başına toplam. Satırlar varlığa çevrilmiyor: yalnız üç alan okunuyor,
+    /// dashboard açılışındaki 450 ms'nin çoğu varlık dönüşümündeydi.
+    func signedTotalsByAccount() throws -> [UUID: Money] {
+        // 10.000 satırı toplamak yarım saniye sürüyor ve sonuç yalnız yazma
+        // olunca değişiyor. Sonuç actor içinde tutuluyor, her yazma düşürüyor:
+        // sekme değiştirmek defteri baştan toplamasın.
+        if let signedTotalsCache { return signedTotalsCache }
+        let computed = try computeSignedTotalsByAccount()
+        signedTotalsCache = computed
+        return computed
+    }
+
+    private func computeSignedTotalsByAccount() throws -> [UUID: Money] {
+        var totals: [UUID: Int] = [:]
+        var currencies: [UUID: String] = [:]
+        // Yalnız dört sütun okunuyor: tam satırı materyalize etmek 10.000 kayıtta
+        // dashboard açılışını eşiğin üstüne çıkarıyordu.
+        var descriptor = FetchDescriptor<SDTransaction>()
+        descriptor.propertiesToFetch = [\.accountID, \.amountMinorUnits,
+                                        \.directionRaw, \.currencyCode]
+        for row in try modelContext.fetch(descriptor) {
+            let direction = TransactionDirection(rawValue: row.directionRaw) ?? .expense
+            let signed = switch direction {
+            case .income: row.amountMinorUnits
+            case .expense: -row.amountMinorUnits
+            case .transfer: 0
+            }
+            totals[row.accountID, default: 0] += signed
+            currencies[row.accountID] = row.currencyCode
+        }
+        return totals.reduce(into: [:]) { result, entry in
+            result[entry.key] = Money(minorUnits: entry.value,
+                                      currencyCode: currencies[entry.key] ?? "TRY")
+        }
     }
 
     func duplicateHashes(among hashes: Set<String>) throws -> Set<String> {
@@ -138,7 +247,19 @@ public actor PersistenceStore {
     }
 
     func countTransactions(matching query: TransactionQuery) throws -> Int {
-        try fetchTransactions(matching: query).count
+        // Yalnız tarihle süzülen sayım store tarafında yapılır: 10.000 kaydı
+        // varlığa çevirip saymak 458 ms sürüyordu. Bellekte süzülen alan varsa
+        // eski yol geçerli — filtre semantiği tek yerde kalmalı.
+        guard query.needsInMemoryFiltering else {
+            var descriptor = FetchDescriptor<SDTransaction>()
+            if let range = query.dateRange {
+                let lower = range.lowerBound, upper = range.upperBound
+                descriptor.predicate = #Predicate { $0.date >= lower && $0.date <= upper }
+            }
+            let total = try modelContext.fetchCount(descriptor)
+            return query.limit.map { min($0, total) } ?? total
+        }
+        return try fetchTransactions(matching: query).count
     }
 
     // MARK: Budget
@@ -260,6 +381,7 @@ public actor PersistenceStore {
         try modelContext.delete(model: SDCategory.self)
         try modelContext.delete(model: SDAccount.self)
         try modelContext.save()
+        invalidateSignedTotals()
     }
 
     private func model<T: PersistentModel>(_ type: T.Type, id: UUID) throws -> T? {
@@ -327,6 +449,9 @@ struct SwiftDataTransactionRepository: TransactionRepository {
     }
     func delete(id: UUID) async throws { try await store.deleteTransaction(id: id) }
     func deleteAll() async throws { try await store.deleteAllTransactions() }
+    func signedTotalsByAccount() async throws -> [UUID: Money] {
+        try await store.signedTotalsByAccount()
+    }
     func existingDuplicateHashes(among hashes: Set<String>) async throws -> Set<String> {
         try await store.duplicateHashes(among: hashes)
     }

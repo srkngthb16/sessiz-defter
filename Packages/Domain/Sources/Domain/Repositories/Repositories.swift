@@ -64,6 +64,13 @@ public protocol TransactionRepository: Sendable {
     func saveAll(_ transactions: [TransactionEntity]) async throws
     func delete(id: UUID) async throws
     func deleteAll() async throws
+    /// Hesap başına işlem toplamı (gelir artı, gider eksi, transfer nötr).
+    ///
+    /// Bakiye tüm defteri ilgilendiriyor ama satırların kendisi gerekmiyor.
+    /// 10.000 kaydı varlığa çevirip toplamak dashboard açılışını 450 ms'ye
+    /// çıkarıyordu; gerçeklemeler bunu satırları okumadan yapabilir.
+    func signedTotalsByAccount() async throws -> [UUID: Money]
+
     /// Verilen hash'lerden hangileri zaten kayıtlı.
     func existingDuplicateHashes(among hashes: Set<String>) async throws -> Set<String>
     func count(matching query: TransactionQuery) async throws -> Int

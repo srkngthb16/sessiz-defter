@@ -83,6 +83,14 @@ public struct InMemoryTransactionRepository: TransactionRepository {
     let store: InMemoryStore
     public init(store: InMemoryStore) { self.store = store }
 
+    public func signedTotalsByAccount() async throws -> [UUID: Money] {
+        await store.transactions.values.reduce(into: [:]) { result, transaction in
+            let current = result[transaction.accountID]
+                ?? Money(minorUnits: 0, currencyCode: transaction.amount.currencyCode)
+            result[transaction.accountID] = current + transaction.signedAmount
+        }
+    }
+
     public func transactions(matching query: TransactionQuery) async throws -> [TransactionEntity] {
         query.apply(to: Array(await store.transactions.values))
     }

@@ -75,12 +75,18 @@ final class SDTransaction {
     var categoryConfidence: Double?
     var needsReview: Bool
     var createdAt: Date
+    /// Aramanın taradığı hazır metin (`TransactionEntity.searchIndexText`).
+    /// Varsayılanı boş: sütun sonradan eklendiği için eski kayıtlarda "" kalır,
+    /// ilk açılışta doldurulur (`PersistenceStore.backfillSearchIndex`).
+    var searchIndex: String = ""
 
     init(id: UUID, date: Date, amountMinorUnits: Int, currencyCode: String,
          directionRaw: String, detail: String, categoryID: UUID?, accountID: UUID,
          counterpartAccountID: UUID?, note: String?, tags: [String], sourceRaw: String,
          importBatchID: UUID?, statementLineNumber: Int?, duplicateHash: String,
-         categoryConfidence: Double?, needsReview: Bool, createdAt: Date) {
+         categoryConfidence: Double?, needsReview: Bool, createdAt: Date,
+         searchIndex: String = "") {
+        self.searchIndex = searchIndex
         self.id = id
         self.date = date
         self.amountMinorUnits = amountMinorUnits
