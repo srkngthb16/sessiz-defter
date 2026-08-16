@@ -124,16 +124,17 @@ public struct AmountText: View {
         }
     }
 
-    private var accessibilityLabel: String {
-        let prefix = switch direction {
-        case .income: "gelir"
-        case .expense: "gider"
-        case .transfer: "transfer"
-        case .neutral: ""
+    /// Okunuş ekrandaki dizeden ayrı: "₺ 842,60" seslendirmede para gibi
+    /// duyulmuyor. Yön sözcüğü yazılmıyor, işaretin karşılığı zaten okunuyor —
+    /// "gider eksi 842 lira" aynı bilgiyi iki kez söylüyordu.
+    var accessibilityLabel: String {
+        let spoken = switch direction {
+        case .income: Fmt.spoken(amount, sign: showsSign ? .income : .none)
+        case .expense: Fmt.spoken(amount, sign: showsSign ? .expense : .none)
+        case .transfer: "transfer, " + Fmt.spoken(amount, sign: .none)
+        case .neutral: Fmt.spoken(amount, sign: .fromValue)
         }
-        let critical = isCritical ? ", bütçe aşıldı" : ""
-        return "\(prefix) \(Fmt.currency(amount))\(critical)"
-            .trimmingCharacters(in: .whitespaces)
+        return isCritical ? spoken + ", bütçe aşıldı" : spoken
     }
 
     /// 44 pt tabandan başlar, .accessibility2'de 56 pt'ta durur; ötesinde punto sabit

@@ -108,6 +108,16 @@ public struct BudgetsView: View {
     }
 
     private func budgetCard(_ status: BudgetStatus, categories: CategoryLookup) -> some View {
+        budgetCardContent(status, categories: categories)
+            // Kart görsel olarak beş parça; tek tek okununca durum, oran ve
+            // tutarlar birbirinden kopuyordu.
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(SpokenSummary.budget(
+                status, categoryName: categories.name(status.budget.categoryID)))
+    }
+
+    private func budgetCardContent(_ status: BudgetStatus,
+                                   categories: CategoryLookup) -> some View {
         Card {
             VStack(alignment: .leading, spacing: Spacing.s) {
                 HStack(spacing: Spacing.s) {

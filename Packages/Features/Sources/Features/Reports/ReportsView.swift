@@ -105,6 +105,13 @@ public struct ReportsScreen: View {
                             .zIndex(-1)
                     }
                 }
+                // Çubukları tek tek dinlemek eğilimi anlatmıyor: grafik tek öğe,
+                // değeri sözlü özet.
+                .accessibilityElement()
+                .accessibilityLabel("Gelir ve gider trendi grafiği")
+                .accessibilityValue(SpokenSummary.trend(points: content.points.map {
+                    (label: $0.label, income: $0.income, expense: $0.expense)
+                }))
                 .chartXSelection(value: $selectedLabel)
                 .chartLegend(.hidden)
                 .chartYAxis {
@@ -145,8 +152,10 @@ public struct ReportsScreen: View {
     /// üstte, gelir ve gider altta.
     private func readout(for content: ReportsModel.Content) -> some View {
         let point = content.points.first { $0.label == selectedLabel } ?? content.points.last
+        // Erişilebilirlik kademelerinde dört tutar yan yana sığmıyor ve
+        // "+₺ 48…" diye kırpılıyordu; eşik geçilince hepsi alt alta.
         return VStack(alignment: .leading, spacing: Spacing.xs) {
-            HStack(alignment: .firstTextBaseline) {
+            AdaptiveStack(spacing: Spacing.s) {
                 Text(point?.label ?? "—")
                     .font(.sd.titleSection)
                     .foregroundStyle(Color.text.primary)
@@ -161,7 +170,7 @@ public struct ReportsScreen: View {
                 }
             }
             if let point {
-                HStack(spacing: Spacing.m) {
+                AdaptiveStack(spacing: Spacing.m) {
                     AmountText(amount: point.income, direction: .income, style: .summary)
                     AmountText(amount: point.expense, direction: .expense, style: .summary)
                     Spacer(minLength: 0)

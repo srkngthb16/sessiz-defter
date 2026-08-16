@@ -54,7 +54,19 @@ public struct TransactionRow: View {
         .padding(.horizontal, Spacing.l)
         .padding(.vertical, Spacing.m)
         .background(model.isCritical ? Color.finance.criticalSurface : Color.bg.surface)
-        .accessibilityElement(children: .combine)
+        // children: .combine alt etiketleri ekrandaki sırayla birleştiriyordu:
+        // hesap maskesi "••3412" ham okunuyor, "kontrol gerekiyor" rozeti hiç
+        // duyulmuyordu. Satır tek etikete indirildi.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    var accessibilityLabel: String {
+        var parts = [model.detail, SpokenText.expandingAccountMask(model.meta)]
+        parts.append(AmountText(amount: model.amount, direction: model.direction,
+                                isCritical: model.isCritical).accessibilityLabel)
+        if model.needsReview { parts.append("kontrol gerekiyor") }
+        return parts.filter { !$0.isEmpty }.joined(separator: ", ")
     }
 
     private var horizontal: some View {

@@ -141,6 +141,14 @@ public struct TransactionsView: View {
         .padding(.horizontal, Spacing.l)
         .padding(.vertical, Spacing.s)
         .background(Color.bg.canvas)
+        // Gün başlığı listede gezinme durağı: tarih ile gün toplamı ayrı okununca
+        // "12 Ağustos 2026 · Çarşamba" ile "−487,25 ₺" ilişkisiz duyuluyordu.
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isHeader)
+        .accessibilityLabel("\(Fmt.dayHeader(group.date, calendar: environment.calendar)), "
+                            + "gün toplamı "
+                            + Fmt.spoken(group.total,
+                                         sign: group.total.isNegative ? .expense : .income))
     }
 
     private func signedTotal(_ group: TransactionDayGroup) -> String {

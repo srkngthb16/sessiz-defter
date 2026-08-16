@@ -17,6 +17,58 @@ public enum Fmt {
         return f.string(from: money.magnitude.decimalValue as NSDecimalNumber) ?? ""
     }
 
+    /// Tutarın işaret durumu — okunuşta "eksi"/"artı" sözcüğü buradan gelir.
+    public enum SpokenSign: Sendable {
+        /// Bakiye gibi yönsüz tutar: işaret değerin kendisinden okunur.
+        case fromValue
+        case income
+        case expense
+        case none
+    }
+
+    /// "eksi 842 lira 60 kuruş" — VoiceOver okunuşu.
+    ///
+    /// Ekrandaki "₺ 842,60" biçimi seslendirmede işe yaramıyor: simgenin ve
+    /// virgülün okunuşu cihaza göre değişiyor, "sekiz yüz kırk iki virgül altmış"
+    /// tutarı para gibi duyurmuyor. Kuruş sıfırsa hiç okunmaz — liste taramasında
+    /// her satırda "sıfır kuruş" duymak yoruyor.
+    public static func spoken(_ money: Money, sign: SpokenSign = .fromValue) -> String {
+        let minorUnits = abs(money.minorUnits)
+        let major = minorUnits / 100
+        let minor = minorUnits % 100
+
+        let words = unitWords(for: money.currencyCode)
+        var parts: [String] = []
+
+        switch sign {
+        case .fromValue: if money.isNegative { parts.append("eksi") }
+        case .expense: parts.append("eksi")
+        case .income: parts.append("artı")
+        case .none: break
+        }
+
+        parts.append("\(grouped(major)) \(words.major)")
+        if minor > 0 { parts.append("\(minor) \(words.minor)") }
+        return parts.joined(separator: " ")
+    }
+
+    /// "yüzde 91" — sayının önündeki "%" bazı seslerde hiç okunmuyor.
+    public static func spokenPercent(_ ratio: Double) -> String {
+        "yüzde \(Int((ratio * 100).rounded()))"
+    }
+
+    private static func unitWords(for currencyCode: String) -> (major: String, minor: String) {
+        currencyCode == "TRY" ? ("lira", "kuruş") : (currencyCode, "cent")
+    }
+
+    private static func grouped(_ value: Int) -> String {
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.locale = TurkishLocale.locale
+        f.maximumFractionDigits = 0
+        return f.string(from: NSNumber(value: value)) ?? "\(value)"
+    }
+
     /// "12.08.2026"
     public static func date(_ date: Date, calendar: Calendar = .current) -> String {
         formatter("dd.MM.yyyy", calendar).string(from: date)

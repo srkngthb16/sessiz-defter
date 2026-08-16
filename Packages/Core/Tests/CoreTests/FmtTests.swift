@@ -2,6 +2,43 @@ import Foundation
 import Testing
 @testable import Core
 
+@Suite("Tutar okunuşu")
+struct SpokenAmountTests {
+    @Test("Kuruş varsa iki parça okunur")
+    func kurusVar() {
+        #expect(Fmt.spoken(Money(minorUnits: 84_260), sign: .expense)
+                == "eksi 842 lira 60 kuruş")
+        #expect(Fmt.spoken(Money(minorUnits: 8_499), sign: .expense)
+                == "eksi 84 lira 99 kuruş")
+    }
+
+    @Test("Kuruş sıfırsa okunmaz")
+    func kurusYok() {
+        #expect(Fmt.spoken(Money(minorUnits: 5_240_000), sign: .income)
+                == "artı 52.400 lira")
+        #expect(Fmt.spoken(Money(minorUnits: 100), sign: .none) == "1 lira")
+        #expect(Fmt.spoken(Money.zero, sign: .none) == "0 lira")
+    }
+
+    @Test("Yönsüz tutarda işaret değerin kendisinden gelir")
+    func yonsuz() {
+        #expect(Fmt.spoken(Money(minorUnits: -84_260)) == "eksi 842 lira 60 kuruş")
+        #expect(Fmt.spoken(Money(minorUnits: 84_260)) == "842 lira 60 kuruş")
+    }
+
+    @Test("Binlik ayracı okunuşta da var")
+    func binlik() {
+        #expect(Fmt.spoken(Money(minorUnits: 4_770_967), sign: .none)
+                == "47.709 lira 67 kuruş")
+    }
+
+    @Test("Yüzde sözcükle okunur")
+    func yuzde() {
+        #expect(Fmt.spokenPercent(0.93) == "yüzde 93")
+        #expect(Fmt.spokenPercent(1.14) == "yüzde 114")
+    }
+}
+
 @Suite("tr_TR biçimlendirme")
 struct FmtTests {
     @Test("Tutar binlik ayracı nokta, ondalık virgül")

@@ -148,20 +148,32 @@ public struct DashboardScreen: View {
     private func balanceCard(_ content: DashboardModel.Content) -> some View {
         Card {
             VStack(alignment: .leading, spacing: Spacing.m) {
-                Text("Toplam net varlık")
-                    .font(.sd.caption)
-                    .foregroundStyle(Color.text.muted)
-                AmountText(amount: content.netWorth, direction: .neutral,
-                           style: .hero, showsSign: false)
-                HStack(spacing: Spacing.xs) {
-                    AmountText(amount: content.summary.net.magnitude,
-                               direction: content.summary.net.isNegative ? .expense : .income,
-                               style: .summary)
-                    Text("bu ay · \(content.accountCount) hesap")
-                        .font(.sd.meta)
+                // Başlık, bakiye ve ayın neti tek erişilebilirlik öğesi: ayrı ayrı
+                // okununca "47.709,67" ile "25.312,07" arasındaki ilişki kayboluyor
+                // ve "bu ay · 1 hesap" içindeki orta nokta ayraç olarak duyulmuyordu.
+                VStack(alignment: .leading, spacing: Spacing.m) {
+                    Text("Toplam net varlık")
+                        .font(.sd.caption)
                         .foregroundStyle(Color.text.muted)
+                    AmountText(amount: content.netWorth, direction: .neutral,
+                               style: .hero, showsSign: false)
+                    // Erişilebilirlik kademelerinde yan yana kalırsa tutar kırpılıp
+                    // "+₺ 25.…" oluyordu; eşik TransactionRow ile aynı.
+                    AdaptiveStack(spacing: Spacing.xs) {
+                        AmountText(amount: content.summary.net.magnitude,
+                                   direction: content.summary.net.isNegative
+                                       ? .expense : .income,
+                                   style: .summary)
+                        Text("bu ay · \(content.accountCount) hesap")
+                            .font(.sd.meta)
+                            .foregroundStyle(Color.text.muted)
+                    }
                 }
-                HStack(spacing: Spacing.s) {
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(SpokenSummary.netWorth(content.netWorth,
+                                                           monthNet: content.summary.net,
+                                                           accountCount: content.accountCount))
+                AdaptiveStack(spacing: Spacing.s) {
                     summaryTile("Gelir", content.summary.income, .income)
                     summaryTile("Gider", content.summary.expense, .expense)
                 }
@@ -176,26 +188,35 @@ public struct DashboardScreen: View {
                 SectionHeader(title: "Bütçe · \(content.periodTitle)",
                               actionTitle: "Tümü", action: onSeeAllBudgets)
                 ForEach(content.budgets) { status in
-                    VStack(alignment: .leading, spacing: Spacing.xs) {
-                        HStack {
-                            Text(content.categories.name(status.budget.categoryID))
-                                .font(.sd.bodyItem)
-                                .foregroundStyle(Color.text.primary)
-                            Spacer()
-                            Text(Fmt.percent(status.ratio))
-                                .font(.sd.amountRow)
-                                .foregroundStyle(status.state == .exceeded
-                                                 ? Color.finance.critical
-                                                 : Color.finance.warning)
-                        }
-                        BudgetBar(ratio: status.ratio)
-                        Text("\(Fmt.amount(status.spent)) / \(Fmt.amount(status.effectiveLimit)) ₺")
-                            .font(.sd.meta)
-                            .foregroundStyle(Color.text.muted)
-                    }
+                    budgetRow(status, categories: content.categories)
                 }
             }
         }
+    }
+
+    private func budgetRow(_ status: BudgetStatus,
+                           categories: CategoryLookup) -> some View {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
+            HStack {
+                Text(categories.name(status.budget.categoryID))
+                    .font(.sd.bodyItem)
+                    .foregroundStyle(Color.text.primary)
+                Spacer()
+                Text(Fmt.percent(status.ratio))
+                    .font(.sd.amountRow)
+                    .foregroundStyle(status.state == .exceeded
+                                     ? Color.finance.critical
+                                     : Color.finance.warning)
+            }
+            BudgetBar(ratio: status.ratio)
+            Text("\(Fmt.amount(status.spent)) / \(Fmt.amount(status.effectiveLimit)) ₺")
+                .font(.sd.meta)
+                .foregroundStyle(Color.text.muted)
+        }
+        // "1.600,00 / 1.400,00 ₺" seslendirmede bölme işlemi gibi duyuluyordu.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(SpokenSummary.budget(
+            status, categoryName: categories.name(status.budget.categoryID)))
     }
 
     private func summaryTile(_ title: String, _ amount: Money,
@@ -214,6 +235,9 @@ public struct DashboardScreen: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(direction.surface, in: RoundedRectangle(cornerRadius: Radius.control,
                                                             style: .continuous))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(SpokenSummary.summaryTile(title, amount,
+                                                      isIncome: direction == .income))
     }
 
     private func breakdownCard(_ content: DashboardModel.Content) -> some View {
@@ -245,6 +269,13 @@ public struct DashboardScreen: View {
                             .foregroundStyle(Color.text.muted)
                             .frame(width: 48, alignment: .trailing)
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(SpokenSummary.breakdownRow(
+                        name: item.isRemainder
+                            ? "Diğer kategoriler"
+                            : content.categories.name(item.categoryID),
+                        amount: item.amount,
+                        share: item.share))
                 }
             }
         }
