@@ -141,17 +141,31 @@ public struct GarantiKrediKartiParser: StatementParsing {
 public struct GenericColumnParser: StatementParsing {
     public let formatIdentifier: String
     public let bankName: String
-    public let signatures: [String] = []
+    public var signatures: [String] { signatureList }
+    let signatureList: [String]
     /// Ayırıcı belirtilmezse boşluk sütunları kullanılır.
     public let separator: Character?
     public let columns: [ColumnRole]
 
     public init(formatIdentifier: String, bankName: String,
-                separator: Character? = nil, columns: [ColumnRole]) {
+                separator: Character? = nil, columns: [ColumnRole],
+                signatures: [String] = []) {
         self.formatIdentifier = formatIdentifier
         self.bankName = bankName
         self.separator = separator
         self.columns = columns
+        self.signatureList = signatures
+    }
+
+    /// Kaydedilmiş kullanıcı eşlemesinden parser üretir. İmzası olmayan profil
+    /// hiçbir metinle eşleşmez; kaydederken imza türetilmesi şart.
+    public init?(profile: ParserProfileEntity) {
+        guard !profile.columnMapping.isEmpty, !profile.signatures.isEmpty else { return nil }
+        self.init(formatIdentifier: profile.formatIdentifier,
+                  bankName: profile.bankName,
+                  separator: profile.separator.flatMap(\.first),
+                  columns: profile.columnMapping,
+                  signatures: profile.signatures)
     }
 
     public func parse(_ text: String, calendar: Calendar = .gregorianIstanbul) -> ParseResult {
@@ -216,6 +230,14 @@ public struct BankFormatDetector: Sendable {
     public init(parsers: [any StatementParsing] = [ZiraatVadesizParser(),
                                                    GarantiKrediKartiParser()]) {
         self.parsers = parsers
+    }
+
+    /// Kullanıcının kaydettiği eşlemeler yerleşik parser'lardan ÖNCE denenir:
+    /// kullanıcı bir bankanın biçimini elle düzelttiyse o düzeltme kazanmalı.
+    public init(parsers: [any StatementParsing] = [ZiraatVadesizParser(),
+                                                   GarantiKrediKartiParser()],
+                savedProfiles: [ParserProfileEntity]) {
+        self.parsers = savedProfiles.compactMap(GenericColumnParser.init(profile:)) + parsers
     }
 
     public func detect(in text: String) -> (any StatementParsing)? {

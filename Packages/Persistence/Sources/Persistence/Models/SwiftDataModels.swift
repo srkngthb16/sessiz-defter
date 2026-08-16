@@ -167,17 +167,20 @@ final class SDParserProfile {
     var formatIdentifier: String
     var signatures: [String]
     var columnMappingRaw: [String]
+    var separator: String?
     var isUserDefined: Bool
     var createdAt: Date
     var lastUsedAt: Date?
 
     init(id: UUID, bankName: String, formatIdentifier: String, signatures: [String],
-         columnMappingRaw: [String], isUserDefined: Bool, createdAt: Date, lastUsedAt: Date?) {
+         columnMappingRaw: [String], separator: String?, isUserDefined: Bool,
+         createdAt: Date, lastUsedAt: Date?) {
         self.id = id
         self.bankName = bankName
         self.formatIdentifier = formatIdentifier
         self.signatures = signatures
         self.columnMappingRaw = columnMappingRaw
+        self.separator = separator
         self.isUserDefined = isUserDefined
         self.createdAt = createdAt
         self.lastUsedAt = lastUsedAt

@@ -128,6 +128,14 @@ struct ColumnMappingStep: View {
 
     private static let separators = ["Boşluk", "|", ";", ","]
 
+    private var livePreview: [ParsedRow] {
+        model.previewRows(columns: roles, separator: separatorCharacter)
+    }
+
+    private var separatorCharacter: Character? {
+        separator == "Boşluk" ? nil : Character(separator)
+    }
+
     var body: some View {
         Form {
             Section("Ham satır önizlemesi") {
@@ -154,6 +162,46 @@ struct ColumnMappingStep: View {
                 Button("Sütun ekle") { roles.append(.ignored) }
                     .disabled(roles.count >= 8)
             }
+
+            // Canlı önizleme: eşleme doğru mu, denemeden önce görünür.
+            Section("Bu eşlemeyle okunanlar") {
+                if livePreview.isEmpty {
+                    Text("Bu eşlemeyle hiçbir satır okunamıyor. Ayracı ya da sütun sırasını değiştirin.")
+                        .font(.sd.meta)
+                        .foregroundStyle(Color.finance.warning)
+                } else {
+                    ForEach(Array(livePreview.enumerated()), id: \.offset) { _, row in
+                        HStack(spacing: Spacing.s) {
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text(row.detail.isEmpty ? "—" : row.detail)
+                                    .font(.sd.bodyItem)
+                                    .foregroundStyle(Color.text.primary)
+                                Text(Fmt.date(row.date, calendar: .gregorianIstanbul))
+                                    .font(.sd.meta)
+                                    .foregroundStyle(Color.text.muted)
+                            }
+                            Spacer(minLength: Spacing.s)
+                            AmountText(amount: row.amount,
+                                       direction: row.direction == .income ? .income : .expense,
+                                       style: .row)
+                        }
+                    }
+                }
+            }
+
+            Section {
+                Toggle("Bu eşlemeyi kaydet", isOn: Binding(
+                    get: { model.savesMapping }, set: { model.savesMapping = $0 }))
+                if model.savesMapping {
+                    TextField("Banka adı", text: Binding(
+                        get: { model.mappedBankName }, set: { model.mappedBankName = $0 }))
+                }
+            } footer: {
+                Text(model.savesMapping
+                     ? "Aynı bankanın sonraki ekstresi otomatik tanınır. Banka adı boş bırakılırsa eşleme kaydedilmez."
+                     : "Eşleme yalnızca bu dosya için kullanılır.")
+            }
+
             Section {
                 Button("Eşlemeyi dene") {
                     Task {
@@ -162,6 +210,15 @@ struct ColumnMappingStep: View {
                     }
                 }
                 .fontWeight(.semibold)
+                .disabled(livePreview.isEmpty)
+
+                if let sample = model.anonymizedSample {
+                    ShareLink(item: sample) {
+                        Label("Anonim örneği paylaş", systemImage: "square.and.arrow.up")
+                    }
+                }
+            } footer: {
+                Text("Paylaşılan metinde harfler X, rakamlar 9 ile değiştirilir; yalnızca satır düzeni görünür. Uygulama kendiliğinden hiçbir şey göndermez.")
             }
         }
     }

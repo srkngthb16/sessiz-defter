@@ -185,6 +185,7 @@ extension SDParserProfile {
             id: id, bankName: bankName, formatIdentifier: formatIdentifier,
             signatures: signatures,
             columnMapping: columnMappingRaw.map { ColumnRole(rawValue: $0) ?? .ignored },
+            separator: separator,
             isUserDefined: isUserDefined, createdAt: createdAt, lastUsedAt: lastUsedAt)
     }
 
@@ -193,6 +194,7 @@ extension SDParserProfile {
             id: entity.id, bankName: entity.bankName,
             formatIdentifier: entity.formatIdentifier, signatures: entity.signatures,
             columnMappingRaw: entity.columnMapping.map(\.rawValue),
+            separator: entity.separator,
             isUserDefined: entity.isUserDefined, createdAt: entity.createdAt,
             lastUsedAt: entity.lastUsedAt)
     }
@@ -202,6 +204,7 @@ extension SDParserProfile {
         formatIdentifier = entity.formatIdentifier
         signatures = entity.signatures
         columnMappingRaw = entity.columnMapping.map(\.rawValue)
+        separator = entity.separator
         isUserDefined = entity.isUserDefined
         lastUsedAt = entity.lastUsedAt
     }

@@ -152,6 +152,32 @@ public struct ImportFlowView: View {
             if let draft = model.draft {
                 VStack(spacing: 0) {
                     ReviewCounters(draft: draft)
+
+                    if let report = model.report {
+                        Card {
+                            VStack(alignment: .leading, spacing: Spacing.xs) {
+                                Text(report.summaryLine)
+                                    .font(.sd.meta)
+                                    .foregroundStyle(Color.text.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                ForEach(ParseReport.SkipReason.allCases, id: \.rawValue) { reason in
+                                    if let count = report.skippedRows[reason], count > 0 {
+                                        Text("\(count) satır · \(reason.rawValue)")
+                                            .font(.sd.caption)
+                                            .foregroundStyle(Color.text.muted)
+                                    }
+                                }
+                                if report.looksWrong {
+                                    // Aday satırların yarısından çoğu okunamadı:
+                                    // sessizce eksik içe aktarmaktansa uyarmak gerek.
+                                    Text("Satırların çoğu okunamadı. Ekstre yanlış tanınmış olabilir — iptal edip sütunları elle eşleyebilirsiniz.")
+                                        .font(.sd.meta)
+                                        .foregroundStyle(Color.finance.warning)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+                        }
+                    }
                     List {
                         section("Kontrol gerekiyor", kind: .needsReview, draft: draft)
                         section("Otomatik kategorilendi", kind: .automatic, draft: draft)

@@ -17,6 +17,9 @@ public struct ParserProfileEntity: Identifiable, Hashable, Sendable, Codable {
     /// Başlık/altbilgi imzaları — BankFormatDetector bunlarla eşleştirir.
     public var signatures: [String]
     public var columnMapping: [ColumnRole]
+    /// Sütun ayracı. nil ise sütunlar boşlukla ayrılır. Kaydedilmezse aynı banka
+    /// sonraki ekstrede yanlış ayraçla okunur.
+    public var separator: String?
     public var isUserDefined: Bool
     public var createdAt: Date
     public var lastUsedAt: Date?
@@ -27,6 +30,7 @@ public struct ParserProfileEntity: Identifiable, Hashable, Sendable, Codable {
         formatIdentifier: String,
         signatures: [String] = [],
         columnMapping: [ColumnRole] = [],
+        separator: String? = nil,
         isUserDefined: Bool = true,
         createdAt: Date = Date(),
         lastUsedAt: Date? = nil
@@ -36,6 +40,7 @@ public struct ParserProfileEntity: Identifiable, Hashable, Sendable, Codable {
         self.formatIdentifier = formatIdentifier
         self.signatures = signatures
         self.columnMapping = columnMapping
+        self.separator = separator
         self.isUserDefined = isUserDefined
         self.createdAt = createdAt
         self.lastUsedAt = lastUsedAt

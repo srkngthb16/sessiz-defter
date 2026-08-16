@@ -56,7 +56,19 @@ public struct ImportPipeline: Sendable {
         }
     }
 
+    public struct Output: Sendable {
+        public let draft: ImportDraft
+        public let report: ParseReport
+        /// Ham metin yalnızca bellekte tutulur; kullanıcı isterse anonimleştirilip
+        /// paylaşılır, hiçbir yere kendiliğinden yazılmaz.
+        public let extractedText: String
+    }
+
     public func run(_ input: Input) async throws -> ImportDraft {
+        try await runDetailed(input).draft
+    }
+
+    public func runDetailed(_ input: Input) async throws -> Output {
         let extracted: ExtractedText
         do {
             extracted = try extractor.extract(fileAt: input.url, password: input.password)
@@ -78,13 +90,18 @@ public struct ImportPipeline: Sendable {
         let builder = DraftBuilder(
             categorizer: CategorizationEngine(rules: input.rules),
             accountID: input.accountID)
-        return builder.build(
+        let draft = builder.build(
             from: result,
             fileName: input.url.lastPathComponent,
             bankName: parser.bankName,
             existingHashes: input.existingHashes,
             usedOCR: extracted.usedOCR,
             calendar: calendar)
+        return Output(
+            draft: draft,
+            report: ParseReport.make(from: result, text: extracted.text,
+                                     bankName: parser.bankName, calendar: calendar),
+            extractedText: extracted.text)
     }
 
     /// C7 ekranındaki "Ham satır önizlemesi" — kullanıcı sütunları eşlerken görür.

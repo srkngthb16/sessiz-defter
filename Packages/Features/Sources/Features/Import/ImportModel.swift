@@ -33,6 +33,14 @@ public final class ImportModel {
     /// İçe aktarılan ekstrenin hangi hesaba yazılacağı. Birden fazla hesap varsa
     /// kullanıcı seçmeden başlanamaz: Garanti ekstresi Ziraat'e yazılmamalı.
     public var selectedAccountID: UUID?
+    /// C7 sonrası rapor: kaç satır tarandı, kaç okundu, kaç atlandı.
+    public private(set) var report: ParseReport?
+    /// Ayrıştırılamayan ekstrenin ham metni. Yalnızca bellekte durur; kullanıcı
+    /// isterse anonimleştirilmiş hâli paylaşılır.
+    public private(set) var extractedText: String?
+    /// Kullanıcı eşlemesi kaydedilsin mi (C7).
+    public var savesMapping = true
+    public var mappedBankName = ""
     public var password = ""
     /// C5 — kullanıcı isterse kasadaki kopya silinir. Varsayılan: silinir.
     public var deletesSourceFile = true
@@ -80,10 +88,17 @@ public final class ImportModel {
             step = .processing(stage: .detectingFormat)
             let hashes = Set<String>()
             step = .processing(stage: .parsingRows)
-            var result = try await pipeline.run(ImportPipeline.Input(
+            // Kullanıcının kaydettiği eşlemeler yerleşik parser'lardan önce denenir.
+            let savedProfiles = ((try? await environment.parserProfiles?.all()) ?? []) ?? []
+            let scopedPipeline = ImportPipeline(
+                detector: BankFormatDetector(savedProfiles: savedProfiles))
+            let output = try await scopedPipeline.runDetailed(ImportPipeline.Input(
                 url: url, password: password.isEmpty ? nil : password,
                 allowOCR: allowOCR, fallbackParser: fallback,
                 accountID: accountID, rules: rules, existingHashes: hashes))
+            report = output.report
+            extractedText = output.extractedText
+            var result = output.draft
 
             step = .processing(stage: .categorizing)
             // Mükerrer sorgusu ayrıştırma bittikten sonra: hash'ler ancak burada belli.
@@ -113,12 +128,53 @@ public final class ImportModel {
         await start(url: pendingURL, allowOCR: true)
     }
 
+    /// C7 — kullanıcı eşlemesiyle yeniden dener. Eşleme kaydedilirse aynı bankanın
+    /// sonraki ekstresi otomatik tanınır; imza türetilemezse kayıt anlamsız olur.
     public func retryWithColumns(_ columns: [ColumnRole], separator: Character?) async {
         guard let pendingURL else { return }
+        let bankName = mappedBankName.trimmingCharacters(in: .whitespaces)
+        let identifier = "kullanici.\(UUID().uuidString.prefix(8)).v1"
+        let signatures = extractedText.map { StatementSignature.derive(from: $0) } ?? []
+
+        if savesMapping, !signatures.isEmpty, !bankName.isEmpty {
+            try? await environment.parserProfiles?.save(ParserProfileEntity(
+                bankName: bankName,
+                formatIdentifier: identifier,
+                signatures: signatures,
+                columnMapping: columns,
+                separator: separator.map(String.init),
+                isUserDefined: true))
+        }
+
         let parser = GenericColumnParser(
-            formatIdentifier: "kullanici.\(UUID().uuidString.prefix(8)).v1",
-            bankName: "Şablon", separator: separator, columns: columns)
+            formatIdentifier: identifier,
+            bankName: bankName.isEmpty ? "Şablon" : bankName,
+            separator: separator, columns: columns, signatures: signatures)
         await start(url: pendingURL, fallback: parser)
+    }
+
+    /// C7 canlı önizleme: eşleme uygulanınca ilk satırlar nasıl okunuyor.
+    public func previewRows(columns: [ColumnRole], separator: Character?,
+                            limit: Int = 4) -> [ParsedRow] {
+        guard let extractedText else { return [] }
+        let parser = GenericColumnParser(
+            formatIdentifier: "onizleme", bankName: "Önizleme",
+            separator: separator, columns: columns)
+        return Array(parser.parse(extractedText, calendar: environment.calendar)
+            .rows.prefix(limit))
+    }
+
+    /// Ayrıştırılamayan ekstrenin paylaşılabilir hâli. Uygulama hiçbir şey göndermez;
+    /// metni sistem paylaşım sayfasına veren kullanıcıdır.
+    public var anonymizedSample: String? {
+        guard let extractedText else { return nil }
+        return """
+        Sessiz Defter · ayrıştırılamayan ekstre örneği
+        Bu metin anonimleştirildi: harfler X, rakamlar 9 ile değiştirildi.
+        Yalnızca satır düzeni ve ayraçlar korundu.
+
+        \(StatementAnonymizer.anonymize(extractedText))
+        """
     }
 
     public func toggle(_ rowID: UUID) {
