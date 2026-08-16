@@ -79,6 +79,9 @@ zorunluydu.
 | 5 | Bütçeler, `BudgetEngine`, yerel bildirim | `22d8fe5`, `d027edf` |
 | 6 | Raporlar (Swift Charts), dönem karşılaştırma | `f761958` |
 | 7 | Onboarding, kilit, ayarlar, şifreli yedek | `f6b6fba` |
+| 8 | Yayın altyapısı: xcconfig, gizlilik manifesti, sürümleme, ihracat analizi, açılış ekranı, Release yapılandırması, arşivleme | `2ca0963`…`b06ced2` |
+| 9.1 | Hesap yönetimi, içe aktarmada hedef hesap seçimi | `7eec11a` |
+| 9.2 | Kaydedilebilir sütun eşlemesi, ayrıştırma raporu, anonim örnek paylaşımı | `fbd9f15` |
 
 **Ekranlar (tasarım dosyasındaki kodlarla):** A1–A3 onboarding, A4 kilit,
 B1 boş durum, B2 iskelet, C1–C8 içe aktarma ve hata dalları, D1 dashboard,
@@ -90,16 +93,16 @@ F1 ayarlar, F2 mahremiyet raporu, F3 tüm verileri sil.
 
 ## 4. Test durumu
 
-161 test geçiyor. `./Scripts/test-all.sh` hepsini koşar.
+184 test geçiyor. `./Scripts/test-all.sh` hepsini koşar.
 
 | Paket | Test |
 |---|---|
-| Core | 21 — biçimlendirme, kuruş aritmetiği, hash normalizasyonu, şifreleme |
+| Core | 25 — biçimlendirme, kuruş aritmetiği, hash, şifreleme, gizlilik manifesti |
 | Domain | 41 — varlık değişmezleri, filtre, bütçe eşikleri, raporlar, katman kuralı |
 | Persistence | 20 — CRUD, sorgu eşdeğerliği, CloudKit kapalı, dosya koruma, yedek |
-| ImportPipeline | 25 — golden parser testleri, hat akışı, hata dalları |
+| ImportPipeline | 32 — golden parser testleri, hat akışı, hata dalları, rapor, anonimleştirme |
 | DesignSystem | 21 — 17 kontrast oranı, font çözümleme, düzen kuralı, snapshot |
-| Features | 33 — ekran modelleri, snapshot (dashboard, bütçe, rapor, kilit, içe aktarma) |
+| Features | 45 — ekran modelleri, hesap yönetimi, eşleme, sürüm, snapshot |
 
 **Doğrulama araçları:**
 - `Scripts/verify-offline.sh` — kaynak ağacında ağ izi arar, bulursa build'i düşürür.
@@ -107,7 +110,13 @@ F1 ayarlar, F2 mahremiyet raporu, F3 tüm verileri sil.
   `import CloudKit` geçemez). Negatif test edildi. Pre-commit hook'una bağlı.
 - `Scripts/test-all.sh` — paket paket test koşar.
 - `Scripts/subset-fonts.sh` — fontları Türkçe kapsamına indirger (1,16 MB → 336 KB).
-- `Scripts/make-app-icon.swift` — uygulama ikonunu üretir.
+- `Scripts/make-app-icon.swift` — uygulama ikonunu üretir (alfasız).
+- `Scripts/make-launch-mark.swift` — açılış ekranı işaretini üretir.
+- `Scripts/verify-privacy-manifest.sh` — gizlilik manifestini kaynakta ve pakette denetler.
+- `Scripts/verify-app-icon.sh` — ikon boyutu ve alfa kanalı denetimi.
+- `Scripts/bump-build.sh` — build numarasını artırır, commit atmaz.
+- `Scripts/archive.sh` — dört kapıdan (çevrimdışılık, manifest, ikon, testler) geçmeden
+  arşiv üretmez. Team ID gerektirir.
 
 **Snapshot altyapısı elde yazıldı** (üçüncü parti paket yasak): `UIHostingController`
 + `UIWindow` trait override + `layer.render` + PNG karşılaştırma. Dört varyant:
@@ -170,40 +179,39 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
 ## 6. Bilinen eksikler
 
 ### Yayını bloklayan
-1. **İmzalama yapılandırılmamış.** Bundle ID `com.sessizdefter.app`, Team ID yok.
-   Derlemeler `CODE_SIGNING_ALLOWED=NO` ile yapılıyor.
-2. **`PrivacyInfo.xcprivacy` yok.** iOS 17+ App Store zorunlu. Uygulama veri toplamıyor
-   ama `UserDefaults` kullanımı için "required reason API" beyanı gerekiyor.
-3. **Versiyon 0.1**, build 1.
-4. **App Store metadata yok** — açıklama, anahtar kelimeler, ekran görüntüleri,
-   gizlilik politikası URL'i, destek URL'i.
-5. **Şifreleme ihracat beyanı doğrulanmadı.** `ITSAppUsesNonExemptEncryption = false`
-   yazılı ama AES-GCM + PBKDF2 kullanılıyor. Hukuki uyum konusu, gözden geçirilmeli.
+1. **Team ID yok.** Apple Developer üyeliği ödendi, onay bekleniyor (48 saate kadar).
+   Onay gelince `cp Config/Local.xcconfig.example Config/Local.xcconfig` ve Team ID yazılır.
+   `Scripts/archive.sh` bunsuz çalışmaz.
+2. **Bundle ID kaydı yapılmadı** — `com.sessizdefter.app` Apple'da kaydedilecek.
+3. **App Store metadata yok** — Faz 11'de üretilecek.
+4. **Destek URL'i ve gizlilik politikası URL'i yok.** App Store Connect'te zorunlu alanlar;
+   yayınlanmış bir sayfa gerekiyor (GitHub Pages yeterli).
+5. **İhracat beyanı onay bekliyor.** `docs/EXPORT-COMPLIANCE.md` analizi yazıldı,
+   `ITSAppUsesNonExemptEncryption = false` bırakıldı, kullanıcı onayı alınmadı.
+6. **Guideline 2.1 riski:** B1 boş durumunda ekranda "Yer tutucu · ilk açılış görseli"
+   yazıyor. Harici TestFlight testinden önce gitmeli.
 
 ### Ürün eksiği
-6. **Hesap ekleme/yönetme ekranı yok.** Kullanıcı akışı adım 03'te var. Şu an tek
-   "Nakit" hesabı otomatik yazılıyor; kullanıcı ikinci hesap ekleyemiyor.
-   Tasarım "3 hesap" gösteriyor.
-7. **Parser gerçek ekstre ile doğrulanmadı.** Fixture metinleri sentetik; biçim
-   tasarım dosyasındaki C7 ham satır önizlemesinden türetildi. Ürünün merkezî
-   vaadi bu — gerçek Ziraat/Garanti PDF'i ile çalışmayabilir.
+7. **Parser gerçek ekstre ile doğrulanmadı.** Fixture metinleri sentetik. Faz 9.2'de
+   manuel sütun eşleme, canlı önizleme, ayrıştırma raporu ve anonim örnek paylaşımı
+   eklendi; artık gerçek PDF ile test edilebilir. **Kullanıcıdan gerçek (anonimleştirilmiş)
+   Ziraat/Garanti/İş Bankası ekstresi bekleniyor.**
 8. **E4 manuel giriş** sistem `Form` + `decimalPad` kullanıyor; tasarım özel tuş
    takımı ve "son kullanılanlar" kategori çipleri gösteriyor.
-9. **Kategori ikonları yer tutucu.** SF Symbols eşlemesi tasarım dosyasının kendi
-   eksik listesinde.
-10. **B1 boş durum illüstrasyonu** kesikli çerçeveli yer tutucu.
-11. **Launch screen markasız** (boş `UILaunchScreen`).
-12. **CSV dışa aktarma** F1'de listeleniyor, yazılmadı.
-13. **Makbuz fotoğrafı** D5'te listeleniyor, yazılmadı.
-14. **Yedek dosya akışı simülatörde uçtan uca denenmedi** — `fileExporter`/
-    `fileImporter` Dosyalar arayüzü gerektiriyor. Şifreleme ve arşiv katmanı
-    birim testlerle kapsandı.
+9. **Kategori ikonları yer tutucu.** SF Symbols eşlemesi yapılmadı (Faz 9.3).
+10. **B1 boş durum illüstrasyonu** kesikli çerçeveli yer tutucu (Faz 9.3).
+11. **Örnek veri modu yok** — test kullanıcısı boş ekranla karşılaşıyor (Faz 9.3).
+12. **Geri bildirim yolu yok** (Faz 9.4).
+13. **CSV dışa aktarma** F1'de listeleniyor, yazılmadı.
+14. **Makbuz fotoğrafı** D5'te listeleniyor, yazılmadı.
+15. **Yedek dosya akışı simülatörde uçtan uca denenmedi** (Faz 10.3).
 
 ### Kalite
-15. Erişilebilirlik denetimi yapılmadı (VoiceOver ile gerçek gezinme).
-16. Performans ölçülmedi (büyük defterde liste kaydırma, 10k işlem).
-17. Release yapılandırmasında derleme denenmedi (hep Debug).
-18. Bellek/sızıntı profillemesi yapılmadı.
+16. Erişilebilirlik denetimi yapılmadı (Faz 10.1).
+17. Performans ölçülmedi — 10k işlemlik defter testi yok (Faz 10.2).
+18. Bellek/sızıntı profillemesi yapılmadı (Faz 10.2).
+19. Dayanıklılık senaryoları denenmedi: uçak modu, düşük depolama, içe aktarma
+    sırasında uygulamayı öldürme, yarım kalan ImportBatch (Faz 10.3).
 
 ---
 
