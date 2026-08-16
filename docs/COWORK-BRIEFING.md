@@ -82,6 +82,7 @@ zorunluydu.
 | 8 | Yayın altyapısı: xcconfig, gizlilik manifesti, sürümleme, ihracat analizi, açılış ekranı, Release yapılandırması, arşivleme | `2ca0963`…`b06ced2` |
 | 9.1 | Hesap yönetimi, içe aktarmada hedef hesap seçimi | `7eec11a` |
 | 9.2 | Kaydedilebilir sütun eşlemesi, ayrıştırma raporu, anonim örnek paylaşımı | `fbd9f15` |
+| 9.3 | Örnek veri modu, B1 illüstrasyonu, kategori simge eşlemesi | `036eee5` |
 
 **Ekranlar (tasarım dosyasındaki kodlarla):** A1–A3 onboarding, A4 kilit,
 B1 boş durum, B2 iskelet, C1–C8 içe aktarma ve hata dalları, D1 dashboard,
@@ -93,16 +94,16 @@ F1 ayarlar, F2 mahremiyet raporu, F3 tüm verileri sil.
 
 ## 4. Test durumu
 
-184 test geçiyor. `./Scripts/test-all.sh` hepsini koşar.
+202 test geçiyor. `./Scripts/test-all.sh` hepsini koşar.
 
 | Paket | Test |
 |---|---|
 | Core | 25 — biçimlendirme, kuruş aritmetiği, hash, şifreleme, gizlilik manifesti |
-| Domain | 41 — varlık değişmezleri, filtre, bütçe eşikleri, raporlar, katman kuralı |
+| Domain | 49 — varlık değişmezleri, filtre, bütçe eşikleri, raporlar, katman kuralı, örnek defter |
 | Persistence | 20 — CRUD, sorgu eşdeğerliği, CloudKit kapalı, dosya koruma, yedek |
 | ImportPipeline | 32 — golden parser testleri, hat akışı, hata dalları, rapor, anonimleştirme |
 | DesignSystem | 21 — 17 kontrast oranı, font çözümleme, düzen kuralı, snapshot |
-| Features | 45 — ekran modelleri, hesap yönetimi, eşleme, sürüm, snapshot |
+| Features | 55 — ekran modelleri, hesap yönetimi, eşleme, sürüm, snapshot, örnek veri, kategori simgeleri |
 
 **Doğrulama araçları:**
 - `Scripts/verify-offline.sh` — kaynak ağacında ağ izi arar, bulursa build'i düşürür.
@@ -167,6 +168,17 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
 - Arşiv JSON'unda ISO8601 kullanılmıyor: alt saniyeyi atıyor ve geri yüklenen kayıt
   kaynağıyla eşleşmiyordu.
 
+**Örnek veri (Faz 9.3):**
+- Örnek defter üretim kodunda durur, `#if DEBUG` ile ayrılmaz: TestFlight test
+  kullanıcısı da görecek. Ayırt edilebilirlik koşullu derlemeyle değil kimlikle:
+  her kayıt sabit bir ImportBatch'e bağlı (`SampleLedger.batchID`), temizleme
+  yalnızca o kimliğe bakar.
+- Örnek işlemler kullanıcının hesabına değil ayrı bir "Örnek Banka" hesabına
+  yazılır; temizleme sonrası gerçek hesabın bakiyesi hiç oynamamış olur.
+- Seçim onboarding'in son sayfasında anahtar (buton değil): iki bitiş yolu da
+  (Face ID aç / şimdi değil) aynı anahtarı okur, yoksa Face ID'yi açan kullanıcı
+  örnek veriyi hiç göremiyordu.
+
 **Ürün kararları:**
 - Varsayılan kategoriler: 13 gider (tasarımdaki 12 + "Yeme-içme") + 3 gelir
   (Maaş, Serbest çalışma, Diğer gelir). "Yeme-içme" renk yuvasını Bağış ile paylaşır.
@@ -179,17 +191,19 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
 ## 6. Bilinen eksikler
 
 ### Yayını bloklayan
-1. **Team ID yok.** Apple Developer üyeliği ödendi, onay bekleniyor (48 saate kadar).
-   Onay gelince `cp Config/Local.xcconfig.example Config/Local.xcconfig` ve Team ID yazılır.
-   `Scripts/archive.sh` bunsuz çalışmaz.
+1. ~~**Team ID yok.**~~ 2026-08-16'da geldi: `Config/Local.xcconfig` içinde
+   `TEAM_ID = 27Q876RTFC`, derleme ayarlarında `DEVELOPMENT_TEAM` olarak görünüyor.
+   Dosya gitignore'lu, repoya girmez. `Scripts/archive.sh` TEAM_ID kapısını geçer;
+   arşiv henüz üretilmedi.
 2. **Bundle ID kaydı yapılmadı** — `com.sessizdefter.app` Apple'da kaydedilecek.
 3. **App Store metadata yok** — Faz 11'de üretilecek.
 4. **Destek URL'i ve gizlilik politikası URL'i yok.** App Store Connect'te zorunlu alanlar;
    yayınlanmış bir sayfa gerekiyor (GitHub Pages yeterli).
 5. **İhracat beyanı onay bekliyor.** `docs/EXPORT-COMPLIANCE.md` analizi yazıldı,
    `ITSAppUsesNonExemptEncryption = false` bırakıldı, kullanıcı onayı alınmadı.
-6. **Guideline 2.1 riski:** B1 boş durumunda ekranda "Yer tutucu · ilk açılış görseli"
-   yazıyor. Harici TestFlight testinden önce gitmeli.
+6. ~~**Guideline 2.1 riski:**~~ B1 illüstrasyonu çizildi (Faz 9.3,
+   `DesignSystem/Components/LedgerBoxArtwork.swift`); kaynak ağacında yer tutucu
+   metni kalmadı.
 
 ### Ürün eksiği
 7. **Parser gerçek ekstre ile doğrulanmadı.** Fixture metinleri sentetik. Faz 9.2'de
@@ -198,9 +212,12 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
    Ziraat/Garanti/İş Bankası ekstresi bekleniyor.**
 8. **E4 manuel giriş** sistem `Form` + `decimalPad` kullanıyor; tasarım özel tuş
    takımı ve "son kullanılanlar" kategori çipleri gösteriyor.
-9. **Kategori ikonları yer tutucu.** SF Symbols eşlemesi yapılmadı (Faz 9.3).
-10. **B1 boş durum illüstrasyonu** kesikli çerçeveli yer tutucu (Faz 9.3).
-11. **Örnek veri modu yok** — test kullanıcısı boş ekranla karşılaşıyor (Faz 9.3).
+9. ~~Kategori ikonları yer tutucu.~~ Eşleme yapıldı: `docs/CATEGORY-ICONS.md`,
+   tek kaynak `DefaultCategories`, `FeaturesTests/CategoryIconTests` her adı
+   `UIImage(systemName:)` ile çözer.
+10. ~~B1 boş durum illüstrasyonu yer tutucu.~~ Çizildi (Faz 9.3).
+11. ~~Örnek veri modu yok.~~ Eklendi (Faz 9.3): onboarding anahtarı, Ayarlar'da
+    tek dokunuşla temizleme.
 12. **Geri bildirim yolu yok** (Faz 9.4).
 13. **CSV dışa aktarma** F1'de listeleniyor, yazılmadı.
 14. **Makbuz fotoğrafı** D5'te listeleniyor, yazılmadı.
@@ -223,8 +240,11 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
 - Her fazın sonunda: ne yapıldı, hangi testler geçti, açık sorular.
 - Tasarım dosyalarıyla çelişen ya da eksik bir şey varsa kullanıcıya sorulur,
   kendi kafasına göre doldurulmaz.
-- Değişiklikler simülatörde de doğrulanır; üç gerçek hata yalnızca orada yakalandı
-  (tazelenmeyen dashboard, eksi bakiyenin artı görünmesi, yanlış düzen seçimi).
+- Değişiklikler simülatörde de doğrulanır; yedi gerçek hata yalnızca orada yakalandı:
+  tazelenmeyen dashboard, eksi bakiyenin artı görünmesi, yanlış düzen seçimi,
+  içe aktarmada hedef hesap, örnek verinin kategorisiz gelmesi (kategoriler
+  onboarding'de henüz tohumlanmamıştı), dağılım kartının "kalanlar" kovasını
+  "Kategorisiz" yazması, örnek veri silinince defterin hesapsız kalması.
 
 ## 8. Kaynak
 

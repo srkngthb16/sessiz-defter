@@ -1,30 +1,50 @@
 # Devir Notu — 2026-08-16
 
-Önceki sohbet bağlam sınırına yaklaştı. Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
+Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 ## Durum
 
-- **20 commit**, hepsi `origin/main`'de. HEAD: `fbd9f15`.
-- **184 test geçiyor.** `./Scripts/test-all.sh`
+- **22 commit**, hepsi `origin/main`'de.
+- **202 test geçiyor.** `./Scripts/test-all.sh`
 - `Scripts/verify-offline.sh` yeşil, pre-commit hook'una bağlı.
 - Uygulama simülatörde çalışıyor; Release yapılandırmasında da derlenip çalıştırıldı.
 - Sürüm 1.0.0, build 2.
+- **Team ID geldi** (2026-08-16): `Config/Local.xcconfig` içinde, derleme ayarlarında
+  `DEVELOPMENT_TEAM` olarak görünüyor. Dosya gitignore'lu. `Scripts/archive.sh`
+  TEAM_ID kapısını geçer — arşiv henüz üretilmedi.
 
 **Faz 0–7** ürün geliştirmesi (tasarım dosyalarına göre tüm ekranlar).
 **Faz 8** yayın altyapısı — bitti.
-**Faz 9.1, 9.2** — bitti.
+**Faz 9.1, 9.2, 9.3** — bitti.
 
-## Sıradaki iş: Faz 9.3
+## Faz 9.3'te ne yapıldı
 
-TestFlight yayın hazırlığı planının kalan maddeleri:
+1. **Örnek veri modu.** `Domain/Services/SampleLedger.swift` 20 sahte işlem +
+   "Örnek Banka" hesabı + sabit kimlikli ImportBatch üretir.
+   `Features/Settings/SampleDataService.swift` yükler ve temizler. Onboarding'in
+   son sayfasında anahtar, Ayarlar > Veri'de "Örnek veriyi temizle".
+2. **B1 illüstrasyonu.** `DesignSystem/Components/LedgerBoxArtwork.swift` —
+   defter + kapalı kutu, tek çizgi, tek accent renk. Varlık dosyası değil Path:
+   dört snapshot varyantında ve tema değişiminde kendisi dönüyor.
+   Kaynak ağacında "Yer tutucu" metni kalmadı (Guideline 2.1 riski kapandı).
+3. **SF Symbols eşlemesi.** `docs/CATEGORY-ICONS.md` 13 gider + 3 gelir için tam
+   tablo ve gerekçeler. Tek kaynak `DefaultCategories`; Ayarlar'daki simge seçici
+   de oradan türüyor. Üç eşleme değişti: Ulaşım `car → bus`, Abonelik
+   `repeat → arrow.triangle.2.circlepath`, Eğitim `book → graduationcap`.
 
-**9.3 İlk kullanım**
-- Onboarding sonunda "örnek veriyle gez": 20 sahte işlem yükler, Ayarlar'dan tek
-  dokunuşla temizlenir. Örnek veri üreticisi Release'e sızmamalı — `#if DEBUG` değil,
-  kullanıcıya açık bir özellik olacaksa üretim kodunda kalabilir ama ayırt edilebilir olmalı.
-- B1 boş durum illüstrasyonunu tamamla. Şu an ekranda "Yer tutucu · ilk açılış görseli"
-  yazıyor — App Store Guideline 2.1 riski, harici testten önce gitmeli.
-- 13 gider + 3 gelir kategorisinin tamamı için SF Symbols eşleme tablosu, `docs/` altına.
+Simülatörde yakalanan üç hata (yalnızca orada görünürdü):
+- Örnek veri onboarding'de yazıldığı için kategoriler henüz tohumlanmamıştı;
+  20 işlemin tamamı "Kategorisiz" geliyordu. `SampleData.load` artık önce
+  `seedDefaultCategoriesIfNeeded()` çağırıyor.
+- Dashboard dağılım kartı limit dışı kalan kategorileri "Kategorisiz" diye
+  yazıyordu (gerçekten kategorisiz harcamayla aynı satır). `CategoryBreakdownItem`
+  artık `isRemainder` taşıyor, ekranda "Diğer kategoriler" yazıyor. İki nil
+  kovasının kimliği de çakışıyordu — `id` artık metin.
+- Örnek veri silinince defter hesapsız kalıyordu ("Nakit" hiç tohumlanmamış
+  oluyordu, manuel giriş yapılamıyordu). `SampleData.clear` sonunda
+  `seedDefaultAccountIfNeeded()` çağırıyor.
+
+## Sıradaki iş: Faz 9.4
 
 **9.4 Geri bildirim yolu**
 - Ayarlar'da "Geri bildirim gönder": cihaz modeli, iOS sürümü, uygulama sürümü ve
@@ -46,13 +66,14 @@ ekran görüntüsü planı ve üretimi.
 
 ## Kullanıcıdan bekleyenler
 
-1. **Team ID** — Apple Developer üyeliği ödendi, onay bekleniyor. Gelince:
-   `cp Config/Local.xcconfig.example Config/Local.xcconfig` ve Team ID yazılır.
-   `Scripts/archive.sh` bunsuz çalışmaz.
-2. **Gerçek ekstre** — Ziraat/Garanti/İş Bankası, anonimleştirilmiş. Kimlik bilgisi
+1. ~~Team ID~~ — geldi, yazıldı, doğrulandı.
+2. **Bundle ID doğrulaması** — `com.sessizdefter.app` Apple'da alınmamış mı,
+   App Store Connect'te kaydedilecek.
+3. **Gerçek ekstre** — Ziraat/Garanti/İş Bankası, anonimleştirilmiş. Kimlik bilgisi
    çıkarılmış ama tutar, tarih ve işyeri adları korunmuş olmalı. Fixture'lar sentetik.
-3. **İhracat beyanı onayı** — `docs/EXPORT-COMPLIANCE.md` bölüm 4.
-4. **Bundle ID doğrulaması** — `com.sessizdefter.app` Apple'da alınmamış mı.
+4. **İhracat beyanı onayı** — `docs/EXPORT-COMPLIANCE.md` bölüm 4.
+5. **Destek URL'i ve gizlilik politikası URL'i** — App Store Connect'te zorunlu,
+   yayınlanmış sayfa gerekiyor (GitHub Pages yeterli).
 
 ## Çalışma kuralları
 
@@ -64,6 +85,6 @@ Ayrıntısı `docs/COWORK-BRIEFING.md` bölüm 1, 5 ve 7'de. Özet:
 - Tasarım dosyaları (`design/`) spesifikasyon. Çelişki ya da eksik varsa kullanıcıya sor,
   kendi kafana göre doldurma.
 - Her faz kendi commit'i, Conventional Commits, tip İngilizce, açıklama Türkçe.
-  Commit gövdesi "ne" değil "neden" yazar.
-- Değişiklikler simülatörde de doğrulanır — dört gerçek hata yalnızca orada yakalandı.
+  Commit gövdesi "ne" değil "neden" yazar. Devir notu ayrı `docs:` commit'i.
+- Değişiklikler simülatörde de doğrulanır — yedi gerçek hata yalnızca orada yakalandı.
 - Her fazın sonunda dur: ne yapıldı, hangi testler geçti, kullanıcıdan ne gerekiyor.
