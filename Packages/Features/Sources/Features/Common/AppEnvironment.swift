@@ -16,6 +16,9 @@ public final class AppEnvironment: @unchecked Sendable {
     /// Test ve önizlemede "bugün"ü sabitlemek için; üretimde Date().
     public let now: @Sendable () -> Date
     public let calendar: Calendar
+    /// Anonim hata sayacı. Ekranların hata dalları buraya yazar, geri bildirim
+    /// metni buradan okur; testte ayrı bir UserDefaults süiti verilir.
+    public let diagnostics: Diagnostics
 
     public var service: TransactionService {
         TransactionService(transactions: transactions, accounts: accounts,
@@ -31,8 +34,10 @@ public final class AppEnvironment: @unchecked Sendable {
         importBatches: any ImportBatchRepository,
         parserProfiles: (any ParserProfileRepository)? = nil,
         calendar: Calendar = .current,
-        now: @escaping @Sendable () -> Date = { Date() }
+        now: @escaping @Sendable () -> Date = { Date() },
+        diagnostics: Diagnostics = Diagnostics()
     ) {
+        self.diagnostics = diagnostics
         self.transactions = transactions
         self.accounts = accounts
         self.categories = categories

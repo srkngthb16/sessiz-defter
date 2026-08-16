@@ -57,6 +57,7 @@ public final class BudgetsModel {
             await notifyIfNeeded(statuses: statuses, categories: CategoryLookup(categories),
                                  periodStart: period.start)
         } catch {
+            environment.diagnostics.record(.dataRead)
             state = .empty
         }
     }

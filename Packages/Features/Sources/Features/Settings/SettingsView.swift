@@ -129,6 +129,15 @@ public struct SettingsView: View {
                 }
 
                 Section {
+                    NavigationLink("Geri bildirim gönder") {
+                        FeedbackView(environment: environment)
+                    }
+                } footer: {
+                    Text("Cihaz modeli, iOS ve uygulama sürümü, defterinizin büyüklüğü (yalnızca sayı) ve hata sayacı. Metnin tamamını göndermeden önce görürsünüz.")
+                        .font(.sd.caption)
+                }
+
+                Section {
                     LabeledContent("Sürüm", value: AppVersion().displayString)
                 } footer: {
                     Text("Sessiz Defter · çevrimdışı kişisel finans defteri")
@@ -190,8 +199,10 @@ public struct SettingsView: View {
                 exportDocument = BackupDocument(data: sealed)
                 isExporting = true
             } catch PasswordCrypto.Failure.weakPassword {
+                // Zayıf parola kullanıcı hatası, uygulama hatası değil: sayaca girmez.
                 message = "Parola en az \(PasswordCrypto.minimumPasswordLength) karakter olmalı."
             } catch {
+                environment.diagnostics.record(.backup)
                 message = "Yedek hazırlanamadı."
             }
         case .restore(let url):
@@ -207,6 +218,7 @@ public struct SettingsView: View {
             } catch PasswordCrypto.Failure.wrongPassword {
                 message = "Parola hatalı ya da dosya bozuk."
             } catch {
+                environment.diagnostics.record(.backup)
                 message = "Geri yükleme başarısız."
             }
         }

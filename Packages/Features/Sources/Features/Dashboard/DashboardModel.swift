@@ -64,6 +64,7 @@ public final class DashboardModel {
                 accounts: AccountLookup(accounts)))
         } catch {
             // Yerel veritabanı okunamıyorsa boş duruma düşmek, yanlış rakam göstermekten iyi.
+            environment.diagnostics.record(.dataRead)
             state = .empty
         }
     }

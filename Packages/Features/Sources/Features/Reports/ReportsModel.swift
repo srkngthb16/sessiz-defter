@@ -50,6 +50,7 @@ public final class ReportsModel {
                 previousLabel: Self.shortMonth(previous.start, calendar: environment.calendar),
                 categories: CategoryLookup(categories)))
         } catch {
+            environment.diagnostics.record(.dataRead)
             state = .empty
         }
     }

@@ -113,6 +113,8 @@ public final class ImportModel {
         } catch let error as ImportError {
             handle(error)
         } catch {
+            // Sayaca yalnızca sayı gider; hata metni ekranda kalır, rapora girmez.
+            environment.diagnostics.record(.statementImport)
             step = .failed(String(describing: error))
         }
     }

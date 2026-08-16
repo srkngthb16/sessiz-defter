@@ -93,6 +93,9 @@ public struct DeleteEverythingView: View {
         for profile in (try? await environment.parserProfiles?.all()) ?? [] {
             try? await environment.parserProfiles?.delete(id: profile.id)
         }
+        // Sayaç da defterin parçası: silinen defterin hataları geri bildirimde
+        // görünmeye devam etmemeli.
+        environment.diagnostics.reset()
         isDone = true
     }
 }

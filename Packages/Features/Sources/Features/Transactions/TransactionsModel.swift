@@ -85,6 +85,7 @@ public final class TransactionsModel {
             groups = TransactionService.group(rows, calendar: environment.calendar)
             totalCount = try await environment.transactions.count(matching: .all)
         } catch {
+            environment.diagnostics.record(.dataRead)
             groups = []
             totalCount = 0
         }
