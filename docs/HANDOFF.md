@@ -4,8 +4,8 @@ Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 ## Durum
 
-- **22 commit**, hepsi `origin/main`'de.
-- **202 test geçiyor.** `./Scripts/test-all.sh`
+- **25 commit.** Son üçü henüz `origin/main`'e itilmedi.
+- **211 test geçiyor.** `./Scripts/test-all.sh`
 - `Scripts/verify-offline.sh` yeşil, pre-commit hook'una bağlı.
 - Uygulama simülatörde çalışıyor; Release yapılandırmasında da derlenip çalıştırıldı.
 - Sürüm 1.0.0, build 2.
@@ -15,7 +15,7 @@ Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 **Faz 0–7** ürün geliştirmesi (tasarım dosyalarına göre tüm ekranlar).
 **Faz 8** yayın altyapısı — bitti.
-**Faz 9.1, 9.2, 9.3** — bitti.
+**Faz 9.1, 9.2, 9.3, 9.4** — bitti.
 
 ## Faz 9.3'te ne yapıldı
 
@@ -44,13 +44,27 @@ Simülatörde yakalanan üç hata (yalnızca orada görünürdü):
   oluyordu, manuel giriş yapılamıyordu). `SampleData.clear` sonunda
   `seedDefaultAccountIfNeeded()` çağırıyor.
 
-## Sıradaki iş: Faz 9.4
+## Faz 9.4'te ne yapıldı
 
-**9.4 Geri bildirim yolu**
-- Ayarlar'da "Geri bildirim gönder": cihaz modeli, iOS sürümü, uygulama sürümü ve
-  anonim tanı bilgisi (işlem sayısı, hata sayacı). İçinde hiçbir işlem detayı, tutar,
-  işyeri adı, hesap bilgisi olmayacak. Sistem paylaşım sayfası (`ShareLink`).
-- Kullanıcı göndermeden önce metnin tamamını görsün.
+- **Geri bildirim ekranı.** Ayarlar > Geri bildirim gönder
+  (`Features/Settings/FeedbackView.swift`). Paylaşılacak metnin tamamı ekranda,
+  altında `ShareLink`. Metni `FeedbackReport` üretir: uygulama sürümü, cihaz model
+  kodu, iOS sürümü, işlem/hesap/bütçe **sayısı** ve hata sayacı. Tutar, işyeri adı,
+  hesap adı, dosya adı ya da hata metni girmiyor; test bunu yasaklı sözcük listesiyle
+  denetliyor.
+- **Anonim hata sayacı** (`Features/Settings/Diagnostics.swift`). Üç sayaç: veri
+  okuma, içe aktarma, yedekleme. Dashboard/İşlemler/Bütçe/Raporlar hata dalları ve
+  yedek akışı yazıyor. Hata metni saklanmıyor. Zayıf parola gibi kullanıcı hataları
+  sayaca girmiyor. "Tüm verileri sil" sayacı sıfırlıyor.
+- Sayaç `AppEnvironment.diagnostics` üzerinden geçiyor; testte ayrı UserDefaults
+  süiti veriliyor, üretim sayacına dokunulmuyor.
+- Cihaz model kodu (`iPhone17,5`) pazarlama adı yerine `uname`'den; simülatörde
+  `SIMULATOR_MODEL_IDENTIFIER`.
+
+Simülatörde doğrulandı: metin ekranda tam görünüyor, paylaşım sayfası açılıyor,
+sayaçlar 0 iken de satırlar yazılıyor.
+
+## Sıradaki iş: Faz 10.1
 
 **10.1 Erişilebilirlik** — VoiceOver ile her ekran, tutar okunuşu ("eksi 842 lira 60 kuruş"),
 grafik özetleri, `docs/A11Y-AUDIT.md`.
