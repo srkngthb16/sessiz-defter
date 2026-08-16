@@ -18,10 +18,16 @@ public enum SampleLedger {
     public static let fileName = "Örnek veri"
     public static let transactionCount = 20
 
+    /// İki örnek bütçe: biri uyarı, biri aşım eşiğinde. Dashboard yalnızca dikkat
+    /// isteyen bütçeleri gösterdiği için "yolunda" bir bütçe demoda görünmezdi.
+    public static let warningBudgetID = UUID(uuidString: "5A3D1E00-0000-4000-A000-000000000003")!
+    public static let exceededBudgetID = UUID(uuidString: "5A3D1E00-0000-4000-A000-000000000004")!
+
     public struct Ledger: Sendable {
         public let account: AccountEntity
         public let batch: ImportBatchEntity
         public let transactions: [TransactionEntity]
+        public let budgets: [BudgetEntity]
     }
 
     /// Örnek işlemler kullanıcının kendi hesabına yazılmaz: ayrı bir örnek hesap
@@ -76,7 +82,32 @@ public enum SampleLedger {
             addedCount: transactions.count
         )
 
-        return Ledger(account: account, batch: batch, transactions: transactions)
+        return Ledger(account: account, batch: batch, transactions: transactions,
+                      budgets: budgets(categoryID: categoryID, now: now, calendar: calendar))
+    }
+
+    /// Limitler bu ayın örnek harcamasına göre seçildi: Market %93 (limite yakın),
+    /// Ulaşım %114 (aşıldı). Sabit tutar yazılsaydı ayın kaçıncı gününde açıldığına
+    /// göre bazen ikisi de "yolunda" çıkıyordu.
+    private static func budgets(
+        categoryID: [String: UUID],
+        now: Date,
+        calendar: Calendar
+    ) -> [BudgetEntity] {
+        let monthStart = calendar.date(from: calendar.dateComponents([.year, .month],
+                                                                     from: now)) ?? now
+        var result: [BudgetEntity] = []
+        if let market = categoryID["Market"] {
+            result.append(BudgetEntity(id: warningBudgetID, categoryID: market,
+                                       limit: Money(minorUnits: 120_000),
+                                       startDate: monthStart))
+        }
+        if let transport = categoryID["Ulaşım"] {
+            result.append(BudgetEntity(id: exceededBudgetID, categoryID: transport,
+                                       limit: Money(minorUnits: 140_000),
+                                       startDate: monthStart))
+        }
+        return result
     }
 
     private struct Entry {

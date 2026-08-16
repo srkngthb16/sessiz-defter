@@ -25,6 +25,9 @@ public enum SampleData {
 
         try await environment.accounts.save(ledger.account)
         try await environment.transactions.saveAll(ledger.transactions)
+        for budget in ledger.budgets {
+            try await environment.budgets.save(budget)
+        }
         // Batch en son yazılıyor: "yüklü mü" sorusunun yanıtı bu kayıt. Yazma
         // ortada kesilirse örnek veri "yüklenmemiş" sayılır ve tekrar denenebilir.
         try await environment.importBatches.save(ledger.batch)
@@ -36,6 +39,9 @@ public enum SampleData {
         let all = try await environment.transactions.transactions(matching: .all)
         for transaction in all where transaction.importBatchID == SampleLedger.batchID {
             try await environment.transactions.delete(id: transaction.id)
+        }
+        for id in [SampleLedger.warningBudgetID, SampleLedger.exceededBudgetID] {
+            try await environment.budgets.delete(id: id)
         }
         try await environment.importBatches.delete(id: SampleLedger.batchID)
 

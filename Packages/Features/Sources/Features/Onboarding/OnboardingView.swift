@@ -162,7 +162,7 @@ public struct OnboardingView: View {
                     Text("Örnek veriyle gez")
                         .font(.sd.bodyItem)
                         .foregroundStyle(Color.text.primary)
-                    Text("\(SampleLedger.transactionCount) örnek işlem ve bir örnek hesap yüklenir. Ayarlar'dan tek dokunuşla silinir.")
+                    Text("\(SampleLedger.transactionCount) örnek işlem, bir örnek hesap ve iki bütçe yüklenir. Ayarlar'dan tek dokunuşla silinir.")
                         .font(.sd.meta)
                         .foregroundStyle(Color.text.muted)
                         .fixedSize(horizontal: false, vertical: true)

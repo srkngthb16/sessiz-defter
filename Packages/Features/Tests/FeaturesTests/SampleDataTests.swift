@@ -17,6 +17,21 @@ struct SampleDataTests {
         #expect(transactions.count == SampleLedger.transactionCount)
         #expect(accounts.contains { $0.id == SampleLedger.accountID })
         #expect(await SampleData.isLoaded(in: environment))
+
+        let budgets = try await environment.budgets.all(includeArchived: true)
+        #expect(budgets.count == 2)
+    }
+
+    @Test("Temizleme örnek bütçeleri de siler, kullanıcının bütçesi kalır")
+    func butceTemizleme() async throws {
+        let environment = await Fixtures.environment(withBudgets: true)
+        let before = try await environment.budgets.all(includeArchived: true)
+
+        try await SampleData.load(into: environment)
+        try await SampleData.clear(from: environment)
+
+        let after = try await environment.budgets.all(includeArchived: true)
+        #expect(Set(after.map(\.id)) == Set(before.map(\.id)))
     }
 
     @Test("Kategori tohumlanmamış defterde de her işlem kategorili gelir")

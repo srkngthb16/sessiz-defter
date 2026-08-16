@@ -37,6 +37,29 @@ struct SampleLedgerTests {
         #expect(ledger.transactions.allSatisfy { $0.accountID == SampleLedger.accountID })
     }
 
+    @Test("İki bütçe: biri limite yakın, biri aşılmış")
+    func butceler() {
+        let ledger = ledger()
+        #expect(ledger.budgets.count == 2)
+
+        let monthStart = calendar.date(from: calendar.dateComponents([.year, .month],
+                                                                     from: now))!
+        let monthEnd = calendar.date(byAdding: .month, value: 1, to: monthStart)!
+        let states = BudgetEngine(calendar: calendar)
+            .statuses(budgets: ledger.budgets,
+                      transactions: ledger.transactions,
+                      period: DateInterval(start: monthStart, end: monthEnd),
+                      now: now)
+            .map(\.state)
+        #expect(states.contains(.exceeded))
+        #expect(states.contains(.warning))
+    }
+
+    @Test("Kategori yoksa bütçe de üretilmez")
+    func kategorisizButce() {
+        #expect(SampleLedger.make(now: now, calendar: calendar, categories: []).budgets.isEmpty)
+    }
+
     @Test("Mükerrer hash'ler benzersiz — örnek veri kendi içinde çakışmaz")
     func mukerrer() {
         let hashes = Set(ledger().transactions.map(\.duplicateHash))

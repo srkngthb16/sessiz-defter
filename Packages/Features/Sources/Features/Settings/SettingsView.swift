@@ -97,7 +97,7 @@ public struct SettingsView: View {
                     Text("Veri")
                 } footer: {
                     if hasSampleData {
-                        Text("Örnek defter yüklü: \(SampleLedger.transactionCount) işlem ve “\(SampleLedger.accountName)” hesabı. Temizleme yalnızca bunları siler, kendi kayıtlarınıza dokunmaz.")
+                        Text("Örnek defter yüklü: \(SampleLedger.transactionCount) işlem, “\(SampleLedger.accountName)” hesabı ve iki bütçe. Temizleme yalnızca bunları siler, kendi kayıtlarınıza dokunmaz.")
                             .font(.sd.caption)
                     }
                 }
