@@ -242,3 +242,40 @@ struct AccountStatementGoldenTests {
             .formatIdentifier == "garanti.hesapHareketleri.v1")
     }
 }
+
+/// Ekstredeki hesap/kart numarasının son dört hanesi. İşlemlerin doğru bankaya
+/// yazılmasının dayanağı bu: banka adı tek başına yetmiyor, aynı bankada iki kart
+/// olabiliyor.
+@Suite("Hesap ipucu")
+struct AccountHintTests {
+    @Test("Kart numarası alt satıra taştığında da okunur")
+    func tasanNumara() throws {
+        let text = try Fixture.text("halkbank-paraf-2026-08")
+        #expect(AccountHint.maskedNumber(in: text) == "••1234")
+    }
+
+    @Test("Boşluklu maskeli kart numarası")
+    func bosluklu() {
+        #expect(AccountHint.maskedNumber(in: "Kart Numarası 0000 00** **** 9764") == "••9764")
+    }
+
+    @Test("Hesap numarası etiketi de tanınır")
+    func hesapNo() throws {
+        let text = try Fixture.text("halkbank-hesap-2026-08")
+        #expect(AccountHint.maskedNumber(in: text) == "••0000")
+    }
+
+    @Test("Numara yoksa nil döner, hata değil")
+    func numarasiz() {
+        #expect(AccountHint.maskedNumber(in: "TARIH ACIKLAMA TUTAR\n01.01.2026 X 1,00") == nil)
+    }
+
+    @Test("Kart ekstresi kredi kartı hesabı açar, hesap ekstresi vadesiz")
+    func hesapTuru() {
+        #expect(ImportPipeline.accountKind(forFormat: "halkbank.paraf.v1") == .creditCard)
+        #expect(ImportPipeline.accountKind(forFormat: "garanti.bonus.v1") == .creditCard)
+        #expect(ImportPipeline.accountKind(forFormat: "garanti.krediKarti.v1") == .creditCard)
+        #expect(ImportPipeline.accountKind(forFormat: "halkbank.hesapOzeti.v1") == .checking)
+        #expect(ImportPipeline.accountKind(forFormat: "ziraat.vadesiz.v1") == .checking)
+    }
+}

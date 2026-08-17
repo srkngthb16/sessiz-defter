@@ -66,9 +66,9 @@ public final class ImportModel {
     }
 
     /// Hesap seçilmeden dosya seçtirilmez.
-    public var canPickFile: Bool {
-        accounts.isEmpty || selectedAccountID != nil
-    }
+    /// Artık her zaman açık: hedef hesap ekstreden çıkarılıyor, seçim yalnız
+    /// elle geçersiz kılma. Önceden hesap seçilmeden dosya seçilemiyordu.
+    public var canPickFile: Bool { true }
 
     public func start(url: URL, allowOCR: Bool = false,
                       fallback: GenericColumnParser? = nil) async {
@@ -201,15 +201,37 @@ public final class ImportModel {
         try? await environment.categoryRules.save(rule)
     }
 
+    /// Ekstrenin yazılacağı hesap. Kullanıcı elle seçtiyse onun seçimi kazanır;
+    /// seçmediyse ekstrenin kendi bilgisinden bulunur, yoksa yeni hesap açılır.
+    /// Böylece "hangi bankaya" sorusu her içe aktarmada sorulmuyor, ama işlemler
+    /// tek torbaya da yığılmıyor — banka bazlı takip bu eşleşmeye dayanıyor.
+    func resolveAccountID(for draft: ImportDraft) async throws -> UUID {
+        if let selectedAccountID { return selectedAccountID }
+
+        let existing = try await environment.accounts.all(includeArchived: true)
+        // Son dört hane en kesin ölçüt: aynı bankada iki kart olabiliyor.
+        if let masked = draft.maskedNumber,
+           let match = existing.first(where: { $0.maskedNumber == masked }) {
+            return match.id
+        }
+        if let match = existing.first(where: {
+            $0.name == draft.bankName && $0.kind == draft.accountKind
+        }) {
+            return match.id
+        }
+        guard !draft.bankName.isEmpty else { return try await defaultAccountID() }
+
+        let account = AccountEntity(
+            name: draft.bankName, kind: draft.accountKind,
+            maskedNumber: draft.maskedNumber, sortIndex: existing.count)
+        try await environment.accounts.save(account)
+        return account.id
+    }
+
     public func confirm() async {
         guard let draft else { return }
         do {
-            let accountID: UUID
-            if let selectedAccountID {
-                accountID = selectedAccountID
-            } else {
-                accountID = try await defaultAccountID()
-            }
+            let accountID = try await resolveAccountID(for: draft)
             let batchID = UUID()
             let builder = DraftBuilder(categorizer: CategorizationEngine(rules: []),
                                        accountID: accountID)

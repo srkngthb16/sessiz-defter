@@ -68,6 +68,14 @@ public struct ImportPipeline: Sendable {
         try await runDetailed(input).draft
     }
 
+    /// Kart ekstresi mi hesap ekstresi mi: yeni hesap açılırken türü belirliyor.
+    /// Biçim kimliğinden okunuyor, ayrı bir alan tutulmuyor — kimlik zaten
+    /// ayrıştırıcıyla birlikte değişen tek şey.
+    static func accountKind(forFormat identifier: String) -> AccountKind {
+        let card = ["krediKarti", "paraf", "bonus"]
+        return card.contains(where: identifier.contains) ? .creditCard : .checking
+    }
+
     public func runDetailed(_ input: Input) async throws -> Output {
         let extracted: ExtractedText
         do {
@@ -90,13 +98,17 @@ public struct ImportPipeline: Sendable {
         let builder = DraftBuilder(
             categorizer: CategorizationEngine(rules: input.rules),
             accountID: input.accountID)
-        let draft = builder.build(
+        var draft = builder.build(
             from: result,
             fileName: input.url.lastPathComponent,
             bankName: parser.bankName,
             existingHashes: input.existingHashes,
             usedOCR: extracted.usedOCR,
             calendar: calendar)
+        // Banka adı ve son dört hane ekstrenin içinde hazır duruyor; kullanıcıya
+        // "hangi hesap" diye sormak yerine buradan çıkarılıyor.
+        draft.maskedNumber = AccountHint.maskedNumber(in: extracted.text)
+        draft.accountKind = Self.accountKind(forFormat: result.formatIdentifier)
         return Output(
             draft: draft,
             report: ParseReport.make(from: result, text: extracted.text,

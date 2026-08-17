@@ -112,11 +112,11 @@ public struct ImportFlowView: View {
                             Text("Hangi hesaba aktarılacak?")
                                 .font(.sd.titleSection)
                                 .foregroundStyle(Color.text.primary)
-                            Text("Ekstredeki işlemler seçtiğiniz hesaba yazılır.")
+                            Text("Otomatik bırakırsanız ekstredeki bankaya ve son dört haneye bakılır; eşleşen hesap yoksa açılır.")
                                 .font(.sd.meta)
                                 .foregroundStyle(Color.text.muted)
                             Picker("Hesap", selection: $model.selectedAccountID) {
-                                Text("Seçiniz").tag(UUID?.none)
+                                Text("Otomatik").tag(UUID?.none)
                                 ForEach(model.accounts) { account in
                                     Text(account.displayName).tag(UUID?.some(account.id))
                                 }

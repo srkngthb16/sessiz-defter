@@ -4,7 +4,7 @@ Müşteri Numarası : 00000000
 Kart Bilgileriniz
 Sayın ÖRNEK KULLANICI
 Kart Numarası : 0000-00##-
-####-0000
+####-1234
 Hesap Kesim Tarihi : 04/08/2026
 Son Ödeme Tarihi : 14/08/2026
 Hesap Bakiyesi : 2,075.37 TL

@@ -2,6 +2,7 @@ import Core
 import Domain
 import DomainTestSupport
 import Foundation
+import ImportPipeline
 import Testing
 @testable import Features
 
@@ -62,18 +63,66 @@ struct AccountManagementTests {
         #expect(model.canPickFile)
     }
 
-    @Test("Birden fazla hesap varsa seçim yapılmadan dosya seçilemez")
-    func cokluHesapSecimZorunlu() async {
+    @Test("Hesap seçmeden dosya seçilebilir: hedef ekstreden bulunur")
+    func secimZorunluDegil() async {
         let environment = await Fixtures.environment()
         let model = ImportModel(environment: environment)
         await model.loadAccounts()
 
         #expect(model.accounts.count == 2)
         #expect(model.selectedAccountID == nil)
-        #expect(model.canPickFile == false)
-
-        model.selectedAccountID = model.accounts.first?.id
+        // Önceden hesap seçilmeden dosya seçilemiyordu; artık banka ekstreden
+        // çıkarıldığı için seçim yalnız elle geçersiz kılma.
         #expect(model.canPickFile)
+    }
+
+    @Test("Ekstre son dört haneyle var olan hesaba eşleşir")
+    func maskeyleEslesme() async throws {
+        let environment = await Fixtures.environment()
+        let model = ImportModel(environment: environment)
+        await model.loadAccounts()
+
+        // Fixture'daki Ziraat hesabının maskesi "••3412".
+        let draft = ImportDraft(fileName: "ekstre.pdf", formatIdentifier: "ziraat.vadesiz.v1",
+                                bankName: "Ziraat Bankası", maskedNumber: "••3412",
+                                accountKind: .checking, rows: [])
+        let resolved = try await model.resolveAccountID(for: draft)
+        #expect(resolved == Fixtures.ziraat.id)
+
+        let sonra = try await environment.accounts.all(includeArchived: true)
+        #expect(sonra.count == 2, "eşleşen hesap varken yenisi açılmamalı")
+    }
+
+    @Test("Eşleşme yoksa ekstredeki bankadan yeni hesap açılır")
+    func eslesmeYoksaHesapAcilir() async throws {
+        let environment = await Fixtures.environment()
+        let model = ImportModel(environment: environment)
+        await model.loadAccounts()
+
+        let draft = ImportDraft(fileName: "kart.pdf", formatIdentifier: "halkbank.paraf.v1",
+                                bankName: "Halkbank", maskedNumber: "••3682",
+                                accountKind: .creditCard, rows: [])
+        let resolved = try await model.resolveAccountID(for: draft)
+
+        let hesaplar = try await environment.accounts.all(includeArchived: true)
+        let yeni = try #require(hesaplar.first { $0.id == resolved })
+        #expect(yeni.name == "Halkbank")
+        #expect(yeni.kind == .creditCard)
+        #expect(yeni.maskedNumber == "••3682")
+        #expect(hesaplar.count == 3)
+    }
+
+    @Test("Elle seçim otomatik eşleşmeyi geçersiz kılar")
+    func elleSecimKazanir() async throws {
+        let environment = await Fixtures.environment()
+        let model = ImportModel(environment: environment)
+        await model.loadAccounts()
+        model.selectedAccountID = Fixtures.garanti.id
+
+        let draft = ImportDraft(fileName: "ekstre.pdf", formatIdentifier: "ziraat.vadesiz.v1",
+                                bankName: "Ziraat Bankası", maskedNumber: "••3412",
+                                accountKind: .checking, rows: [])
+        #expect(try await model.resolveAccountID(for: draft) == Fixtures.garanti.id)
     }
 
     @Test("Hesap adı maskeyle birleşir, maske dört haneden kısa olamaz")

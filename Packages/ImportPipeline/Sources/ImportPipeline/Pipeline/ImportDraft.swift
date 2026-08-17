@@ -48,14 +48,22 @@ public struct ImportDraft: Sendable {
     public var fileName: String
     public var formatIdentifier: String
     public var bankName: String
+    /// Ekstredeki hesap/kart numarasının son dört hanesi ("••9764"). İşlemlerin
+    /// doğru bankaya yazılması için gerekiyor: aynı bankada iki kart olabiliyor.
+    public var maskedNumber: String?
+    /// Ekstre kart mı hesap mı — yeni hesap açılırken türünü bu belirler.
+    public var accountKind: AccountKind
     public var rows: [ImportDraftRow]
     public var usedOCR: Bool
 
     public init(fileName: String, formatIdentifier: String, bankName: String,
+                maskedNumber: String? = nil, accountKind: AccountKind = .checking,
                 rows: [ImportDraftRow], usedOCR: Bool = false) {
         self.fileName = fileName
         self.formatIdentifier = formatIdentifier
         self.bankName = bankName
+        self.maskedNumber = maskedNumber
+        self.accountKind = accountKind
         self.rows = rows
         self.usedOCR = usedOCR
     }
