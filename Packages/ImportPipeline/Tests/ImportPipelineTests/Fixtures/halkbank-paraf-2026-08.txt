@@ -1,0 +1,25 @@
+Türkiye Halk Bankası A.Ş.
+Müşteri Bilgileriniz
+Müşteri Numarası : 00000000
+Kart Bilgileriniz
+Sayın ÖRNEK KULLANICI
+Kart Numarası : 0000-00##-
+####-0000
+Hesap Kesim Tarihi : 04/08/2026
+Son Ödeme Tarihi : 14/08/2026
+Hesap Bakiyesi : 2,075.37 TL
+İşlem
+KALAN
+Tarihi Açıklama TUTAR(TL)
+BORÇ(TL) / TAKSİT
+ParafPara
+05/05/2026 ORNEK MAGAZA ISTANBUL 366.60 0.00/3-
+03.Taksit 0.00
+11/07/2026 Internet Şube den Nakit Avans 500.00 0.00
+11/07/2026 Hesaptan Ödeme - Teşekkür Ederiz
++ 500.00 0.00
+-
+11/07/2026 Nakit Avans Ucreti 5.00 0.00
+11/07/2026 Nakit Avans Ucreti BSMV 0.75 0.00
+04/08/2026 KKDF 8.35 0.00
+04/08/2026 Kredi faizi 37.97 0.00

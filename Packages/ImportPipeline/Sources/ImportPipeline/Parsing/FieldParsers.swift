@@ -31,7 +31,15 @@ public enum AmountParser {
         guard !text.isEmpty else { return nil }
 
         let minorUnits: Int
-        if let separatorIndex = text.lastIndex(of: ",") {
+        if let comma = text.lastIndex(of: ","), let dot = text.lastIndex(of: "."), dot > comma {
+            // İngiliz biçimi: "2,075.37". Halkbank Paraf ekstresi böyle yazıyor —
+            // virgül binlik, nokta ondalık. Türk biçimiyle karışmaması için ayraç
+            // sırasına bakılıyor, locale tahminine değil.
+            let whole = text[text.startIndex..<dot].replacingOccurrences(of: ",", with: "")
+            let fraction = String(text[text.index(after: dot)...])
+            guard let value = normalize(whole: whole, fraction: fraction) else { return nil }
+            minorUnits = value
+        } else if let separatorIndex = text.lastIndex(of: ",") {
             // Virgül ondalık: nokta binlik ayracıdır.
             let whole = text[text.startIndex..<separatorIndex]
                 .replacingOccurrences(of: ".", with: "")
@@ -68,8 +76,10 @@ public enum AmountParser {
 
 /// Ekstre tarihleri sabit desenlidir; DateFormatter locale'i tr_TR'ye sabitlenir.
 public enum StatementDateParser {
+    /// "16 Haziran 2026" biçimi Garanti Bonus ekstresinden geliyor; ay adı tr_TR
+    /// locale'iyle çözülüyor, o yüzden ayrı bir tablo gerekmiyor.
     public static let formats = ["dd/MM/yy", "dd.MM.yyyy", "dd/MM/yyyy",
-                                 "dd.MM.yy", "yyyy-MM-dd"]
+                                 "dd.MM.yy", "yyyy-MM-dd", "d MMMM yyyy"]
 
     public static func parse(_ raw: String, calendar: Calendar = .gregorianIstanbul) -> Date? {
         let text = raw.trimmingCharacters(in: .whitespaces)

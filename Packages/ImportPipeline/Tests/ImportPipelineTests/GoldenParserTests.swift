@@ -107,3 +107,71 @@ struct GoldenParserTests {
         #expect(result.unparsed.first?.text.contains("SHELL") == true)
     }
 }
+
+/// Kredi kartı ekstrelerinin golden testleri. Bu iki fixture gerçek ekstrelerin
+/// **yapısından** türetildi (kullanıcı 2026-08-17'de dört PDF verdi); işyeri
+/// adları, kart ve müşteri numaraları anonimleştirildi, tutar ve tarih düzeni
+/// olduğu gibi korundu — hata tam da o düzende çıkıyordu.
+@Suite("Kredi kartı golden testleri")
+struct CreditCardGoldenTests {
+    static let calendar = Calendar.gregorianIstanbul
+
+    @Test("Halkbank Paraf — tutar sütunu ve alt satıra düşen ödeme")
+    func halkbank() throws {
+        let text = try Fixture.text("halkbank-paraf-2026-08")
+        let parser = HalkbankParafParser()
+        #expect(parser.matches(text))
+
+        let result = parser.parse(text, calendar: Self.calendar)
+        #expect(result.rows.count == 7)
+
+        // "05/05/2026 ORNEK MAGAZA ISTANBUL 366.60 0.00/3-": son alan kalan borç
+        // ve taksit, tutar ondan önceki alan. Nokta ondalık, virgül binlik.
+        let first = try #require(result.rows.first)
+        #expect(first.detail == "ORNEK MAGAZA ISTANBUL")
+        #expect(first.amount.minorUnits == 36_660)
+        #expect(first.direction == .expense)
+
+        // Ödeme satırında tutar bir alt satıra düşüyor ve `+` taşıyor.
+        let payments = result.rows.filter { $0.direction == .income }
+        #expect(payments.count == 1)
+        #expect(payments.first?.detail == "Hesaptan Ödeme - Teşekkür Ederiz")
+        #expect(payments.first?.amount.minorUnits == 50_000)
+    }
+
+    @Test("Garanti Bonus — iç içe geçmiş sütunlar ve bonus sütunu")
+    func garantiBonus() throws {
+        let text = try Fixture.text("garanti-bonus-2026-07")
+        let parser = GarantiBonusParser()
+        #expect(parser.matches(text))
+
+        let result = parser.parse(text, calendar: Self.calendar)
+
+        // Tek satıra sıkışmış iki işlem, tutarları alt satırda.
+        let ulasim = result.rows.filter { $0.detail == "TOPLU TASIMA UCRETI" }
+        #expect(ulasim.count == 2)
+        #expect(ulasim.allSatisfy { $0.amount.minorUnits == 4_200 })
+
+        // Bonus sütunu doluysa tutar ikinci sayıdır (3,96 bonus, 1.980,00 tutar).
+        let avm = try #require(result.rows.first { $0.detail == "ORNEK ALISVERIS MERKEZI" })
+        #expect(avm.amount.minorUnits == 198_000)
+
+        // `+` ödeme, `-` bonus iadesi: ikisi de borcu azaltır.
+        let odeme = try #require(result.rows.first { $0.detail.hasPrefix("ÖDEMENİZ") })
+        #expect(odeme.direction == .income)
+        #expect(odeme.amount.minorUnits == 612_400)
+        let bonus = try #require(result.rows.first { $0.detail == "BONUS BEDAVA ALIŞVERİŞ" })
+        #expect(bonus.direction == .income)
+
+        // Başlık sayısı tutar sayısını tutmayan satır okunmaz, atlanır: devir
+        // bakiyesini ilk işlemin tutarı sanmaktansa satırı rapora yazmak yeğdir.
+        #expect(result.unparsed.count == 1)
+    }
+
+    @Test("Bonus ekstresi eski Garanti ayrıştırıcısına kapılmaz")
+    func siralama() throws {
+        let text = try Fixture.text("garanti-bonus-2026-07")
+        let detected = BankFormatDetector().detect(in: text)
+        #expect(detected?.formatIdentifier == "garanti.bonus.v1")
+    }
+}

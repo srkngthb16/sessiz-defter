@@ -227,15 +227,25 @@ public struct GenericColumnParser: StatementParsing {
 public struct BankFormatDetector: Sendable {
     public let parsers: [any StatementParsing]
 
+    // Sıra önemli: Bonus ekstresi "kredi kartı" sözcüğünü de taşıdığı için eski
+    // Garanti ayrıştırıcısı önce denenirse onu kapıyor ve sıfır satır okuyor.
+    // Gerçek ekstreyle doğrulanmış olan öne alındı.
     public init(parsers: [any StatementParsing] = [ZiraatVadesizParser(),
-                                                   GarantiKrediKartiParser()]) {
+                                                   GarantiBonusParser(),
+                                                   GarantiKrediKartiParser(),
+                                                   HalkbankParafParser()]) {
         self.parsers = parsers
     }
 
     /// Kullanıcının kaydettiği eşlemeler yerleşik parser'lardan ÖNCE denenir:
     /// kullanıcı bir bankanın biçimini elle düzelttiyse o düzeltme kazanmalı.
+    // Sıra önemli: Bonus ekstresi "kredi kartı" sözcüğünü de taşıdığı için eski
+    // Garanti ayrıştırıcısı önce denenirse onu kapıyor ve sıfır satır okuyor.
+    // Gerçek ekstreyle doğrulanmış olan öne alındı.
     public init(parsers: [any StatementParsing] = [ZiraatVadesizParser(),
-                                                   GarantiKrediKartiParser()],
+                                                   GarantiBonusParser(),
+                                                   GarantiKrediKartiParser(),
+                                                   HalkbankParafParser()],
                 savedProfiles: [ParserProfileEntity]) {
         self.parsers = savedProfiles.compactMap(GenericColumnParser.init(profile:)) + parsers
     }
