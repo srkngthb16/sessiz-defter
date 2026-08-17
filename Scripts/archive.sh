@@ -34,6 +34,16 @@ echo "───── testler"
 mkdir -p "$BUILD_DIR"
 rm -rf "$ARCHIVE" "$EXPORT_DIR"
 
+# Bundle ID Apple Developer hesabında kayıtlı değilse imzalama düşer. Xcode kaydı
+# kendisi yapabilir, ama bu hesapta kalıcı bir App ID yaratmak demek — geri
+# alınması zor bir iş, sessizce yapılmamalı. Ayrı kapıya bağlandı:
+#   SD_ALLOW_PROVISIONING=1 ./Scripts/archive.sh
+PROVISIONING_ARGS=()
+if [ "${SD_ALLOW_PROVISIONING:-0}" = "1" ]; then
+  PROVISIONING_ARGS+=(-allowProvisioningUpdates)
+  echo "NOT · otomatik profil güncellemesi açık; gerekiyorsa App ID kaydedilecek"
+fi
+
 echo "───── arşivleniyor"
 xcodebuild archive \
   -project SessizDefter.xcodeproj \
@@ -41,6 +51,7 @@ xcodebuild archive \
   -configuration Release \
   -destination 'generic/platform=iOS' \
   -archivePath "$ARCHIVE" \
+  ${PROVISIONING_ARGS[@]+"${PROVISIONING_ARGS[@]}"} \
   DEVELOPMENT_TEAM="$TEAM_ID"
 
 cat > "$EXPORT_OPTIONS" <<PLIST
