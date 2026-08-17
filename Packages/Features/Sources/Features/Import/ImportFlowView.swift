@@ -33,12 +33,18 @@ public struct ImportFlowView: View {
                 .fileImporter(isPresented: $isFilePickerPresented,
                               allowedContentTypes: [.pdf],
                               allowsMultipleSelection: true) { result in
-                    guard case .success(let urls) = result, let first = urls.first else { return }
+                    guard case .success(let urls) = result, !urls.isEmpty else { return }
+                    // Seçilen dosyaların **hepsi** hemen kasaya kopyalanıyor.
+                    // Sırası gelince kopyalamak yetmiyordu: dosya seçicinin
+                    // verdiği güvenlik kapsamı ikinci ekstreye sıra gelmeden
+                    // kapanıyor ve kuyruktaki dosyalar okunamıyordu.
+                    let copies = urls.compactMap(copyIntoVault)
+                    guard let first = copies.first else { return }
                     // Ekstreler sırayla işleniyor: her biri kendi onay adımından
                     // geçmeli, çünkü kullanıcı kategorileri satır satır
                     // düzeltiyor. Hepsini birden yazmak o denetimi elinden alırdı.
-                    queue = Array(urls.dropFirst())
-                    Task { await startImport(first) }
+                    queue = Array(copies.dropFirst())
+                    Task { await model.start(url: first) }
                 }
                 .sheet(isPresented: $isBulkCategoryPresented) {
                     BulkCategorySheet(model: model, selection: selection) {
@@ -284,7 +290,7 @@ public struct ImportFlowView: View {
                         onFinished()
                         queue.removeFirst()
                         model.cancel()
-                        Task { await startImport(next) }
+                        Task { await model.start(url: next) }
                     }
                     SecondaryButton("Özete dön") {
                         onFinished()
@@ -328,16 +334,12 @@ public struct ImportFlowView: View {
         .padding(Spacing.xl)
     }
 
-    private func startImport(_ url: URL) async {
-        // Güvenlik kapsamı: seçilen dosya sandbox dışında; kopya kasaya alınır.
+    /// Güvenlik kapsamı: seçilen dosya sandbox dışında; kopya kasaya alınır.
+    /// Kopyalama seçimin hemen ardından yapılır, işleme sırası beklenmez.
+    private func copyIntoVault(_ url: URL) -> URL? {
         let didAccess = url.startAccessingSecurityScopedResource()
         defer { if didAccess { url.stopAccessingSecurityScopedResource() } }
-        do {
-            let vault = try ImportVault.copyIntoVault(url)
-            await model.start(url: vault)
-        } catch {
-            await model.start(url: url)
-        }
+        return try? ImportVault.copyIntoVault(url)
     }
 }
 

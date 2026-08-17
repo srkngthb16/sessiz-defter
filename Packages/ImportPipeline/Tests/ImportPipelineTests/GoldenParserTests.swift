@@ -175,3 +175,70 @@ struct CreditCardGoldenTests {
         #expect(detected?.formatIdentifier == "garanti.bonus.v1")
     }
 }
+
+/// Vadesiz hesap ekstreleri. Kart ekstresinden ayrı ayrıştırıcıları var; ikisi
+/// karışınca para girişleri de gider yazılıyordu (kullanıcı 2026-08-17: aynı gün
+/// 50.000 TL giriş ve çıkış, net varlık eksi 100.000 göründü).
+@Suite("Hesap ekstresi golden testleri")
+struct AccountStatementGoldenTests {
+    static let calendar = Calendar.gregorianIstanbul
+
+    @Test("Halkbank hesap özeti — işaret yönü belirler, valörlü satır da okunur")
+    func halkbankHesap() throws {
+        let text = try Fixture.text("halkbank-hesap-2026-08")
+        let parser = HalkbankHesapOzetiParser()
+        #expect(parser.matches(text))
+
+        let result = parser.parse(text, calendar: Self.calendar)
+        #expect(result.rows.count == 5)
+        #expect(result.unparsed.isEmpty)
+
+        let gelen = try #require(result.rows.first)
+        #expect(gelen.direction == .income)
+        #expect(gelen.amount.minorUnits == 500_000)
+        #expect(gelen.runningBalance?.minorUnits == 500_000)
+
+        let kartOdeme = result.rows[1]
+        #expect(kartOdeme.direction == .expense)
+        #expect(kartOdeme.amount.minorUnits == 194_758)
+
+        // Valör tarihi ve fazladan sayı taşıyan satırda tutar, açıklamadan
+        // hemen önceki iki sayının ilkidir.
+        let taksitli = try #require(result.rows.first { $0.detail.contains("TAKSITLI") })
+        #expect(taksitli.amount.minorUnits == 101_000)
+        #expect(taksitli.direction == .expense)
+        #expect(taksitli.runningBalance?.minorUnits == 115_778)
+    }
+
+    @Test("Garanti hesap hareketleri — alt satıra taşan açıklama ve işaret")
+    func garantiHesap() throws {
+        let text = try Fixture.text("garanti-hesap-2026-08")
+        let parser = GarantiHesapHareketleriParser()
+        #expect(parser.matches(text))
+
+        let result = parser.parse(text, calendar: Self.calendar)
+        #expect(result.rows.count == 4)
+
+        let avans = try #require(result.rows.first { $0.detail.contains("Nakit Avans") })
+        #expect(avans.direction == .income)
+        #expect(avans.amount.minorUnits == 100_000)
+
+        // Açıklaması alt satıra taşan kayıt: tutar taşan satırda.
+        let hediye = try #require(result.rows.first { $0.detail.contains("Hediye parası") })
+        #expect(hediye.direction == .income)
+        #expect(hediye.amount.minorUnits == 70_000)
+
+        let cekme = try #require(result.rows.first { $0.detail.contains("PARA ÇEKME") })
+        #expect(cekme.direction == .expense)
+        #expect(cekme.amount.minorUnits == 5_000_000)
+    }
+
+    @Test("Hesap ekstreleri kart ayrıştırıcılarına kapılmaz")
+    func siralama() throws {
+        let detector = BankFormatDetector()
+        #expect(try detector.detect(in: Fixture.text("halkbank-hesap-2026-08"))?
+            .formatIdentifier == "halkbank.hesapOzeti.v1")
+        #expect(try detector.detect(in: Fixture.text("garanti-hesap-2026-08"))?
+            .formatIdentifier == "garanti.hesapHareketleri.v1")
+    }
+}

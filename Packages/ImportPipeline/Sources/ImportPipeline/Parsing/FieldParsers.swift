@@ -79,7 +79,9 @@ public enum StatementDateParser {
     /// "16 Haziran 2026" biçimi Garanti Bonus ekstresinden geliyor; ay adı tr_TR
     /// locale'iyle çözülüyor, o yüzden ayrı bir tablo gerekmiyor.
     public static let formats = ["dd/MM/yy", "dd.MM.yyyy", "dd/MM/yyyy",
-                                 "dd.MM.yy", "yyyy-MM-dd", "d MMMM yyyy"]
+                                 "dd.MM.yy", "yyyy-MM-dd", "d MMMM yyyy",
+                                 // Halkbank hesap özeti: "11-03-2026".
+                                 "dd-MM-yyyy"]
 
     public static func parse(_ raw: String, calendar: Calendar = .gregorianIstanbul) -> Date? {
         let text = raw.trimmingCharacters(in: .whitespaces)

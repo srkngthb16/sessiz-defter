@@ -230,7 +230,13 @@ public struct BankFormatDetector: Sendable {
     // Sıra önemli: Bonus ekstresi "kredi kartı" sözcüğünü de taşıdığı için eski
     // Garanti ayrıştırıcısı önce denenirse onu kapıyor ve sıfır satır okuyor.
     // Gerçek ekstreyle doğrulanmış olan öne alındı.
+    // Hesap ekstreleri önce: imzaları sütun başlığı satırı olduğu için kesin,
+    // kart ayrıştırıcılarının imzaları ise açıklama metnindeki banka adına da
+    // takılabiliyor. Kart ayrıştırıcısı hesap ekstresini kaptığında her satır
+    // harcama sayılıyor ve para girişleri de eksiye yazılıyordu.
     public init(parsers: [any StatementParsing] = [ZiraatVadesizParser(),
+                                                   HalkbankHesapOzetiParser(),
+                                                   GarantiHesapHareketleriParser(),
                                                    GarantiBonusParser(),
                                                    GarantiKrediKartiParser(),
                                                    HalkbankParafParser()]) {
@@ -242,7 +248,13 @@ public struct BankFormatDetector: Sendable {
     // Sıra önemli: Bonus ekstresi "kredi kartı" sözcüğünü de taşıdığı için eski
     // Garanti ayrıştırıcısı önce denenirse onu kapıyor ve sıfır satır okuyor.
     // Gerçek ekstreyle doğrulanmış olan öne alındı.
+    // Hesap ekstreleri önce: imzaları sütun başlığı satırı olduğu için kesin,
+    // kart ayrıştırıcılarının imzaları ise açıklama metnindeki banka adına da
+    // takılabiliyor. Kart ayrıştırıcısı hesap ekstresini kaptığında her satır
+    // harcama sayılıyor ve para girişleri de eksiye yazılıyordu.
     public init(parsers: [any StatementParsing] = [ZiraatVadesizParser(),
+                                                   HalkbankHesapOzetiParser(),
+                                                   GarantiHesapHareketleriParser(),
                                                    GarantiBonusParser(),
                                                    GarantiKrediKartiParser(),
                                                    HalkbankParafParser()],

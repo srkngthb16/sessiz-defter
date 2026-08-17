@@ -1,0 +1,10 @@
+Sayın ÖRNEK KULLANICI, hesap hareketleri bilgileriniz aşağıdaki gibidir.
+Hesap Numarası : 00 - 0000000
+IBAN : TR00 0000 0000 0000 0000 0000 00
+Tarih Açıklama Etiket Tutar Bakiye
+10.08.2026 KESİNTİ VE EKLERİ-. Diğer -8,37 TL -1.733,62 TL
+10.08.2026 Nakit Avans HVL Nakit Avans +1.000,00 TL 1.000,64 TL
+02.08.2026 ÖRNEK KULLANICI-Hediye parası yarısı-
+FAST-0000000000 Para Transferi +700,00 TL 703,64 TL
+03.07.2026 PARA ÇEKME Para Çekme -50.000,00 TL 2,01 TL
+T. Garanti Bankası A.Ş. www.garantibbva.com.tr
