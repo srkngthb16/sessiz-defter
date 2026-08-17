@@ -62,14 +62,12 @@ maliyet **açılışta bir kez** ve **her yazmadan sonra bir kez** ödeniyor; se
 değiştirmek bedava. Tasarımda B2 iskeleti zaten 200 ms'yi geçen sorgular için var,
 bu yolu örtüyor.
 
-Kalıcı çözüm için iki seçenek var, ikisi de kullanıcı kararı bekliyor:
-
-1. **Hesap başına toplamı tabloda tutmak** (denormalize sütun/tablo, her yazımda
-   güncellenir). İlk hesap da milisaniyeye iner; karşılığında tutarlılık riski:
-   yedekten geri yükleme, toplu silme ve içe aktarma yollarının hepsi toplamı
-   doğru güncellemek zorunda.
-2. **Şimdiki hâlde bırakmak.** 10.000 işlem tipik kullanıcı için üst sınır;
-   açılıştaki tek seferlik yarım saniye iskeletle örtülüyor.
+**Karar (2026-08-17, kullanıcı onayıyla): şimdiki hâl kalıyor.** Denormalize
+toplam tablosu ilk hesabı milisaniyeye indirirdi ama yedekten geri yükleme, toplu
+silme ve içe aktarma yollarının hepsine "toplamı da güncelle" borcu yazardı;
+biri unutulduğunda bakiye sessizce yanlış görünür. 10.000 işlem tipik kullanıcı
+için üst sınır ve açılıştaki tek seferlik yarım saniyeyi B2 iskeleti örtüyor.
+Defter bundan çok büyürse karar yeniden açılır.
 
 ## Simülatörde yakalanan hata
 

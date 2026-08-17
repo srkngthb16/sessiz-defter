@@ -86,6 +86,7 @@ zorunluydu.
 | 9.4 | Geri bildirim yolu, anonim hata sayacı | `feb1156` |
 | 10.1 | Erişilebilirlik: tutar okunuşu, ekran etiketleri, grafik özeti, XXXL yerleşim | `b4db490` |
 | 10.2 | Performans: 10.000 işlemlik ölçüm, store tarafı arama, sayfalama, toplam önbelleği | `816fb5b` |
+| 10.3 | Dayanıklılık: iki aşamalı içe aktarma, açılışta onarım, yedek uçtan uca | `7441d53` |
 
 **Ekranlar (tasarım dosyasındaki kodlarla):** A1–A3 onboarding, A4 kilit,
 B1 boş durum, B2 iskelet, C1–C8 içe aktarma ve hata dalları, D1 dashboard,
@@ -97,7 +98,7 @@ F1 ayarlar, F2 mahremiyet raporu, F3 tüm verileri sil.
 
 ## 4. Test durumu
 
-240 test geçiyor. `./Scripts/test-all.sh` hepsini koşar.
+245 test geçiyor. `./Scripts/test-all.sh` hepsini koşar.
 
 | Paket | Test |
 |---|---|
@@ -106,7 +107,7 @@ F1 ayarlar, F2 mahremiyet raporu, F3 tüm verileri sil.
 | Persistence | 32 — CRUD, sorgu eşdeğerliği, CloudKit kapalı, dosya koruma, yedek, 10.000 işlemde performans |
 | ImportPipeline | 32 — golden parser testleri, hat akışı, hata dalları, rapor, anonimleştirme |
 | DesignSystem | 26 — 17 kontrast oranı, font çözümleme, düzen kuralı, snapshot |
-| Features | 69 — ekran modelleri, hesap yönetimi, eşleme, sürüm, snapshot, örnek veri, kategori simgeleri, geri bildirim ve hata sayacı |
+| Features | 74 — ekran modelleri, hesap yönetimi, eşleme, sürüm, snapshot, örnek veri, kategori simgeleri, geri bildirim ve hata sayacı, dayanıklılık |
 
 **Doğrulama araçları:**
 - `Scripts/verify-offline.sh` — kaynak ağacında ağ izi arar, bulursa build'i düşürür.
@@ -223,6 +224,17 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
   yazımı düşürüyor. İlk hesap 10.000 kayıtta ~460 ms — iOS 17 SwiftData'da
   toplama sorgusu yok; ayrıntı ve seçenekler `docs/PERFORMANCE.md`.
 
+**Dayanıklılık (Faz 10.3):**
+- İçe aktarma iki aşamalı yazıyor: parti `isComplete = false` ile açılır, işlemler
+  yazılır, parti tamamlanır. Uygulama arada ölürse yarım kalan iş küçük parti
+  tablosundan saptanıyor; işlemleri taramak 10.000 kayıtta yarım saniye sürerdi.
+- Açılıştaki onarım işlem **silmiyor**: satır yazmış yarım parti gerçek sayısıyla
+  tamamlanıyor, hiç yazmamış parti kaydı siliniyor. Kullanıcının verisini silmek
+  geri alınamaz bir karar olurdu.
+- `isComplete` alanı yedek arşivine de giriyor; alanı olmayan eski yedeklerde
+  tamamlanmış sayılıyor, yoksa geçmiş içe aktarmalar yarım görünürdü.
+- Ayrıntı ve sınanmayanlar: `docs/RESILIENCE.md`.
+
 **Ürün kararları:**
 - Varsayılan kategoriler: 13 gider (tasarımdaki 12 + "Yeme-içme") + 3 gelir
   (Maaş, Serbest çalışma, Diğer gelir). "Yeme-içme" renk yuvasını Bağış ile paylaşır.
@@ -273,11 +285,12 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
     `docs/A11Y-AUDIT.md`. **Kalan:** VoiceOver ile gerçek cihazda uçtan uca
     gezinme; simülatörde betikle sürülemedi.
 17. ~~Performans ölçülmedi.~~ Ölçüldü ve düzeltildi (Faz 10.2),
-    `docs/PERFORMANCE.md`. **Kalan:** net varlığın ilk hesabı 10.000 kayıtta
-    ~460 ms; karar kullanıcıda (denormalize toplam tablosu mu, şimdiki hâl mi).
+    `docs/PERFORMANCE.md`. Net varlığın ilk hesabı 10.000 kayıtta ~460 ms;
+    kullanıcı kararıyla şimdiki hâl kaldı (önbellek + iskelet).
 18. **Bellek/sızıntı profillemesi yapılmadı** — Instruments turu bu fazda kapsanmadı.
-19. Dayanıklılık senaryoları denenmedi: uçak modu, düşük depolama, içe aktarma
-    sırasında uygulamayı öldürme, yarım kalan ImportBatch (Faz 10.3).
+19. ~~Dayanıklılık senaryoları denenmedi.~~ Denendi (Faz 10.3),
+    `docs/RESILIENCE.md`. **Kalan:** gerçek cihazda düşük depolama ve "Tüm
+    verileri sil" akışı.
 
 ---
 

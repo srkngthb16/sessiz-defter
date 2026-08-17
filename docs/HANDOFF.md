@@ -4,8 +4,8 @@ Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 ## Durum
 
-- **31 commit.** Son onu henüz `origin/main`'e itilmedi (Faz 9.3 – 10.2).
-- **240 test geçiyor.** `./Scripts/test-all.sh`
+- **34 commit**, tamamı `origin/main`'de.
+- **245 test geçiyor.** `./Scripts/test-all.sh`
 - `Scripts/verify-offline.sh` yeşil, pre-commit hook'una bağlı.
 - Uygulama simülatörde çalışıyor; Release yapılandırmasında da derlenip çalıştırıldı.
 - Sürüm 1.0.0, build 2.
@@ -15,7 +15,7 @@ Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 **Faz 0–7** ürün geliştirmesi (tasarım dosyalarına göre tüm ekranlar).
 **Faz 8** yayın altyapısı — bitti.
-**Faz 9.1 – 9.4, 10.1, 10.2** — bitti.
+**Faz 9.1 – 9.4, 10.1 – 10.3** — bitti.
 
 ## Faz 9.3'te ne yapıldı
 
@@ -113,10 +113,23 @@ SwiftData'da toplama sorgusu yok. Ya denormalize toplam tablosu yazılacak
 (tutarlılık riski) ya da şimdiki hâl kabul edilecek (açılışta tek sefer, B2
 iskeleti örtüyor).
 
-## Sıradaki iş: Faz 10.3
+## Faz 10.3'te ne yapıldı
 
-**10.3 Dayanıklılık** — yedek al/geri yükle simülatörde uçtan uca; uçak modu, düşük depolama,
-içe aktarma sırasında uygulamayı öldürme, yarım kalan ImportBatch.
+Ayrıntısı `docs/RESILIENCE.md`. Beş senaryo:
+
+| Senaryo | Durum |
+|---|---|
+| Yedek al / geri yükle | Simülatörde uçtan uca doğrulandı (dışa aktar, defteri boşalt, geri yükle: 20 işlem, 2 bütçe, hesap geri geldi) |
+| İçe aktarma sırasında ölüm | İki aşamalı yazma + açılışta onarım; simülatörde depo elle yarım bırakılıp doğrulandı |
+| Yarım kalan ImportBatch | Onarım işlem silmiyor, gerçek sayıyla tamamlıyor; arşiv uyumluluğu testli |
+| Uçak modu | Yapı gereği (ağ kodu yok, `verify-offline.sh` denetliyor) |
+| Düşük depolama | Kısmen: hata yolları tanımlı, gerçek disk dolu üretilemedi |
+
+**Kalan iki elle deneme (cihazda):** düşük depolama ve "Tüm verileri sil" akışı —
+onay kutusuna "SİL" yazmak gerekiyor, simülatöre metin gönderen araç "İ" harfini
+yazamıyor.
+
+## Sıradaki iş: Faz 11
 
 **11 App Store Connect paketi** — `docs/APPSTORE.md`, `docs/PRIVACY-POLICY.md`,
 ekran görüntüsü planı ve üretimi.
