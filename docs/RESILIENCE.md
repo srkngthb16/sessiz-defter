@@ -22,10 +22,15 @@ dönüyor. Birim testleri (`PersistenceTests/BackupServiceTests`) arşivin içer
 zaten denetliyordu; buradaki fark dosya seçici, güvenlik kapsamlı URL ve parola
 akışının gerçek yollarla çalıştığının görülmesi.
 
-**Not:** "Tüm verileri sil" onayı "SİL" yazmayı istiyor. Simülatöre metin gönderen
-araç yalnız ASCII yazabildiği için "İ" düşüyor; silme adımı bu yüzden "Örnek
-veriyi temizle" ile yapıldı. Gerçek klavyede sorun değil, ama **"Tüm verileri sil"
-akışı cihazda elle bir kez denenmeli.**
+**Kullanıcı cihazda da doğruladı** (2026-08-17): yedek dışa aktarma ve geri
+yükleme sorunsuz çalışıyor.
+
+**Bu adımda bir hata çıktı ve düzeltildi:** "Tüm verileri sil" onayı "SİL" ile
+tam eşleşme arıyordu. Klavyenin otomatik büyük harf kuralı "sil" yazınca cihaza
+göre "SIL" (noktasız I) üretiyor; doğru sözcük yazılsa bile buton hiç açılmıyor
+ve kullanıcı verisini silemiyordu. Karşılaştırma artık Türkçe harf katlamasıyla:
+"sil", "SIL", "SİL", "sıl" kabul, "SILME" değil (`String.trFoldedUpper`,
+`FeaturesTests/DeleteConfirmationTests`). Cihazda doğrulandı.
 
 ## 2. İçe aktarma sırasında uygulamanın ölmesi ✔
 
@@ -94,4 +99,4 @@ denemesi.
 | Yarım kalan ImportBatch | Onarım + arşiv uyumluluğu, testlerle |
 | Uçak modu | Yapı gereği; `verify-offline.sh` denetliyor |
 | Düşük depolama | Kısmen: hata yolları tanımlı, gerçek disk dolu denenmedi |
-| "Tüm verileri sil" akışı | Cihazda elle denenmeli (araç "İ" yazamıyor) |
+| "Tüm verileri sil" akışı | Hata bulundu ve düzeltildi; cihazda doğrulandı |

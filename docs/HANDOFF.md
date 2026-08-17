@@ -4,8 +4,8 @@ Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 ## Durum
 
-- **34 commit**, tamamı `origin/main`'de.
-- **245 test geçiyor.** `./Scripts/test-all.sh`
+- **35 commit**, tamamı `origin/main`'de.
+- **247 test geçiyor.** `./Scripts/test-all.sh`
 - `Scripts/verify-offline.sh` yeşil, pre-commit hook'una bağlı.
 - Uygulama simülatörde çalışıyor; Release yapılandırmasında da derlenip çalıştırıldı.
 - Sürüm 1.0.0, build 2.
@@ -125,9 +125,13 @@ Ayrıntısı `docs/RESILIENCE.md`. Beş senaryo:
 | Uçak modu | Yapı gereği (ağ kodu yok, `verify-offline.sh` denetliyor) |
 | Düşük depolama | Kısmen: hata yolları tanımlı, gerçek disk dolu üretilemedi |
 
-**Kalan iki elle deneme (cihazda):** düşük depolama ve "Tüm verileri sil" akışı —
-onay kutusuna "SİL" yazmak gerekiyor, simülatöre metin gönderen araç "İ" harfini
-yazamıyor.
+**Kullanıcı cihazda doğruladı:** yedek dışa aktarma ve geri yükleme sorunsuz.
+
+**Cihazda çıkan hata düzeltildi:** "Tüm verileri sil" onayı "SİL" ile tam eşleşme
+arıyordu; klavye "SIL" (noktasız I) üretiyor ve buton hiç açılmıyordu. Artık
+Türkçe harf katlamasıyla karşılaştırılıyor (`String.trFoldedUpper`).
+
+**Kalan elle deneme:** düşük depolama (cihazda disk doluyken yedek/içe aktarma).
 
 ## Sıradaki iş: Faz 11
 
