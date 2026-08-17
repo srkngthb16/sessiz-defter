@@ -9,6 +9,8 @@ public final class ReportsModel {
         public var points: [PeriodPoint]
         public var comparisons: [CategoryComparison]
         public var merchants: [MerchantTotal]
+        /// Banka bazlı kırılım: hangi hesapta ne kadar gelir, ne kadar gider.
+        public var accounts: [AccountTotal]
         public var currentLabel: String
         public var previousLabel: String
         public var categories: CategoryLookup
@@ -37,6 +39,7 @@ public final class ReportsModel {
                 return
             }
             let categories = try await environment.categories.all(includeArchived: true)
+            let accounts = try await environment.accounts.all(includeArchived: true)
             let now = environment.now()
             let builder = ReportBuilder(calendar: environment.calendar)
             let current = Period.month(containing: now, calendar: environment.calendar)
@@ -46,6 +49,7 @@ public final class ReportsModel {
                 points: builder.trend(rows, scale: scale, endingAt: now),
                 comparisons: builder.comparison(rows, current: current, previous: previous),
                 merchants: builder.topMerchants(rows, in: current),
+                accounts: builder.accountTotals(rows, accounts: accounts, in: current),
                 currentLabel: Self.shortMonth(current.start, calendar: environment.calendar),
                 previousLabel: Self.shortMonth(previous.start, calendar: environment.calendar),
                 categories: CategoryLookup(categories)))

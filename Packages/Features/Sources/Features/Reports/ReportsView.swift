@@ -60,6 +60,8 @@ public struct ReportsScreen: View {
                 VStack(spacing: Spacing.l) {
                     scalePicker
                     trendCard(content)
+                    // Tek hesaplı defterde kırılımın anlatacağı bir şey yok.
+                    if content.accounts.count > 1 { accountCard(content) }
                     if !content.comparisons.isEmpty { comparisonCard(content) }
                     if !content.merchants.isEmpty { merchantCard(content) }
                 }
@@ -229,6 +231,61 @@ public struct ReportsScreen: View {
         }
         .font(.sd.meta)
         .frame(width: 62, alignment: .trailing)
+    }
+
+    /// Banka bazlı kırılım. Tutarlar erişilebilirlik kademesinde alt alta geçsin
+    /// diye AdaptiveStack kullanılıyor: yan yana yazıldığında XXXL boyutta
+    /// kırpılıyorlardı.
+    private func accountCard(_ content: ReportsModel.Content) -> some View {
+        Card {
+            VStack(alignment: .leading, spacing: Spacing.m) {
+                SectionHeader(title: "Hesaplara göre")
+                ForEach(content.accounts) { item in
+                    VStack(alignment: .leading, spacing: Spacing.xs) {
+                        HStack(spacing: Spacing.s) {
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text(item.name)
+                                    .font(.sd.bodyItem)
+                                    .foregroundStyle(Color.text.primary)
+                                if let masked = item.maskedNumber {
+                                    Text(masked)
+                                        .font(.sd.meta)
+                                        .foregroundStyle(Color.text.muted)
+                                        .accessibilityLabel("son dört hane \(masked.suffix(4))")
+                                }
+                            }
+                            Spacer(minLength: Spacing.s)
+                            AmountText(amount: item.net.magnitude,
+                                       direction: item.net.isNegative ? .expense : .income,
+                                       style: .row)
+                        }
+                        AdaptiveStack(spacing: Spacing.s) {
+                            accountLeg("Gelir", item.income, .income)
+                            accountLeg("Gider", item.expense, .expense)
+                            if item.transferCount > 0 {
+                                Text("\(item.transferCount) transfer")
+                                    .font(.sd.meta)
+                                    .foregroundStyle(Color.text.muted)
+                            }
+                        }
+                    }
+                    .accessibilityElement(children: .combine)
+                }
+            }
+        }
+    }
+
+    private func accountLeg(_ title: String, _ amount: Money,
+                            _ direction: TransactionDirection) -> some View {
+        HStack(spacing: 4) {
+            Text(title)
+                .font(.sd.meta)
+                .foregroundStyle(Color.text.secondary)
+            Text(Fmt.amount(amount))
+                .font(.sd.meta)
+                .foregroundStyle(direction == .income
+                    ? Color.finance.income : Color.finance.expense)
+        }
     }
 
     private func merchantCard(_ content: ReportsModel.Content) -> some View {

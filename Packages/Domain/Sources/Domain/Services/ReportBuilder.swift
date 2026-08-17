@@ -44,6 +44,33 @@ public struct CategoryComparison: Identifiable, Hashable, Sendable {
 }
 
 /// "1 Migros · 7 işlem · 4.980,20"
+/// Hesap (banka) bazlı dönem toplamı. Kullanıcı her bankanın gelirini ve giderini
+/// ayrı görmek istiyor: tek toplam, iki bankası olan biri için okunmaz oluyor.
+///
+/// Transfer sayısı ayrı tutuluyor ama net etkiye girmiyor — hesaplar arası
+/// aktarma varlık yaratmıyor, yalnız yer değiştiriyor.
+public struct AccountTotal: Identifiable, Hashable, Sendable {
+    public let accountID: UUID
+    public let name: String
+    public let maskedNumber: String?
+    public let income: Money
+    public let expense: Money
+    public let transferCount: Int
+
+    public var id: UUID { accountID }
+    public var net: Money { income - expense }
+
+    public init(accountID: UUID, name: String, maskedNumber: String?,
+                income: Money, expense: Money, transferCount: Int) {
+        self.accountID = accountID
+        self.name = name
+        self.maskedNumber = maskedNumber
+        self.income = income
+        self.expense = expense
+        self.transferCount = transferCount
+    }
+}
+
 public struct MerchantTotal: Identifiable, Hashable, Sendable {
     public let name: String
     public let transactionCount: Int
@@ -188,6 +215,38 @@ public struct ReportBuilder: Sendable {
 
     /// "En çok harcanan yerler". İşyeri adı açıklamanın ilk anlamlı kelimesinden
     /// türetilir: "MIGROS ATASEHIR" ve "MIGROS KADIKOY" aynı yerdir.
+    /// Hesap bazlı dönem toplamları. Silinmiş hesaba bağlı işlem kalmışsa o kimlik
+    /// listede karşılık bulmuyor ve atlanıyor: adı olmayan bir satır çizmek
+    /// toplamı okunmaz yapardı.
+    public func accountTotals(
+        _ transactions: [TransactionEntity],
+        accounts: [AccountEntity],
+        in interval: DateInterval
+    ) -> [AccountTotal] {
+        var totals: [UUID: (income: Int, expense: Int, transfers: Int)] = [:]
+        for row in transactions where interval.contains(row.date) {
+            var entry = totals[row.accountID] ?? (0, 0, 0)
+            switch row.direction {
+            case .income: entry.income += row.amount.minorUnits
+            case .expense: entry.expense += row.amount.minorUnits
+            case .transfer: entry.transfers += 1
+            }
+            totals[row.accountID] = entry
+        }
+
+        return accounts.compactMap { account -> AccountTotal? in
+            guard let entry = totals[account.id] else { return nil }
+            return AccountTotal(
+                accountID: account.id, name: account.name,
+                maskedNumber: account.maskedNumber,
+                income: Money(minorUnits: entry.income),
+                expense: Money(minorUnits: entry.expense),
+                transferCount: entry.transfers)
+        }
+        // Gideri en büyük hesap üstte: bütçe okuması oradan başlıyor.
+        .sorted { $0.expense > $1.expense }
+    }
+
     public func topMerchants(
         _ transactions: [TransactionEntity],
         in interval: DateInterval,
