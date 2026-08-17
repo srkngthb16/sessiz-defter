@@ -91,6 +91,10 @@ public struct InMemoryTransactionRepository: TransactionRepository {
         }
     }
 
+    public func count(inBatch id: UUID) async throws -> Int {
+        await store.transactions.values.filter { $0.importBatchID == id }.count
+    }
+
     public func transactions(matching query: TransactionQuery) async throws -> [TransactionEntity] {
         query.apply(to: Array(await store.transactions.values))
     }

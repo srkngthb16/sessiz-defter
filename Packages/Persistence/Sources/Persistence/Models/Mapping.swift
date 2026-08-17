@@ -155,7 +155,8 @@ extension SDImportBatch {
             skippedDuplicateCount: skippedDuplicateCount,
             manuallyRecategorizedCount: manuallyRecategorizedCount,
             bankFormatIdentifier: bankFormatIdentifier,
-            sourceFileRetained: sourceFileRetained, usedOCR: usedOCR)
+            sourceFileRetained: sourceFileRetained, usedOCR: usedOCR,
+            isComplete: isComplete)
     }
 
     static func make(_ entity: ImportBatchEntity) -> SDImportBatch {
@@ -166,7 +167,8 @@ extension SDImportBatch {
             skippedDuplicateCount: entity.skippedDuplicateCount,
             manuallyRecategorizedCount: entity.manuallyRecategorizedCount,
             bankFormatIdentifier: entity.bankFormatIdentifier,
-            sourceFileRetained: entity.sourceFileRetained, usedOCR: entity.usedOCR)
+            sourceFileRetained: entity.sourceFileRetained, usedOCR: entity.usedOCR,
+            isComplete: entity.isComplete)
     }
 
     func apply(_ entity: ImportBatchEntity) {
@@ -180,6 +182,7 @@ extension SDImportBatch {
         bankFormatIdentifier = entity.bankFormatIdentifier
         sourceFileRetained = entity.sourceFileRetained
         usedOCR = entity.usedOCR
+        isComplete = entity.isComplete
     }
 }
 

@@ -148,10 +148,15 @@ final class SDImportBatch {
     var bankFormatIdentifier: String?
     var sourceFileRetained: Bool
     var usedOCR: Bool
+    /// Yarım kalan içe aktarma işareti; sütun sonradan eklendi, eski satırlar
+    /// tamamlanmış sayılır.
+    var isComplete: Bool = true
 
     init(id: UUID, fileName: String, importedAt: Date, periodStart: Date?, periodEnd: Date?,
          addedCount: Int, skippedDuplicateCount: Int, manuallyRecategorizedCount: Int,
-         bankFormatIdentifier: String?, sourceFileRetained: Bool, usedOCR: Bool) {
+         bankFormatIdentifier: String?, sourceFileRetained: Bool, usedOCR: Bool,
+         isComplete: Bool = true) {
+        self.isComplete = isComplete
         self.id = id
         self.fileName = fileName
         self.importedAt = importedAt

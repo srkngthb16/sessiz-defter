@@ -54,17 +54,20 @@ final class Bootstrap {
                 try await store.backfillSearchIndex()
                 UserDefaults.standard.set(true, forKey: backfillKey)
             }
-            state = .ready(
-                AppEnvironment(
-                    transactions: store.transactions,
-                    accounts: store.accounts,
-                    categories: store.categories,
-                    budgets: store.budgets,
-                    categoryRules: store.categoryRules,
-                    importBatches: store.importBatches,
-                    parserProfiles: store.parserProfiles),
-                AppSettings(),
-                BackupService(store: store))
+            let environment = AppEnvironment(
+                transactions: store.transactions,
+                accounts: store.accounts,
+                categories: store.categories,
+                budgets: store.budgets,
+                categoryRules: store.categoryRules,
+                importBatches: store.importBatches,
+                parserProfiles: store.parserProfiles)
+            // İçe aktarma sırasında uygulama ölmüşse yarım kalan parti burada
+            // kapanır: hiç satır yazmamışsa kaydı silinir, yazmışsa gerçek
+            // sayısıyla tamamlanır. İşlem silinmiyor.
+            try? await ImportRecovery.repair(in: environment)
+
+            state = .ready(environment, AppSettings(), BackupService(store: store))
         } catch {
             state = .failed(String(describing: error))
         }

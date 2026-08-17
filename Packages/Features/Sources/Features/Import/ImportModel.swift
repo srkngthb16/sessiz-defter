@@ -215,9 +215,12 @@ public final class ImportModel {
                                        accountID: accountID)
             let entities = builder.transactions(from: draft, importBatchID: batchID)
 
-            // Tek yazma işlemi: biri düşerse hiçbiri kalmaz.
-            try await environment.transactions.saveAll(entities)
-            try await environment.importBatches.save(ImportBatchEntity(
+            // İki aşamalı yazma: parti önce "tamamlanmadı" işaretiyle kaydedilir,
+            // sonra işlemler (tek yazma işlemi — biri düşerse hiçbiri kalmaz),
+            // en son parti tamamlanmış olarak güncellenir. Uygulama arada ölürse
+            // yarım kalan iş küçük parti tablosundan saptanıyor; işlemleri taramak
+            // 10.000 kayıtta yarım saniye sürerdi.
+            let batch = ImportBatchEntity(
                 id: batchID, fileName: draft.fileName,
                 periodStart: draft.dateRange?.lowerBound,
                 periodEnd: draft.dateRange?.upperBound,
@@ -226,7 +229,12 @@ public final class ImportModel {
                 manuallyRecategorizedCount: draft.rows.filter(\.wasRecategorized).count,
                 bankFormatIdentifier: draft.formatIdentifier,
                 sourceFileRetained: !deletesSourceFile,
-                usedOCR: draft.usedOCR))
+                usedOCR: draft.usedOCR)
+            var pending = batch
+            pending.isComplete = false
+            try await environment.importBatches.save(pending)
+            try await environment.transactions.saveAll(entities)
+            try await environment.importBatches.save(batch)
 
             if deletesSourceFile, let pendingURL {
                 try? FileManager.default.removeItem(at: pendingURL)

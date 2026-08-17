@@ -238,6 +238,11 @@ public actor PersistenceStore {
         }
     }
 
+    func countTransactions(inBatch id: UUID) throws -> Int {
+        try modelContext.fetchCount(FetchDescriptor<SDTransaction>(
+            predicate: #Predicate { $0.importBatchID == id }))
+    }
+
     func duplicateHashes(among hashes: Set<String>) throws -> Set<String> {
         guard !hashes.isEmpty else { return [] }
         let list = Array(hashes)
@@ -451,6 +456,9 @@ struct SwiftDataTransactionRepository: TransactionRepository {
     func deleteAll() async throws { try await store.deleteAllTransactions() }
     func signedTotalsByAccount() async throws -> [UUID: Money] {
         try await store.signedTotalsByAccount()
+    }
+    func count(inBatch id: UUID) async throws -> Int {
+        try await store.countTransactions(inBatch: id)
     }
     func existingDuplicateHashes(among hashes: Set<String>) async throws -> Set<String> {
         try await store.duplicateHashes(among: hashes)

@@ -71,6 +71,10 @@ public protocol TransactionRepository: Sendable {
     /// çıkarıyordu; gerçeklemeler bunu satırları okumadan yapabilir.
     func signedTotalsByAccount() async throws -> [UUID: Money]
 
+    /// Bir içe aktarma partisine bağlı işlem sayısı. Yarım kalan içe aktarmayı
+    /// onarırken partinin gerçekten kaç satır yazdığını öğrenmek gerekiyor.
+    func count(inBatch id: UUID) async throws -> Int
+
     /// Verilen hash'lerden hangileri zaten kayıtlı.
     func existingDuplicateHashes(among hashes: Set<String>) async throws -> Set<String>
     func count(matching query: TransactionQuery) async throws -> Int

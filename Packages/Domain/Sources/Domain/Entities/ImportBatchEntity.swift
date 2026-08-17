@@ -14,6 +14,10 @@ public struct ImportBatchEntity: Identifiable, Hashable, Sendable, Codable {
     public var sourceFileRetained: Bool
     /// Metin katmanı yoktu, Vision OCR kullanıldı — tüm satırlar "kontrol gerekiyor" gelir.
     public var usedOCR: Bool
+    /// İçe aktarma iki aşamalı yazılıyor: önce bu kayıt `false` ile, sonra
+    /// işlemler, en son `true`. Uygulama arada ölürse yarım kalan iş buradan
+    /// anlaşılıyor — 10.000 işlemi taramaya gerek kalmadan.
+    public var isComplete: Bool
 
     public init(
         id: UUID = UUID(),
@@ -26,7 +30,8 @@ public struct ImportBatchEntity: Identifiable, Hashable, Sendable, Codable {
         manuallyRecategorizedCount: Int = 0,
         bankFormatIdentifier: String? = nil,
         sourceFileRetained: Bool = false,
-        usedOCR: Bool = false
+        usedOCR: Bool = false,
+        isComplete: Bool = true
     ) {
         self.id = id
         self.fileName = fileName
@@ -39,5 +44,31 @@ public struct ImportBatchEntity: Identifiable, Hashable, Sendable, Codable {
         self.bankFormatIdentifier = bankFormatIdentifier
         self.sourceFileRetained = sourceFileRetained
         self.usedOCR = usedOCR
+        self.isComplete = isComplete
+    }
+
+    /// Eski yedeklerde bu alan yok; okunurken tamamlanmış sayılıyor.
+    enum CodingKeys: String, CodingKey {
+        case id, fileName, importedAt, periodStart, periodEnd, addedCount
+        case skippedDuplicateCount, manuallyRecategorizedCount, bankFormatIdentifier
+        case sourceFileRetained, usedOCR, isComplete
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        fileName = try container.decode(String.self, forKey: .fileName)
+        importedAt = try container.decode(Date.self, forKey: .importedAt)
+        periodStart = try container.decodeIfPresent(Date.self, forKey: .periodStart)
+        periodEnd = try container.decodeIfPresent(Date.self, forKey: .periodEnd)
+        addedCount = try container.decode(Int.self, forKey: .addedCount)
+        skippedDuplicateCount = try container.decode(Int.self, forKey: .skippedDuplicateCount)
+        manuallyRecategorizedCount = try container.decode(
+            Int.self, forKey: .manuallyRecategorizedCount)
+        bankFormatIdentifier = try container.decodeIfPresent(
+            String.self, forKey: .bankFormatIdentifier)
+        sourceFileRetained = try container.decode(Bool.self, forKey: .sourceFileRetained)
+        usedOCR = try container.decode(Bool.self, forKey: .usedOCR)
+        isComplete = try container.decodeIfPresent(Bool.self, forKey: .isComplete) ?? true
     }
 }
