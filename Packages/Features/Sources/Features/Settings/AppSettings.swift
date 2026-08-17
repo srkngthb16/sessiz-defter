@@ -35,6 +35,33 @@ public final class AppSettings {
         }
     }
 
+    /// Arayüz dili. "Sistem" cihaz dilini kullanır, diğerleri onu geçersiz kılar —
+    /// yurt dışında yaşayan kullanıcı cihazı İngilizceyken uygulamayı Türkçe
+    /// tutabilsin diye. Seçim metinleri ve sayı biçimini etkiler; tutarların para
+    /// birimi hesabın kendi biriminden gelir, dile bağlı değildir.
+    public enum Language: String, CaseIterable, Identifiable, Sendable {
+        case system, turkish, english
+
+        public var id: String { rawValue }
+
+        public var title: String {
+            switch self {
+            case .system: "Sistem"
+            case .turkish: "Türkçe"
+            case .english: "English"
+            }
+        }
+
+        /// nil = cihazın kendi dili.
+        public var locale: Locale? {
+            switch self {
+            case .system: nil
+            case .turkish: Locale(identifier: "tr_TR")
+            case .english: Locale(identifier: "en_US")
+            }
+        }
+    }
+
     private enum Key {
         static let lockEnabled = "lock.enabled"
         static let hideInSwitcher = "lock.hideInSwitcher"
@@ -42,6 +69,7 @@ public final class AppSettings {
         static let appearance = "appearance"
         static let onboardingCompleted = "onboarding.completed"
         static let tourSeen = "tour.seen"
+        static let language = "language"
     }
 
     private let defaults: UserDefaults
@@ -58,6 +86,8 @@ public final class AppSettings {
             ?? .system
         hasCompletedOnboarding = defaults.bool(forKey: Key.onboardingCompleted)
         hasSeenTour = defaults.bool(forKey: Key.tourSeen)
+        language = Language(rawValue: defaults.string(forKey: Key.language) ?? "")
+            ?? .system
     }
 
     public var isLockEnabled: Bool {
@@ -87,6 +117,10 @@ public final class AppSettings {
     /// Aynı bayrağa bağlanırsa mevcut kullanıcılar güncellemede turu hiç görmezdi.
     public var hasSeenTour: Bool {
         didSet { defaults.set(hasSeenTour, forKey: Key.tourSeen) }
+    }
+
+    public var language: Language {
+        didSet { defaults.set(language.rawValue, forKey: Key.language) }
     }
 
     public var colorScheme: ColorSchemePreference {

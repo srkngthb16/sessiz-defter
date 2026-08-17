@@ -62,12 +62,12 @@ public struct TourView: View {
                 .accessibilityHidden(true)
 
             VStack(spacing: Spacing.s) {
-                Text(step.title)
+                Text(LocalizedStringKey(step.title))
                     .font(.sd.titleScreen)
                     .foregroundStyle(Color.text.primary)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
-                Text(step.message)
+                Text(LocalizedStringKey(step.message))
                     .font(.sd.meta)
                     .foregroundStyle(Color.text.secondary)
                     .multilineTextAlignment(.center)

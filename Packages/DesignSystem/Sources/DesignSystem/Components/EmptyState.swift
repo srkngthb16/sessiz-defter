@@ -40,7 +40,7 @@ public struct EmptyState<Actions: View>: View {
             }
 
             VStack(spacing: Spacing.s) {
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.sd.titleSection)
                     .foregroundStyle(Color.text.primary)
                     .multilineTextAlignment(.center)
@@ -81,7 +81,7 @@ public struct PrimaryButton: View {
         Button(action: action) {
             HStack(spacing: Spacing.s) {
                 if let systemImage { Image(systemName: systemImage) }
-                Text(title)
+                Text(LocalizedStringKey(title))
             }
             .font(.sd.button)
             .foregroundStyle(Color.text.onBrand)
@@ -109,7 +109,7 @@ public struct SecondaryButton: View {
         Button(action: action) {
             HStack(spacing: Spacing.s) {
                 if let systemImage { Image(systemName: systemImage) }
-                Text(title)
+                Text(LocalizedStringKey(title))
             }
             .font(.sd.button)
             .foregroundStyle(Color.text.primary)

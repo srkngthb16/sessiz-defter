@@ -107,6 +107,12 @@ public struct SettingsView: View {
                                                       set: { settings.appearance = $0 })) {
                         ForEach(AppSettings.Appearance.allCases) { Text($0.title).tag($0) }
                     }
+                    // Dil cihazdan bağımsız seçilebiliyor: yurt dışındaki kullanıcı
+                    // telefonu İngilizceyken defteri Türkçe tutmak isteyebiliyor.
+                    Picker("Dil", selection: Binding(get: { settings.language },
+                                                     set: { settings.language = $0 })) {
+                        ForEach(AppSettings.Language.allCases) { Text($0.title).tag($0) }
+                    }
                     LabeledContent("Para birimi", value: "₺ TRY")
                 }
 

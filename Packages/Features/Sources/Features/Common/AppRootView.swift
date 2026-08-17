@@ -32,6 +32,10 @@ public struct AppRootView: View {
             if isMasked { maskOverlay }
         }
         .preferredColorScheme(colorScheme)
+        // Dil seçimi ortamdan geçiyor: SwiftUI metin aramasını buradaki locale ile
+        // yapıyor, yani seçim uygulama yeniden başlatılmadan uygulanıyor.
+        // "Sistem" seçiliyken cihazın kendi dili geçerli kalır.
+        .environment(\.locale, settings.language.locale ?? Locale.autoupdatingCurrent)
         .onChange(of: scenePhase) { _, phase in handle(phase) }
     }
 

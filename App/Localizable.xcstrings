@@ -1,0 +1,125 @@
+{
+  "sourceLanguage" : "tr",
+  "strings" : {
+    "Alttaki yuvarlak düğme nakit harcamalar ve desteklenmeyen bankalar için." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "The round button below is for cash spending and unsupported banks." }
+        }
+      }
+    },
+    "Atla" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Skip" }
+        }
+      }
+    },
+    "Ayarlar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Settings" }
+        }
+      }
+    },
+    "Ayarlar'da hangi iznin kullanıldığını, hangisinin hiç istenmediğini tek ekranda görürsünüz." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Settings shows which permissions are used and which are never requested, on one screen." }
+        }
+      }
+    },
+    "Başla" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Start" }
+        }
+      }
+    },
+    "Bütçe" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Budget" }
+        }
+      }
+    },
+    "Bütçe sekmesinde aylık limit koyun; kalan gün başına ne harcayabileceğinizi uygulama hesaplar." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Set a monthly limit in the Budget tab; the app works out what you can spend per remaining day." }
+        }
+      }
+    },
+    "Bütçenizi kurun" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Set your budget" }
+        }
+      }
+    },
+    "Ekstre içe aktar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Import statement" }
+        }
+      }
+    },
+    "Ekstrenizi yükleyin" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Import your statement" }
+        }
+      }
+    },
+    "Elle işlem ekleyin" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Add a transaction by hand" }
+        }
+      }
+    },
+    "Mahremiyet raporu" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Privacy report" }
+        }
+      }
+    },
+    "Raporlar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Reports" }
+        }
+      }
+    },
+    "Özet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Summary" }
+        }
+      }
+    },
+    "Özet ekranının sağ üstündeki simge PDF ekstre yükler. Birden fazla dosyayı aynı anda seçebilirsiniz." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "The icon at the top right of the Summary screen imports a PDF statement. You can pick several files at once." }
+        }
+      }
+    },
+    "İleri" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Next" }
+        }
+      }
+    },
+    "İşlemler" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Transactions" }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
