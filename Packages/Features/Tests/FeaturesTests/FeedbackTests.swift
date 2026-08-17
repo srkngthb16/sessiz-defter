@@ -7,18 +7,19 @@ import Testing
 
 @Suite("Geri bildirim ve hata sayacı")
 struct FeedbackTests {
-    /// Her test kendi süitinde: sayaç UserDefaults'ta duruyor, testler birbirinin
-    /// sayısını görmemeli.
-    private func isolatedDefaults(_ name: String) -> UserDefaults {
+    /// Her test kendi süiti **ve** kendi anahtar öneğiyle: süit tek başına
+    /// yetmiyor, çünkü süitin arama listesinde uygulamanın kendi alanı da var —
+    /// başka bir testin standart alana yazdığı sayaç buradan da okunuyordu.
+    private func isolated(_ name: String) -> Diagnostics {
         let suite = "feedback-tests-\(name)"
         let defaults = UserDefaults(suiteName: suite)!
         defaults.removePersistentDomain(forName: suite)
-        return defaults
+        return Diagnostics(defaults: defaults, namespace: suite)
     }
 
     @Test("Sayaç artar, sıfırlanır")
     func sayac() {
-        let diagnostics = Diagnostics(defaults: isolatedDefaults(#function))
+        let diagnostics = isolated(#function)
         #expect(diagnostics.total == 0)
 
         diagnostics.record(.dataRead)
@@ -85,7 +86,7 @@ struct FeedbackTests {
     @Test("Okuma düşerse ekran modeli sayacı artırır")
     @MainActor
     func modelHataSayaci() async {
-        let defaults = isolatedDefaults(#function)
+        let diagnostics = isolated(#function)
         let store = InMemoryStore()
         let environment = AppEnvironment(
             transactions: FailingTransactionRepository(),
@@ -96,12 +97,12 @@ struct FeedbackTests {
             importBatches: InMemoryImportBatchRepository(store: store),
             calendar: Fixtures.calendar,
             now: { Fixtures.today },
-            diagnostics: Diagnostics(defaults: defaults))
+            diagnostics: diagnostics)
 
         let model = DashboardModel(environment: environment)
         await model.load()
 
-        #expect(Diagnostics(defaults: defaults).count(.dataRead) == 1)
+        #expect(diagnostics.count(.dataRead) == 1)
     }
 }
 

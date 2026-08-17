@@ -28,17 +28,31 @@ public struct Diagnostics: @unchecked Sendable {
     }
 
     private let defaults: UserDefaults
+    private let namespace: String
 
-    public init(defaults: UserDefaults = .standard) {
+    /// `namespace` üretimde boş kalır: anahtarlar bugünkü hâliyle okunur, mevcut
+    /// kullanıcının sayacı sıfırlanmaz.
+    ///
+    /// Testte gerekiyor. `UserDefaults(suiteName:)` arama listesine uygulamanın
+    /// kendi alanını da katıyor, yani ayrı süit vermek tek başına yalıtım
+    /// sağlamıyor: başka bir yerde standart alana yazılmış sayaç süit üzerinden
+    /// de okunuyor ve test kendi yazmadığı sayıyı görüyordu. Önek okuma yolunu
+    /// da ayırır.
+    public init(defaults: UserDefaults = .standard, namespace: String = "") {
         self.defaults = defaults
+        self.namespace = namespace
+    }
+
+    private func key(_ failure: Failure) -> String {
+        namespace.isEmpty ? failure.storageKey : "\(namespace).\(failure.storageKey)"
     }
 
     public func record(_ failure: Failure) {
-        defaults.set(count(failure) + 1, forKey: failure.storageKey)
+        defaults.set(count(failure) + 1, forKey: key(failure))
     }
 
     public func count(_ failure: Failure) -> Int {
-        defaults.integer(forKey: failure.storageKey)
+        defaults.integer(forKey: key(failure))
     }
 
     public var total: Int {
@@ -48,6 +62,6 @@ public struct Diagnostics: @unchecked Sendable {
     /// Tüm verileri silmede sayaç da sıfırlanır: kullanıcı defteri sildikten
     /// sonra geri bildirimde eski hataları görmemeli.
     public func reset() {
-        for failure in Failure.allCases { defaults.removeObject(forKey: failure.storageKey) }
+        for failure in Failure.allCases { defaults.removeObject(forKey: key(failure)) }
     }
 }

@@ -87,8 +87,16 @@ enum Fixtures {
             categoryRules: InMemoryCategoryRuleRepository(store: store),
             importBatches: InMemoryImportBatchRepository(store: store),
             calendar: calendar,
-            now: { today })
+            now: { today },
+            diagnostics: diagnostics)
     }
+
+    /// Ortak ortamı kullanan testler hata dalına düşerse sayaç üretim deposuna
+    /// yazılmasın: oraya yazılan sayı, sayacı okuyan testin gördüğü sayıya
+    /// karışıyordu.
+    static let diagnostics = Diagnostics(
+        defaults: UserDefaults(suiteName: "features-tests-fixtures")!,
+        namespace: "features-tests-fixtures")
 
     @MainActor
     static func loadedDashboard() async -> DashboardModel.State {
