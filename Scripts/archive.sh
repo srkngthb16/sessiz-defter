@@ -44,26 +44,25 @@ if [ "${SD_ALLOW_PROVISIONING:-0}" = "1" ]; then
   echo "NOT · otomatik profil güncellemesi açık; gerekirse sertifika/profil üretilecek"
 fi
 
-# Arşiv imzasız üretiliyor, dağıtım imzası export adımında biniyor.
+# Arşiv imzalı üretilir; dağıtım imzası export adımında yeniden biniyor. Bu,
+# Xcode'un standart akışı ve Apple'ın doğruladığı tek yol.
 #
-# Neden: otomatik imzalamada arşiv adımı "iOS App Development" profili istiyor, o
-# profil de takımda kayıtlı en az bir cihaz olmasını şart koşuyor —
-# "Your team has no devices from which to generate a provisioning profile".
-# Mağazaya giden yapının geliştirme profiliyle işi yok; export zaten
-# app-store-connect yöntemiyle dağıtım profilini üretip ikiliyi yeniden imzalıyor
-# (üretilen .ipa'da get-task-allow = false, profil "iOS Team Store"). Böylece
-# cihaz kaydı gerekmeden mağaza yapısı üretilebiliyor.
-echo "───── arşivleniyor (imzasız)"
+# Bir ara "imzasız arşivle, export imzalasın" denendi: arşiv ve export başarılı
+# oluyor, ama Transporter ikiliyi reddediyor —
+# "Invalid Signature. Code failed to satisfy specified code requirement(s)".
+# İmzasız arşivi export'un yeniden imzalaması, yerel dağıtım sertifikası
+# olmadığında bulut imzalamaya düşüyor ve ortaya çıkan mühür geçerli sayılmıyor.
+# Bedeli: arşiv adımı geliştirme profili istediği için takımda kayıtlı en az bir
+# cihaz gerekiyor.
+echo "───── arşivleniyor"
 xcodebuild archive \
   -project SessizDefter.xcodeproj \
   -scheme SessizDefter \
   -configuration Release \
   -destination 'generic/platform=iOS' \
   -archivePath "$ARCHIVE" \
-  DEVELOPMENT_TEAM="$TEAM_ID" \
-  CODE_SIGNING_ALLOWED=NO \
-  CODE_SIGNING_REQUIRED=NO \
-  CODE_SIGN_IDENTITY=""
+  ${PROVISIONING_ARGS[@]+"${PROVISIONING_ARGS[@]}"} \
+  DEVELOPMENT_TEAM="$TEAM_ID"
 
 cat > "$EXPORT_OPTIONS" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
