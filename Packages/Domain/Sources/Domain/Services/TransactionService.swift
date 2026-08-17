@@ -103,7 +103,10 @@ public struct TransactionService: Sendable {
     /// İlk açılışta kategori tablosu boşsa varsayılanlar yazılır.
     @discardableResult
     public func seedDefaultCategoriesIfNeeded() async throws -> Bool {
-        guard try await categories.all(includeArchived: true).isEmpty else { return false }
+        guard try await categories.all(includeArchived: true).isEmpty else {
+            try await addMissingDefaultRules()
+            return false
+        }
         let seeded = DefaultCategories.seed()
         for category in seeded {
             try await categories.save(category)
@@ -115,6 +118,23 @@ public struct TransactionService: Sendable {
             }
         }
         return true
+    }
+
+    /// Sürüm yükseltmesinde eklenen varsayılan kuralları mevcut deftere de yazar.
+    ///
+    /// Gerekli, çünkü kurallar yalnız ilk açılışta tohumlanıyordu: kural listesi
+    /// genişletildiğinde eski kullanıcı ekstresini kategorisiz görmeyi sürdürdü.
+    /// Yalnız **eksik** anahtarlar ekleniyor; aynı anahtar zaten varsa atlanıyor,
+    /// böylece kullanıcının değiştirdiği kurallara dokunulmuyor.
+    private func addMissingDefaultRules() async throws {
+        guard let categoryRules else { return }
+        let existingKeywords = Set(try await categoryRules.all().map { $0.keyword.uppercased() })
+        let all = try await categories.all(includeArchived: true)
+
+        for rule in DefaultCategoryRules.seed(categories: all)
+        where !existingKeywords.contains(rule.keyword.uppercased()) {
+            try await categoryRules.save(rule)
+        }
     }
 }
 

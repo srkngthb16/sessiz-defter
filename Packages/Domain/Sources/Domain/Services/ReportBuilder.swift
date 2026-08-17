@@ -268,15 +268,38 @@ public struct ReportBuilder: Sendable {
             .map { $0 }
     }
 
+    /// Gerçek ekstrelerde açıklama işyeri adıyla başlamıyor: önünde tarih, işlem
+    /// kodu, IBAN ya da "ALISVERIS/SNFT 5262901589985507 PN 019366" gibi bankaya
+    /// ait alanlar oluyor. İlk sözcüğü almak raporda "27" ve "9876549888661497qr"
+    /// gibi başlıklar üretiyordu; bu yüzden anlamsız sözcükler eleniyor.
     public static func merchantKey(_ detail: String) -> String {
         let words = detail
             .split(whereSeparator: { !$0.isLetter && !$0.isNumber })
             .map(String.init)
-        guard let first = words.first else { return "" }
-        // İki harfi geçmeyen ön ekler ad değildir; "A101" rakam taşıdığı için kalır.
-        let isShortPrefix = first.count <= 2 && !first.contains(where: \.isNumber)
-        let candidate = isShortPrefix && words.count > 1 ? words[1] : first
-        return capitalize(candidate)
+
+        // Ay adları tarihin parçası, işyeri değil.
+        let months = ["OCAK", "SUBAT", "MART", "NISAN", "MAYIS", "HAZIRAN", "TEMMUZ",
+                      "AGUSTOS", "EYLUL", "EKIM", "KASIM", "ARALIK"]
+        // Banka alan adları her satırda tekrar ediyor ve işyerini gölgeliyor.
+        let noise = ["ALISVERIS", "HBPOS", "SNFT", "PN", "POS", "ISLEM", "ODEME",
+                     "TRANSFER", "HESAPLAR", "ARASI", "GIDEN", "GELEN", "FAST",
+                     "TARAFINDAN", "GONDERILEN", "DAN", "DEN", "TL", "KART",
+                     "KARTI", "KREDI", "TAKSIT", "UCRET", "UCRETI", "DEVIR"]
+
+        let meaningful = words.first { word in
+            let folded = CategorizationEngine.fold(word)
+            guard word.contains(where: \.isLetter), word.count > 2 else { return false }
+            guard !months.contains(folded), !noise.contains(folded) else { return false }
+            // IBAN parçası: "TR51", "TR30". Marka adı gibi görünüyor ama değil.
+            if folded.hasPrefix("TR"), folded.dropFirst(2).allSatisfy(\.isNumber) { return false }
+            // Uzun rakam öbekleri kart ve referans numarası ("9876549888661497qr").
+            // Kısa rakam kuyruğu ada ait olabiliyor, o yüzden eşik var: "A101" kalır.
+            return word.filter(\.isNumber).count <= 8
+        }
+        // Hiçbir sözcük anlamlı çıkmazsa bile kart numarası başlık olmasın:
+        // önce harf taşıyan ilk sözcüğe düşülüyor.
+        let fallback = words.first { $0.contains(where: \.isLetter) } ?? words.first
+        return capitalize(meaningful ?? fallback ?? "")
     }
 
     /// Ekstre metni çoğunlukla ASCII gelir: "MIGROS". tr_TR kuralıyla küçültmek

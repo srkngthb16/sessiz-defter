@@ -44,7 +44,7 @@ struct AccountManagementTests {
         #expect(try await environment.accounts.account(id: bos.id) == nil)
     }
 
-    @Test("Tek hesap varsa içe aktarma hedefi otomatik seçilir")
+    @Test("Tek hesap varken bile seçim boş kalır: hedef ekstreden bulunur")
     func tekHesapOtomatik() async {
         let store = InMemoryStore()
         let account = AccountEntity(name: "Nakit", kind: .cash)
@@ -59,8 +59,11 @@ struct AccountManagementTests {
 
         let model = ImportModel(environment: environment)
         await model.loadAccounts()
-        #expect(model.selectedAccountID == account.id)
+        // Önceden tek hesap otomatik seçiliyordu; yeni kurulumda o hesap "Nakit"
+        // olduğu için bütün banka ekstreleri nakde yazılıyordu.
+        #expect(model.selectedAccountID == nil)
         #expect(model.canPickFile)
+        #expect(account.name == "Nakit")
     }
 
     @Test("Hesap seçmeden dosya seçilebilir: hedef ekstreden bulunur")

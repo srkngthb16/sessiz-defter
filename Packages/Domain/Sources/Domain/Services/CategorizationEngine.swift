@@ -71,20 +71,63 @@ public struct CategorizationEngine: Sendable {
 public enum DefaultCategoryRules {
     public static func seed(categories: [CategoryEntity]) -> [CategoryRuleEntity] {
         let byName = Dictionary(uniqueKeysWithValues: categories.map { ($0.name, $0.id) })
+        // Marka adlarının yanında **cins adlar** da var. Gerçek ekstrelerde
+        // (kullanıcı 2026-08-17'de dört PDF verdi) işyeri adları markadan çok
+        // "KARDEŞLER MARKET", "ÇAĞDAŞ MARKET", "TOPLU TASIMA UCRETI" gibi geliyor;
+        // yalnız markaya bakan liste bunların hepsini kategorisiz bırakıyordu.
         let pairs: [(String, String)] = [
             ("MIGROS", "Market"), ("BIM", "Market"), ("A101", "Market"),
-            ("CARREFOUR", "Market"), ("SOK MARKET", "Market"),
+            ("CARREFOUR", "Market"), ("SOK MARKET", "Market"), ("MARKET", "Market"),
+            ("BAKKAL", "Market"), ("MANAV", "Market"), ("KASAP", "Market"),
+            ("GIDA", "Market"), ("SUPERMARKET", "Market"), ("FIRIN", "Market"),
+
             ("SHELL", "Ulaşım"), ("OPET", "Ulaşım"), ("BP ", "Ulaşım"),
+            ("PETROL", "Ulaşım"), ("AKARYAKIT", "Ulaşım"), ("BENZIN", "Ulaşım"),
             ("IETT", "Ulaşım"), ("OTOYOL", "Ulaşım"), ("TAKSI", "Ulaşım"),
+            ("TOPLU TASIMA", "Ulaşım"), ("OTOPARK", "Ulaşım"), ("HGS", "Ulaşım"),
+            ("OGS", "Ulaşım"), ("BILET", "Ulaşım"),
+
             ("ISKI", "Faturalar"), ("BEDAS", "Faturalar"), ("IGDAS", "Faturalar"),
             ("TURKCELL", "Faturalar"), ("VODAFONE", "Faturalar"), ("FATURA", "Faturalar"),
+            ("TURK TELEKOM", "Faturalar"), ("DOGALGAZ", "Faturalar"),
+            ("ELEKTRIK", "Faturalar"), ("INTERNET", "Faturalar"),
+
             ("ECZANE", "Sağlık"), ("HASTANE", "Sağlık"), ("DIS ", "Sağlık"),
+            ("KLINIK", "Sağlık"), ("LABORATUVAR", "Sağlık"), ("OPTIK", "Sağlık"),
+
             ("SPOTIFY", "Abonelik"), ("NETFLIX", "Abonelik"), ("ICLOUD", "Abonelik"),
-            ("YOUTUBE", "Abonelik"), ("ABONELIK", "Abonelik"),
-            ("KIRA", "Ev"), ("AIDAT", "Ev"),
+            ("YOUTUBE", "Abonelik"), ("ABONELIK", "Abonelik"), ("APPLE COM", "Abonelik"),
+
+            ("KIRA", "Ev"), ("AIDAT", "Ev"), ("EMLAK", "Ev"), ("MOBILYA", "Ev"),
+
             ("TRENDYOL", "Alışveriş"), ("HEPSIBURADA", "Alışveriş"), ("AMAZON", "Alışveriş"),
+            ("ALISVERIS", "Alışveriş"), ("MAGAZA", "Alışveriş"), ("TEKSTIL", "Alışveriş"),
+            ("BOYNER", "Alışveriş"), ("LC WAIKIKI", "Alışveriş"), ("DEFACTO", "Alışveriş"),
+            ("FLO", "Alışveriş"), ("ILETISIM", "Alışveriş"),
+
             ("KAHVE", "Yeme-içme"), ("RESTORAN", "Yeme-içme"), ("YEMEKSEPETI", "Yeme-içme"),
-            ("KUAFOR", "Kişisel bakım"), ("BERBER", "Kişisel bakım")
+            ("GETIR", "Yeme-içme"), ("LOKANTA", "Yeme-içme"), ("PIDE", "Yeme-içme"),
+            ("KEBAP", "Yeme-içme"), ("CAFE", "Yeme-içme"), ("PASTANE", "Yeme-içme"),
+            ("BUFE", "Yeme-içme"), ("TEKEL", "Yeme-içme"),
+
+            ("KUAFOR", "Kişisel bakım"), ("BERBER", "Kişisel bakım"),
+            ("KOZMETIK", "Kişisel bakım"), ("GRATIS", "Kişisel bakım"),
+
+            ("OKUL", "Eğitim"), ("KURS", "Eğitim"), ("UNIVERSITE", "Eğitim"),
+            ("KITAP", "Eğitim"),
+
+            ("SINEMA", "Eğlence"), ("TIYATRO", "Eğlence"), ("ORGANIZASYON", "Eğlence"),
+            ("KONSER", "Eğlence"),
+
+            // Banka işlemleri: kart ödemesi, havale, faiz ve ücretler. Harcama
+            // kategorisi değiller ama "Diğer" olarak işaretlenmeleri kategorisiz
+            // yığınında kalmalarından iyi — kullanıcı isterse değiştirir.
+            ("KREDI KART ODEME", "Diğer"), ("K.KARTI ODEME", "Diğer"),
+            ("KART ODEME", "Diğer"), ("HESAPLAR ARASI TRANSFER", "Diğer"),
+            ("GIDEN FAST", "Diğer"), ("PARA TRANSFERI", "Diğer"), ("HAVALE", "Diğer"),
+            ("NAKIT AVANS", "Diğer"), ("PARA CEKME", "Diğer"),
+            ("KESINTI VE EKLERI", "Diğer"), ("KKDF", "Diğer"), ("BSMV", "Diğer"),
+            ("FAIZ", "Diğer"), ("KOMISYON", "Diğer")
         ]
         var rules = pairs.compactMap { keyword, categoryName -> CategoryRuleEntity? in
             guard let categoryID = byName[categoryName] else { return nil }

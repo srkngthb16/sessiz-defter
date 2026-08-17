@@ -114,6 +114,10 @@ public struct TransactionRow: View {
                 // metin sarmak yerine tek satırda kalıp kırpılıyor. Dondurma değil,
                 // tam tersi: dikeyde büyümeye izin verir.
                 .fixedSize(horizontal: false, vertical: true)
+                // Banka açıklamaları IBAN ve isim taşıyıp altı satıra çıkabiliyor;
+                // satır o zaman ekranı yiyor. Tamamı işlem detayında duruyor,
+                // VoiceOver de tam metni okumayı sürdürüyor.
+                .lineLimit(2)
             HStack(spacing: Spacing.xs) {
                 if model.needsReview {
                     Image(systemName: "questionmark.circle")

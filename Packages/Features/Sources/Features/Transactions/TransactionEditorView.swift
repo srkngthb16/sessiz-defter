@@ -22,6 +22,7 @@ public struct TransactionEditorView: View {
     @State private var categories = CategoryLookup()
     @State private var accounts = AccountLookup()
     @State private var showsDeleteConfirmation = false
+    @State private var isAddingAccount = false
 
     public init(
         environment: AppEnvironment,
@@ -91,6 +92,15 @@ public struct TransactionEditorView: View {
                             Text(account.displayName).tag(UUID?.some(account.id))
                         }
                     }
+                    // Hesap eklemek için Ayarlar'a çıkmak gerekiyordu; banka
+                    // hesabı yokken işlem yazmaya çalışan kullanıcı burada
+                    // tıkanıyordu.
+                    Button {
+                        isAddingAccount = true
+                    } label: {
+                        Label("Yeni hesap ekle", systemImage: "plus.circle")
+                            .font(.sd.meta)
+                    }
                     DatePicker("Tarih", selection: $date, displayedComponents: .date)
                         .environment(\.locale, TurkishLocale.locale)
                 }
@@ -138,6 +148,19 @@ public struct TransactionEditorView: View {
                 Button("Vazgeç", role: .cancel) {}
             } message: {
                 Text("Bu işlem kalıcı olarak silinecek.")
+            }
+            .sheet(isPresented: $isAddingAccount) {
+                // Kaydedilen hesap hemen seçili gelsin: kullanıcı hesabı işlem
+                // yazmak için açıyor, listeye dönüp bir daha seçmesi gerekmemeli.
+                AccountEditorView(environment: environment) {
+                    Task {
+                        let before = Set(accounts.ordered.map(\.id))
+                        await loadReferences()
+                        if let added = accounts.ordered.first(where: { !before.contains($0.id) }) {
+                            accountID = added.id
+                        }
+                    }
+                }
             }
             .task { await loadReferences() }
         }

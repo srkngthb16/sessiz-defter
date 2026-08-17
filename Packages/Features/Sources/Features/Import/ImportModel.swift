@@ -55,13 +55,16 @@ public final class ImportModel {
         self.pipeline = pipeline
     }
 
-    /// Dosya seçiciden önce çağrılır: hesap listesi yüklenir, tek hesap varsa
-    /// seçim kullanıcıya sorulmadan yapılır.
+    /// Dosya seçiciden önce çağrılır: hesap listesi yüklenir.
+    ///
+    /// Hiçbir hesap önceden seçilmiyor. Önceden tek hesap varsa o seçiliyordu;
+    /// yeni kurulumda tek hesap "Nakit" olduğu için bütün banka ekstreleri nakde
+    /// yazıldı ve ekstreden banka tanıma hiç devreye girmedi.
     public func loadAccounts() async {
         accounts = ((try? await environment.accounts.all(includeArchived: false)) ?? [])
             .sorted { $0.sortIndex < $1.sortIndex }
-        if selectedAccountID == nil || !accounts.contains(where: { $0.id == selectedAccountID }) {
-            selectedAccountID = accounts.count == 1 ? accounts.first?.id : nil
+        if let current = selectedAccountID, !accounts.contains(where: { $0.id == current }) {
+            selectedAccountID = nil
         }
     }
 
