@@ -34,25 +34,36 @@ echo "───── testler"
 mkdir -p "$BUILD_DIR"
 rm -rf "$ARCHIVE" "$EXPORT_DIR"
 
-# Bundle ID Apple Developer hesabında kayıtlı değilse imzalama düşer. Xcode kaydı
-# kendisi yapabilir, ama bu hesapta kalıcı bir App ID yaratmak demek — geri
-# alınması zor bir iş, sessizce yapılmamalı. Ayrı kapıya bağlandı:
+# Profil ya da sertifika üretilmesi gerekiyorsa (ilk arşiv) bu kapı açılır:
 #   SD_ALLOW_PROVISIONING=1 ./Scripts/archive.sh
+# Varsayılan kapalı: Apple hesabında sertifika ve profil yaratmak kalıcı bir iş,
+# arşiv betiğinin sessizce yapacağı şey değil.
 PROVISIONING_ARGS=()
 if [ "${SD_ALLOW_PROVISIONING:-0}" = "1" ]; then
   PROVISIONING_ARGS+=(-allowProvisioningUpdates)
-  echo "NOT · otomatik profil güncellemesi açık; gerekiyorsa App ID kaydedilecek"
+  echo "NOT · otomatik profil güncellemesi açık; gerekirse sertifika/profil üretilecek"
 fi
 
-echo "───── arşivleniyor"
+# Arşiv imzasız üretiliyor, dağıtım imzası export adımında biniyor.
+#
+# Neden: otomatik imzalamada arşiv adımı "iOS App Development" profili istiyor, o
+# profil de takımda kayıtlı en az bir cihaz olmasını şart koşuyor —
+# "Your team has no devices from which to generate a provisioning profile".
+# Mağazaya giden yapının geliştirme profiliyle işi yok; export zaten
+# app-store-connect yöntemiyle dağıtım profilini üretip ikiliyi yeniden imzalıyor
+# (üretilen .ipa'da get-task-allow = false, profil "iOS Team Store"). Böylece
+# cihaz kaydı gerekmeden mağaza yapısı üretilebiliyor.
+echo "───── arşivleniyor (imzasız)"
 xcodebuild archive \
   -project SessizDefter.xcodeproj \
   -scheme SessizDefter \
   -configuration Release \
   -destination 'generic/platform=iOS' \
   -archivePath "$ARCHIVE" \
-  ${PROVISIONING_ARGS[@]+"${PROVISIONING_ARGS[@]}"} \
-  DEVELOPMENT_TEAM="$TEAM_ID"
+  DEVELOPMENT_TEAM="$TEAM_ID" \
+  CODE_SIGNING_ALLOWED=NO \
+  CODE_SIGNING_REQUIRED=NO \
+  CODE_SIGN_IDENTITY=""
 
 cat > "$EXPORT_OPTIONS" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -79,11 +90,12 @@ cat > "$EXPORT_OPTIONS" <<PLIST
 </plist>
 PLIST
 
-echo "───── dışa aktarılıyor"
+echo "───── dışa aktarılıyor (dağıtım imzası burada biniyor)"
 xcodebuild -exportArchive \
   -archivePath "$ARCHIVE" \
   -exportPath "$EXPORT_DIR" \
-  -exportOptionsPlist "$EXPORT_OPTIONS"
+  -exportOptionsPlist "$EXPORT_OPTIONS" \
+  ${PROVISIONING_ARGS[@]+"${PROVISIONING_ARGS[@]}"}
 
 echo
 echo "OK · arşiv:  $ARCHIVE"

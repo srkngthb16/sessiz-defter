@@ -168,12 +168,16 @@ ise ayrı mekanizma (required reason API), formda karşılığı yok.
 altı kare `build/screenshots/appstore` altında (gitignore'lu, betikle yeniden
 üretilir).
 
-**Arşiv denemesi:** dört kapı da geçti (çevrimdışılık, gizlilik manifesti, ikon,
-247 test) — arşiv imzalamada düştü, çünkü bundle ID hesapta kayıtlı değil:
+**Arşiv üretildi.** Dört kapı geçti (çevrimdışılık, gizlilik manifesti, ikon,
+247 test), `build/export/SessizDefter.ipa` çıktı: 1.0.0 (2), profil
+`iOS Team Store Provisioning Profile`, `get-task-allow = false` — gerçek mağaza
+imzası.
 
-```
-error: No profiles for 'com.sessizdefter.app' were found
-```
+Yol üç hatadan sonra bulundu (ayrıntısı `docs/APPSTORE.md` bölüm 1.1): Xcode'a
+Apple hesabı eklendi, App ID kaydedildi, ve arşiv artık **imzasız** üretiliyor.
+Otomatik imzalama arşiv adımında geliştirme profili istiyor, o profil de takımda
+kayıtlı cihaz şart koşuyor; dağıtım imzası zaten export adımında bindiği için
+cihaz kaydına hiç gerek kalmadı.
 
 **Simülatörde yakalanan iki şey:** `Toggle` anlık dokunuşu yutuyor (~150 ms
 basılı kalmalı), bildirim izni istemi Bütçe sekmesinde çıkıp kareyi kaplıyor.
@@ -192,14 +196,9 @@ TestFlight iç testi yapılır. Adım listesi `docs/APPSTORE.md` bölüm 14'te.
 ## Kullanıcıdan bekleyenler
 
 1. ~~Team ID~~ — geldi, yazıldı, doğrulandı.
-2. **Xcode'da Apple hesabı yok — arşivi bloklayan ilk şey.**
-   `SD_ALLOW_PROVISIONING=1` ile denendi, çıkan hata:
-   `No Accounts: Add a new account in Accounts settings.`
-   Xcode > Settings > Accounts > + > Apple ID ile hesap eklenmeli.
-3. **Bundle ID kaydı.** Hesap eklendikten sonra ya developer.apple.com >
-   Identifiers'tan `com.sessizdefter.app` elle kaydedilir, ya da
-   `SD_ALLOW_PROVISIONING=1 ./Scripts/archive.sh` ile Xcode kaydeder. İkincisi
-   hesapta kalıcı App ID yaratır, o yüzden varsayılan değil.
+2. ~~Xcode'da Apple hesabı~~ — eklendi (2026-08-17).
+3. ~~Bundle ID kaydı~~ — `com.sessizdefter.app` Identifiers'ta kayıtlı,
+   capability işaretlenmedi. Arşiv ve `.ipa` üretildi.
 4. **Destek e-posta adresi** — `docs/SUPPORT.md` ve `docs/PRIVACY-POLICY.md`
    bölüm 11 boş bekliyor; App Store Connect'teki adresle aynı olmalı.
 5. **GitHub Pages'i aç** — Settings > Pages > main dalı, `/docs` klasörü.

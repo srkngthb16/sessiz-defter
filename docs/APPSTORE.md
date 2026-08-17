@@ -24,37 +24,39 @@ değiştirirsen betiği koştur.
 | Platform | iOS 17.0+, yalnız iPhone | `IPHONEOS_DEPLOYMENT_TARGET`, `TARGETED_DEVICE_FAMILY = 1` |
 | Yönlendirme | Yalnız dikey | `UISupportedInterfaceOrientations` |
 
-**Not:** Bundle ID App Store Connect'te bir kez kaydedilir ve bir daha
-değiştirilemez. Kayıt yapılmadan arşiv **üretilemiyor** — 2026-08-17 denemesinde
-dört kapı geçti, imzalama düştü:
+**Bundle ID kaydedildi** (2026-08-17): developer.apple.com > Identifiers,
+Explicit App ID `com.sessizdefter.app`, hiçbir capability işaretlenmedi —
+uygulamanın push, App Groups, iCloud ya da Sign in with Apple ihtiyacı yok.
 
-```
-error: No profiles for 'com.sessizdefter.app' were found: Xcode couldn't find any
-iOS App Development provisioning profiles matching 'com.sessizdefter.app'.
-```
+### 1.1 Arşiv nasıl imzalanıyor
 
-`-allowProvisioningUpdates` ile tekrar denendi, bu kez asıl sebep çıktı:
+`./Scripts/archive.sh` dört kapıdan geçtikten sonra arşivi **imzasız** üretiyor;
+dağıtım imzası export adımında biniyor. Üç deneme sonunda bu yola girildi:
 
-```
-error: No Accounts: Add a new account in Accounts settings.
-```
+| Deneme | Hata |
+|---|---|
+| Düz `archive.sh` | `No profiles for 'com.sessizdefter.app' were found` |
+| `-allowProvisioningUpdates` | `No Accounts: Add a new account in Accounts settings.` — Xcode'da hesap yoktu |
+| Hesap eklendikten sonra | `Your team has no devices from which to generate a provisioning profile` |
 
-**Önce Xcode'a hesap eklenmeli:** Xcode > Settings > Accounts > + > Apple ID.
-Hesap yokken otomatik imzalama ne profil indirebiliyor ne App ID kaydedebiliyor;
-bundle ID kaydı ikinci sırada gelen sorun.
+Üçüncünün nedeni: otomatik imzalamada arşiv adımı "iOS App Development" profili
+istiyor, o profil de takımda kayıtlı en az bir cihaz olmasını şart koşuyor.
+Mağazaya giden yapının geliştirme profiliyle işi yok — export zaten
+`app-store-connect` yöntemiyle dağıtım profilini üretip ikiliyi yeniden
+imzalıyor. Arşivi imzasız üretmek cihaz kaydı ihtiyacını tümden kaldırdı.
 
-Hesap eklendikten sonra iki yol:
+**Sonuç (2026-08-17):** `build/export/SessizDefter.ipa`, sürüm 1.0.0 (2), profil
+`iOS Team Store Provisioning Profile: com.sessizdefter.app`,
+`get-task-allow = false`.
 
-1. **developer.apple.com > Identifiers**'tan App ID elle kaydedilir, sonra
-   `./Scripts/archive.sh` normal koşar.
-2. Xcode kaydı kendisi yapar:
+İlk koşuda sertifika ya da profil üretilmesi gerekiyorsa:
 
 ```bash
 SD_ALLOW_PROVISIONING=1 ./Scripts/archive.sh
 ```
 
-İkinci yol hesapta kalıcı bir App ID yaratıyor; bayrak bu yüzden varsayılan
-değil, bilinçli açılan bir kapı.
+Bayrak varsayılan kapalı: Apple hesabında sertifika ve profil yaratmak kalıcı
+bir iş, arşiv betiğinin sessizce yapacağı şey değil.
 
 ---
 
