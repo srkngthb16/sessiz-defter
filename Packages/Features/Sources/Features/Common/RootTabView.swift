@@ -9,6 +9,7 @@ public struct RootTabView: View {
     @State private var selection: Tab = .summary
     @State private var isComposerPresented = false
     @State private var isImportPresented = false
+    @State private var isTourPresented = false
     /// Sheet'te yazılan işlem sekmelerdeki listeleri de tazelemeli; her kayıt bu
     /// sayacı artırır ve ekranların .task(id:) bağı yeniden çalışır.
     @State private var dataVersion = 0
@@ -67,6 +68,15 @@ public struct RootTabView: View {
         }
         .sheet(isPresented: $isImportPresented) {
             ImportFlowView(environment: environment) { dataVersion += 1 }
+        }
+        // Tur onboarding'den sonra, defter ekranı arkada dururken gösteriliyor:
+        // anlattığı düğmeler kapatılır kapatılmaz yerinde bulunuyor.
+        .fullScreenCover(isPresented: $isTourPresented) {
+            TourView { settings.hasSeenTour = true }
+        }
+        .onAppear { isTourPresented = !settings.hasSeenTour }
+        .onChange(of: settings.hasSeenTour) { _, seen in
+            if seen { isTourPresented = false }
         }
     }
 

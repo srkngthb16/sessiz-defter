@@ -80,3 +80,41 @@ struct DeleteConfirmationTests {
         }
     }
 }
+
+/// İlk kullanım turu. Onboarding'den ayrı bayrak: aynı bayrağa bağlanırsa mevcut
+/// kullanıcılar güncellemede turu hiç görmezdi.
+@Suite("İlk kullanım turu")
+@MainActor
+struct TourTests {
+    private func isolatedDefaults(_ name: String) -> UserDefaults {
+        let suite = "tour-tests-\(name)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defaults.removePersistentDomain(forName: suite)
+        return defaults
+    }
+
+    @Test("Tur bayrağı varsayılan kapalı, işaretlenince kalıcı")
+    func bayrak() {
+        let defaults = isolatedDefaults(#function)
+        let settings = AppSettings(defaults: defaults)
+        #expect(settings.hasSeenTour == false)
+
+        settings.hasSeenTour = true
+        #expect(AppSettings(defaults: defaults).hasSeenTour)
+    }
+
+    @Test("Onboarding bayrağı turu kapatmaz")
+    func ayriBayrak() {
+        let defaults = isolatedDefaults(#function)
+        let settings = AppSettings(defaults: defaults)
+        settings.hasCompletedOnboarding = true
+        #expect(settings.hasSeenTour == false)
+    }
+
+    @Test("Tur dört adım, hepsinde başlık ve açıklama var")
+    func adimlar() {
+        #expect(TourView.steps.count == 4)
+        #expect(TourView.steps.allSatisfy { !$0.title.isEmpty && !$0.message.isEmpty })
+        #expect(Set(TourView.steps.map(\.symbol)).count == 4)
+    }
+}

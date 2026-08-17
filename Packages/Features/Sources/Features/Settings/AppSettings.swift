@@ -41,6 +41,7 @@ public final class AppSettings {
         static let autoLockDelay = "lock.autoLockDelay"
         static let appearance = "appearance"
         static let onboardingCompleted = "onboarding.completed"
+        static let tourSeen = "tour.seen"
     }
 
     private let defaults: UserDefaults
@@ -56,6 +57,7 @@ public final class AppSettings {
         appearance = Appearance(rawValue: defaults.string(forKey: Key.appearance) ?? "")
             ?? .system
         hasCompletedOnboarding = defaults.bool(forKey: Key.onboardingCompleted)
+        hasSeenTour = defaults.bool(forKey: Key.tourSeen)
     }
 
     public var isLockEnabled: Bool {
@@ -78,6 +80,13 @@ public final class AppSettings {
 
     public var hasCompletedOnboarding: Bool {
         didSet { defaults.set(hasCompletedOnboarding, forKey: Key.onboardingCompleted) }
+    }
+
+    /// İlk kullanım turu bir kez gösterilir. Onboarding'den ayrı bir bayrak:
+    /// onboarding neyin olmadığını anlatıyor, tur ekranın neresine dokunulacağını.
+    /// Aynı bayrağa bağlanırsa mevcut kullanıcılar güncellemede turu hiç görmezdi.
+    public var hasSeenTour: Bool {
+        didSet { defaults.set(hasSeenTour, forKey: Key.tourSeen) }
     }
 
     public var colorScheme: ColorSchemePreference {
