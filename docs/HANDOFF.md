@@ -192,18 +192,22 @@ TestFlight iç testi yapılır. Adım listesi `docs/APPSTORE.md` bölüm 14'te.
 ## Kullanıcıdan bekleyenler
 
 1. ~~Team ID~~ — geldi, yazıldı, doğrulandı.
-2. **Bundle ID kaydı — arşivi bloklayan tek şey.** İki yol:
-   developer.apple.com > Identifiers'tan `com.sessizdefter.app` elle kaydedilir,
-   ya da `SD_ALLOW_PROVISIONING=1 ./Scripts/archive.sh` ile Xcode kaydeder.
-   İkincisi hesapta kalıcı App ID yaratır, o yüzden varsayılan değil.
-3. **Destek e-posta adresi** — `docs/SUPPORT.md` ve `docs/PRIVACY-POLICY.md`
+2. **Xcode'da Apple hesabı yok — arşivi bloklayan ilk şey.**
+   `SD_ALLOW_PROVISIONING=1` ile denendi, çıkan hata:
+   `No Accounts: Add a new account in Accounts settings.`
+   Xcode > Settings > Accounts > + > Apple ID ile hesap eklenmeli.
+3. **Bundle ID kaydı.** Hesap eklendikten sonra ya developer.apple.com >
+   Identifiers'tan `com.sessizdefter.app` elle kaydedilir, ya da
+   `SD_ALLOW_PROVISIONING=1 ./Scripts/archive.sh` ile Xcode kaydeder. İkincisi
+   hesapta kalıcı App ID yaratır, o yüzden varsayılan değil.
+4. **Destek e-posta adresi** — `docs/SUPPORT.md` ve `docs/PRIVACY-POLICY.md`
    bölüm 11 boş bekliyor; App Store Connect'teki adresle aynı olmalı.
-4. **GitHub Pages'i aç** — Settings > Pages > main dalı, `/docs` klasörü.
+5. **GitHub Pages'i aç** — Settings > Pages > main dalı, `/docs` klasörü.
    Sonra iki URL App Store Connect'e girilir.
-5. **İhracat beyanı onayı** — `docs/EXPORT-COMPLIANCE.md` bölüm 4.
-6. **Gerçek ekstre** — Ziraat/Garanti/İş Bankası, anonimleştirilmiş. Kimlik bilgisi
+6. **İhracat beyanı onayı** — `docs/EXPORT-COMPLIANCE.md` bölüm 4.
+7. **Gerçek ekstre** — Ziraat/Garanti/İş Bankası, anonimleştirilmiş. Kimlik bilgisi
    çıkarılmış ama tutar, tarih ve işyeri adları korunmuş olmalı. Fixture'lar sentetik.
-7. **Son dört commit itilmedi** — `git push` sende.
+8. **Son commit'ler itilmedi** — `git push` sende.
 
 ## Çalışma kuralları
 

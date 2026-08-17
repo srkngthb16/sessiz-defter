@@ -33,7 +33,17 @@ error: No profiles for 'com.sessizdefter.app' were found: Xcode couldn't find an
 iOS App Development provisioning profiles matching 'com.sessizdefter.app'.
 ```
 
-İki yol var:
+`-allowProvisioningUpdates` ile tekrar denendi, bu kez asıl sebep çıktı:
+
+```
+error: No Accounts: Add a new account in Accounts settings.
+```
+
+**Önce Xcode'a hesap eklenmeli:** Xcode > Settings > Accounts > + > Apple ID.
+Hesap yokken otomatik imzalama ne profil indirebiliyor ne App ID kaydedebiliyor;
+bundle ID kaydı ikinci sırada gelen sorun.
+
+Hesap eklendikten sonra iki yol:
 
 1. **developer.apple.com > Identifiers**'tan App ID elle kaydedilir, sonra
    `./Scripts/archive.sh` normal koşar.
