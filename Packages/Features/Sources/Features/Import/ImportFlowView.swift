@@ -9,6 +9,8 @@ public struct ImportFlowView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var model: ImportModel
     @State private var isFilePickerPresented = false
+    /// Çoklu seçimde bekleyen ekstreler. Biri bitince sıradaki başlatılır.
+    @State private var queue: [URL] = []
     @State private var selection: Set<UUID> = []
     @State private var isBulkCategoryPresented = false
 
@@ -29,9 +31,14 @@ public struct ImportFlowView: View {
                 .toolbar { toolbar }
                 .task { await model.loadAccounts() }
                 .fileImporter(isPresented: $isFilePickerPresented,
-                              allowedContentTypes: [.pdf]) { result in
-                    guard case .success(let url) = result else { return }
-                    Task { await startImport(url) }
+                              allowedContentTypes: [.pdf],
+                              allowsMultipleSelection: true) { result in
+                    guard case .success(let urls) = result, let first = urls.first else { return }
+                    // Ekstreler sırayla işleniyor: her biri kendi onay adımından
+                    // geçmeli, çünkü kullanıcı kategorileri satır satır
+                    // düzeltiyor. Hepsini birden yazmak o denetimi elinden alırdı.
+                    queue = Array(urls.dropFirst())
+                    Task { await startImport(first) }
                 }
                 .sheet(isPresented: $isBulkCategoryPresented) {
                     BulkCategorySheet(model: model, selection: selection) {
@@ -269,9 +276,30 @@ public struct ImportFlowView: View {
                         }
                     }
                 }
-                PrimaryButton("Özete dön") {
-                    onFinished()
-                    dismiss()
+                // Sıradaki ekstre ya da yeni bir seçim: kullanıcı sayfayı kapatıp
+                // baştan açmak zorunda kalmasın. Yazılanlar her ekstre bitiminde
+                // sekmelere bildiriliyor, yoksa listeler eski hâlde kalıyordu.
+                if let next = queue.first {
+                    PrimaryButton("Sıradaki ekstre (\(queue.count))") {
+                        onFinished()
+                        queue.removeFirst()
+                        model.cancel()
+                        Task { await startImport(next) }
+                    }
+                    SecondaryButton("Özete dön") {
+                        onFinished()
+                        dismiss()
+                    }
+                } else {
+                    PrimaryButton("Özete dön") {
+                        onFinished()
+                        dismiss()
+                    }
+                    SecondaryButton("Başka ekstre yükle", systemImage: "doc.badge.plus") {
+                        onFinished()
+                        model.cancel()
+                        isFilePickerPresented = true
+                    }
                 }
             }
             .padding(Spacing.l)

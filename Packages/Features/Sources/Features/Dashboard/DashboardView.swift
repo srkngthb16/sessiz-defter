@@ -41,6 +41,16 @@ public struct DashboardView: View {
                             calendar: environment.calendar)
                 .navigationTitle("Özet")
                 .toolbar {
+                    // İçe aktarma düğmesi boş durumla birlikte kaybolmamalı: ilk
+                    // ekstreden sonra B1 ekranı gidiyor ve geriye yalnız manuel
+                    // giriş kalıyordu, ikinci ekstre hiç yüklenemiyordu.
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            onImport()
+                        } label: {
+                            Label("Ekstre içe aktar", systemImage: "doc.badge.plus")
+                        }
+                    }
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             onOpenSettings()
