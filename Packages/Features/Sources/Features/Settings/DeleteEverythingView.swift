@@ -15,8 +15,19 @@ public struct DeleteEverythingView: View {
 
     static let requiredWord = "SİL"
 
+    /// Onay metni Türkçe harf katlamasıyla karşılaştırılıyor.
+    ///
+    /// Klavye "sil" yazınca otomatik büyük harf kuralı cihaza göre "SIL" (noktasız)
+    /// ya da "SİL" üretiyor; tam eşleşme arandığında buton hiç açılmıyor ve
+    /// kullanıcı doğru sözcüğü yazsa bile veriyi silemiyordu. Katlama sonrası
+    /// dördü de "SIL" oluyor.
+    static func matchesConfirmation(_ text: String) -> Bool {
+        text.trimmingCharacters(in: .whitespacesAndNewlines).trFoldedUpper
+            == requiredWord.trFoldedUpper
+    }
+
     private var canDelete: Bool {
-        confirmation.trimmingCharacters(in: .whitespaces) == Self.requiredWord && !isDeleting
+        Self.matchesConfirmation(confirmation) && !isDeleting
     }
 
     public var body: some View {

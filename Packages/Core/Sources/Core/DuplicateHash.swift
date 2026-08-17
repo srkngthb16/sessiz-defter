@@ -29,12 +29,7 @@ public enum DuplicateHash {
     /// "Migros Ataşehir" olarak geçer. Katlanmazsa tr_TR büyük harf kuralı ikisini
     /// "MIGROS" ve "MİGROS" diye ayırır ve mükerrer yakalanmaz. Bu katlama yalnızca
     /// hash içindir; görüntülenen açıklama hiç değişmez.
-    static let asciiFolding: [Character: Character] = [
-        "İ": "I", "I": "I", "ı": "I", "i": "I",
-        "Ş": "S", "ş": "S", "Ğ": "G", "ğ": "G",
-        "Ç": "C", "ç": "C", "Ö": "O", "ö": "O", "Ü": "U", "ü": "U",
-        "Â": "A", "â": "A", "Î": "I", "î": "I", "Û": "U", "û": "U"
-    ]
+    static let asciiFolding = TurkishLocale.asciiFolding
 
     static func normalizedDetail(_ detail: String) -> String {
         let folded = String(detail.map { asciiFolding[$0] ?? $0 }).trUpper

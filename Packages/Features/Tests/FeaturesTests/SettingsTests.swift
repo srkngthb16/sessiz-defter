@@ -60,3 +60,23 @@ struct StubAppLock: AppLocking {
         succeeds ? .success(()) : .failure(.failed)
     }
 }
+
+@Suite("Tüm verileri sil onayı")
+struct DeleteConfirmationTests {
+    @Test("Klavyenin ürettiği her yazım kabul edilir")
+    func kabul() {
+        // Cihaza göre "sil" otomatik büyük harfte "SIL" ya da "SİL" oluyor;
+        // kullanıcı hangisinin üretileceğine karar veremiyor.
+        for yazim in ["SİL", "SIL", "sil", "sıl", "Sil", "  SIL  "] {
+            #expect(DeleteEverythingView.matchesConfirmation(yazim), "\(yazim) reddedildi")
+        }
+    }
+
+    @Test("Başka sözcük kabul edilmez")
+    func ret() {
+        for yazim in ["", "S", "SILME", "SİLİN", "delete", "SIL SIL"] {
+            #expect(DeleteEverythingView.matchesConfirmation(yazim) == false,
+                    "\(yazim) kabul edildi")
+        }
+    }
+}
