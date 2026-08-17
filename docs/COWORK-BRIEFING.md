@@ -87,6 +87,7 @@ zorunluydu.
 | 10.1 | Erişilebilirlik: tutar okunuşu, ekran etiketleri, grafik özeti, XXXL yerleşim | `b4db490` |
 | 10.2 | Performans: 10.000 işlemlik ölçüm, store tarafı arama, sayfalama, toplam önbelleği | `816fb5b` |
 | 10.3 | Dayanıklılık: iki aşamalı içe aktarma, açılışta onarım, yedek uçtan uca | `7441d53` |
+| 11 | App Store Connect paketi: mağaza metinleri, gizlilik politikası, destek sayfası, ekran görüntüleri, arşiv | — |
 
 **Ekranlar (tasarım dosyasındaki kodlarla):** A1–A3 onboarding, A4 kilit,
 B1 boş durum, B2 iskelet, C1–C8 içe aktarma ve hata dalları, D1 dashboard,
@@ -235,6 +236,23 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
   tamamlanmış sayılıyor, yoksa geçmiş içe aktarmalar yarım görünürdü.
 - Ayrıntı ve sınanmayanlar: `docs/RESILIENCE.md`.
 
+**App Store paketi (Faz 11):**
+- Uygulama **ücretsiz** çıkıyor, sonraki sürümlerde uygulama içi satın alma
+  düşünülüyor. **Reklam eklenmeyecek:** reklam SDK'sı ağ katmanı ve üçüncü parti
+  bağımlılık kısıtlarını kırar, "Data Not Collected" etiketini ve mağaza metnini
+  yalanlar. Ayrıntı `docs/APPSTORE.md` bölüm 12.1.
+- App Privacy cevabı **Data Not Collected**; gerekçe ve manifestle satır satır
+  eşleme `docs/APPSTORE.md` bölüm 8. Geri bildirim ve yedek akışları "toplama"
+  sayılmıyor çünkü veri geliştiricinin erişebileceği hiçbir yere gitmiyor.
+- App Review'a eklenecek örnek ekstre **kurgusal bir bankaya** ait
+  (`Scripts/make-sample-statement.swift`). Gerçek bir bankanın adına düzenlenmiş
+  sahte finansal belge üretilmedi; bedeli, reviewer'ın otomatik tanıma yerine
+  elle sütun eşleme akışını görmesi.
+- Ekran görüntülerinde **kısa başlık bandı** var, cihaz çerçevesi yok; veri
+  örnek defterden geliyor, gerçek kayıt kullanılmıyor (`docs/SCREENSHOTS.md`).
+- Ekran görüntüleri ve arşiv `build/` altında, gitignore'lu: ikili çıktı depoya
+  girmiyor, üretimi betiklerden tekrarlanıyor.
+
 **Ürün kararları:**
 - Varsayılan kategoriler: 13 gider (tasarımdaki 12 + "Yeme-içme") + 3 gelir
   (Maaş, Serbest çalışma, Diğer gelir). "Yeme-içme" renk yuvasını Bağış ile paylaşır.
@@ -252,9 +270,12 @@ Cowork bunları değiştirmeyi önerirse gerekçeyi bilerek önermeli.
    Dosya gitignore'lu, repoya girmez. `Scripts/archive.sh` TEAM_ID kapısını geçer;
    arşiv henüz üretilmedi.
 2. **Bundle ID kaydı yapılmadı** — `com.sessizdefter.app` Apple'da kaydedilecek.
-3. **App Store metadata yok** — Faz 11'de üretilecek.
-4. **Destek URL'i ve gizlilik politikası URL'i yok.** App Store Connect'te zorunlu alanlar;
-   yayınlanmış bir sayfa gerekiyor (GitHub Pages yeterli).
+3. ~~**App Store metadata yok.**~~ Yazıldı (Faz 11): `docs/APPSTORE.md`,
+   `docs/PRIVACY-POLICY.md`, `docs/SUPPORT.md`, `docs/SCREENSHOTS.md`.
+   Karakter sınırları `Scripts/verify-appstore-limits.sh` ile denetleniyor.
+4. **Destek URL'i ve gizlilik politikası URL'i yayımlanmadı.** Metinler hazır;
+   GitHub Pages `main` dalının `/docs` klasöründen açılacak (kullanıcı kararı,
+   2026-08-17). Sayfa yayına girmeden App Store Connect kaydı tamamlanamaz.
 5. **İhracat beyanı onay bekliyor.** `docs/EXPORT-COMPLIANCE.md` analizi yazıldı,
    `ITSAppUsesNonExemptEncryption = false` bırakıldı, kullanıcı onayı alınmadı.
 6. ~~**Guideline 2.1 riski:**~~ B1 illüstrasyonu çizildi (Faz 9.3,
