@@ -1,10 +1,10 @@
-# Devir Notu — 2026-08-16
+# Devir Notu — 2026-08-17
 
 Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 ## Durum
 
-- **35 commit**, tamamı `origin/main`'de.
+- **39 commit**; son dördü (`6452a5d`…) henüz `origin/main`'e itilmedi.
 - **247 test geçiyor.** `./Scripts/test-all.sh`
 - `Scripts/verify-offline.sh` yeşil, pre-commit hook'una bağlı.
 - Uygulama simülatörde çalışıyor; Release yapılandırmasında da derlenip çalıştırıldı.
@@ -133,21 +133,77 @@ Türkçe harf katlamasıyla karşılaştırılıyor (`String.trFoldedUpper`).
 
 **Kalan elle deneme:** düşük depolama (cihazda disk doluyken yedek/içe aktarma).
 
-## Sıradaki iş: Faz 11
+## Faz 11'de ne yapıldı
 
-**11 App Store Connect paketi** — `docs/APPSTORE.md`, `docs/PRIVACY-POLICY.md`,
-ekran görüntüsü planı ve üretimi.
+Dört yeni belge, üç yeni betik, bir test yalıtım düzeltmesi.
+
+**Belgeler**
+- `docs/APPSTORE.md` — App Store Connect'in her alanı: ad, alt başlık, tanıtım
+  metni, anahtar kelimeler, açıklama, "Yenilikler", kategori, yaş sınırı anketi,
+  App Privacy cevapları, App Review notları, fiyat/kullanılabilirlik, yükleme
+  kontrol listesi. Her değerin yanında gerekçesi var.
+- `docs/PRIVACY-POLICY.md` — yayınlanabilir gizlilik politikası. "Veri
+  toplanmıyor" iddia olarak değil, kullanıcının kendi sınayabileceği üç yolla
+  yazıldı (uçak modu, uygulama içi mahremiyet raporu, açık kaynak + denetim
+  betiği).
+- `docs/SUPPORT.md` — App Store Connect'in zorunlu tuttuğu destek sayfası.
+  E-posta adresi **boş**, kullanıcı dolduracak.
+- `docs/SCREENSHOTS.md` — plan, boyutlar, hangi ekran neden seçildi, üretim
+  adımları ve simülatörde çıkan üç tuzak.
+
+**Betikler**
+- `Scripts/verify-appstore-limits.sh` — mağaza metinlerinin karakter sınırları.
+  Hepsi sınır altında: ad 13/30, alt başlık 26/30, tanıtım 149/170, anahtar
+  kelimeler 94/100, açıklama 2580/4000.
+- `Scripts/make-screenshots.swift` — ham çekime başlık bandı biner, 1320×2868
+  çıktı üretir; girdi ölçüsü yanlışsa durur.
+- `Scripts/make-sample-statement.swift` — App Review'a eklenecek örnek ekstre
+  PDF'i (kurgusal banka, "ÖRNEK BELGE" damgalı).
+
+**App Privacy ↔ manifest eşlemesi** `docs/APPSTORE.md` bölüm 8.1'de satır satır:
+dört manifest anahtarının üçü forma karşılık geliyor, `NSPrivacyAccessedAPITypes`
+ise ayrı mekanizma (required reason API), formda karşılığı yok.
+
+**Ekran görüntüleri** iPhone 17 Pro Max simülatöründe, örnek defterle çekildi;
+altı kare `build/screenshots/appstore` altında (gitignore'lu, betikle yeniden
+üretilir).
+
+**Arşiv denemesi:** dört kapı da geçti (çevrimdışılık, gizlilik manifesti, ikon,
+247 test) — arşiv imzalamada düştü, çünkü bundle ID hesapta kayıtlı değil:
+
+```
+error: No profiles for 'com.sessizdefter.app' were found
+```
+
+**Simülatörde yakalanan iki şey:** `Toggle` anlık dokunuşu yutuyor (~150 ms
+basılı kalmalı), bildirim izni istemi Bütçe sekmesinde çıkıp kareyi kaplıyor.
+İkisi de `docs/SCREENSHOTS.md` bölüm 5.3'te.
+
+**Test yalıtımı düzeltildi:** hata sayacı testleri tam koşuda düşüyor, tek
+başına geçiyordu. `UserDefaults(suiteName:)` arama listesine uygulamanın kendi
+alanını da katıyor; ayrı süit vermek yalıtım sağlamıyordu. Sayaç anahtarına
+isteğe bağlı önek eklendi (üretimde boş).
+
+## Sıradaki iş: Faz 12 — yayın
+
+App Store Connect kaydı açılır, metinler girilir, arşiv üretilip yüklenir,
+TestFlight iç testi yapılır. Adım listesi `docs/APPSTORE.md` bölüm 14'te.
 
 ## Kullanıcıdan bekleyenler
 
 1. ~~Team ID~~ — geldi, yazıldı, doğrulandı.
-2. **Bundle ID doğrulaması** — `com.sessizdefter.app` Apple'da alınmamış mı,
-   App Store Connect'te kaydedilecek.
-3. **Gerçek ekstre** — Ziraat/Garanti/İş Bankası, anonimleştirilmiş. Kimlik bilgisi
+2. **Bundle ID kaydı — arşivi bloklayan tek şey.** İki yol:
+   developer.apple.com > Identifiers'tan `com.sessizdefter.app` elle kaydedilir,
+   ya da `SD_ALLOW_PROVISIONING=1 ./Scripts/archive.sh` ile Xcode kaydeder.
+   İkincisi hesapta kalıcı App ID yaratır, o yüzden varsayılan değil.
+3. **Destek e-posta adresi** — `docs/SUPPORT.md` ve `docs/PRIVACY-POLICY.md`
+   bölüm 11 boş bekliyor; App Store Connect'teki adresle aynı olmalı.
+4. **GitHub Pages'i aç** — Settings > Pages > main dalı, `/docs` klasörü.
+   Sonra iki URL App Store Connect'e girilir.
+5. **İhracat beyanı onayı** — `docs/EXPORT-COMPLIANCE.md` bölüm 4.
+6. **Gerçek ekstre** — Ziraat/Garanti/İş Bankası, anonimleştirilmiş. Kimlik bilgisi
    çıkarılmış ama tutar, tarih ve işyeri adları korunmuş olmalı. Fixture'lar sentetik.
-4. **İhracat beyanı onayı** — `docs/EXPORT-COMPLIANCE.md` bölüm 4.
-5. **Destek URL'i ve gizlilik politikası URL'i** — App Store Connect'te zorunlu,
-   yayınlanmış sayfa gerekiyor (GitHub Pages yeterli).
+7. **Son dört commit itilmedi** — `git push` sende.
 
 ## Çalışma kuralları
 
