@@ -279,3 +279,36 @@ struct AccountHintTests {
         #expect(ImportPipeline.accountKind(forFormat: "ziraat.vadesiz.v1") == .checking)
     }
 }
+
+/// Cihaz testinde çıkan hata: ekstre 2.529,15 TL borç yazarken uygulama fazladan
+/// 34.760,00 TL gider gösterdi. Kaynağı sayfa altbilgisindeki posta koduydu —
+/// tarihli satırda tutar bulunamayınca ayrıştırıcı aşağı bakmayı sürdürüyor,
+/// "No:42/1 34760 Ümraniye/İstanbul" satırında bölü işaretli alanı taksit sanıp
+/// atıyor ve geriye kalan posta kodunu tutar olarak okuyordu.
+@Suite("Kart ekstresi tutar güvenliği")
+struct CardAmountSafetyTests {
+    @Test("Sayfa altbilgisi işlem sanılmaz")
+    func altbilgi() throws {
+        let text = try Fixture.text("halkbank-paraf-2026-08")
+        let result = HalkbankParafParser().parse(text, calendar: .gregorianIstanbul)
+
+        #expect(result.rows.allSatisfy { $0.amount.minorUnits != 3_476_000 })
+        #expect(result.rows.allSatisfy { !$0.detail.contains("Ümraniye") })
+        // Ondalığı kaybolmuş tutar ("400 00") uydurulmaz, atlanır ve rapora düşer.
+        #expect(result.unparsed.contains { $0.text.contains("Hesaptan Ödeme") })
+    }
+
+    @Test("Kuruşsuz sayı tutar sayılmaz")
+    func kurussuzSayi() {
+        // Posta kodu, işlem numarası, şube kodu: hepsi kuruşsuz.
+        let text = """
+        İşlem Tarihi Açıklama TUTAR(TL)
+        HALK BANKASI
+        04/08/2026 ORNEK ISYERI 34760 0.00
+        05/08/2026 ORNEK ISYERI 120.50 0.00
+        """
+        let result = HalkbankParafParser().parse(text, calendar: .gregorianIstanbul)
+        #expect(result.rows.count == 1)
+        #expect(result.rows.first?.amount.minorUnits == 12_050)
+    }
+}

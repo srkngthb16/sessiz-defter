@@ -49,24 +49,42 @@ public struct HalkbankParafParser: StatementParsing {
                 continue
             }
 
+            // Devam satırı yalnız **bir sonraki** satır olabilir. Önceden tutar
+            // bulunana kadar aşağı bakılıyordu ve sayfa altbilgisi işlem sanılıyordu.
             guard let waiting = pending else { continue }
+            pending = nil
             if let row = row(date: waiting.date, fields: fields,
                              detailOverride: waiting.detail, lineNumber: waiting.lineNumber) {
                 result.rows.append(row)
-                pending = nil
+            } else {
+                result.unparsed.append(UnparsedRow(
+                    lineNumber: waiting.lineNumber, text: waiting.detail,
+                    reason: "Tutar alanı okunamadı"))
             }
         }
         return result
+    }
+
+    /// Kuruşu olan sayı. Kart ekstresinde tutarlar daima iki ondalık taşıyor;
+    /// bu şart olmadan ekstrenin dipnotundaki posta kodu ("34760 Ümraniye")
+    /// tutar sanılıp deftere 34.760,00 TL gider olarak yazılıyordu.
+    private func isMoney(_ token: String) -> Bool {
+        var text = token
+        if text.hasPrefix("+") || text.hasPrefix("-") { text.removeFirst() }
+        if text.hasSuffix("+") || text.hasSuffix("-") { text.removeLast() }
+        guard let separator = text.lastIndex(of: "."), text.distance(
+            from: text.index(after: separator), to: text.endIndex) == 2 else { return false }
+        return text.allSatisfy { $0.isNumber || $0 == "." || $0 == "," }
     }
 
     /// Son alan "kalan borç / taksit" sütunu; ondan önceki alan işlem tutarı.
     private func row(date: Date, fields: [String], detailOverride: String? = nil,
                      lineNumber: Int) -> ParsedRow? {
         var fields = fields
-        if let last = fields.last, last.contains("/") || AmountParser.parse(last) != nil {
+        if let last = fields.last, last.contains("/") || isMoney(last) {
             fields.removeLast()
         }
-        guard let amountToken = fields.last,
+        guard let amountToken = fields.last, isMoney(amountToken),
               let parsed = AmountParser.parse(amountToken),
               parsed.amount.minorUnits > 0 else { return nil }
         fields.removeLast()
