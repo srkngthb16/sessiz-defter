@@ -1,11 +1,13 @@
-# Devir Notu — 2026-08-17
+# Devir Notu — 2026-08-18
 
 Bu dosya işi kaldığı yerden sürdürmek için yazıldı.
 
 ## Durum
 
-- **39 commit**; son dördü (`6452a5d`…) henüz `origin/main`'e itilmedi.
-- **247 test geçiyor.** `./Scripts/test-all.sh`
+- **50 commit**; hiçbiri `origin/main`'e itilmedi (`git push` bekliyor).
+- **254 test geçiyor.** `./Scripts/test-all.sh`
+- Son üretilen arşiv: **1.0.0 (7)**. Build 8 henüz üretilmedi; son iki düzeltme
+  (posta kodu hatası, toplam denetimi) build 7'de **yok**.
 - `Scripts/verify-offline.sh` yeşil, pre-commit hook'una bağlı.
 - Uygulama simülatörde çalışıyor; Release yapılandırmasında da derlenip çalıştırıldı.
 - Sürüm 1.0.0, build 2.
@@ -221,3 +223,87 @@ Ayrıntısı `docs/COWORK-BRIEFING.md` bölüm 1, 5 ve 7'de. Özet:
   Commit gövdesi "ne" değil "neden" yazar. Devir notu ayrı `docs:` commit'i.
 - Değişiklikler simülatörde de doğrulanır — yedi gerçek hata yalnızca orada yakalandı.
 - Her fazın sonunda dur: ne yapıldı, hangi testler geçti, kullanıcıdan ne gerekiyor.
+
+
+---
+
+# Faz 12–16 (2026-08-17 / 18)
+
+## Faz 12 — banka bazlı takip
+
+- Ekstredeki banka adı ve kart/hesap numarasının **son dört hanesi** okunuyor
+  (`ImportPipeline/Parsing/AccountHint.swift`), hesap otomatik eşleşiyor,
+  eşleşme yoksa açılıyor (`ImportModel.resolveAccountID`).
+- Eşleştirme ölçütü son dört hane; aynı bankada iki kart ayrı hesap olmalı.
+- Raporlarda "Hesaplara göre" kartı: hesap bazlı gelir, gider, net, transfer
+  sayısı (`ReportBuilder.accountTotals`).
+- Hesap seçici varsayılanı "Otomatik". **Önemli hata düzeltildi:** tek hesap
+  varsa o seçiliyordu, yeni kurulumda tek hesap "Nakit" olduğu için bütün banka
+  ekstreleri nakde yazılıyordu.
+
+## Faz 13 — ilk kullanım turu
+
+`Features/Onboarding/TourView.swift`, dört adım, `AppSettings.hasSeenTour`
+bayrağıyla tek seferlik. Onboarding bayrağından ayrı.
+
+## Faz 14 — dil (yarım)
+
+- String Catalog **App hedefinde**: `App/Localizable.xcstrings`. SwiftUI metin
+  aramasını ana pakette yapıyor, bu yüzden 166 çağrı yerine dokunulmadı.
+- Dil seçimi `AppSettings.language` (system/turkish/english), `AppRootView`
+  içinde `.environment(\.locale, …)` ile uygulanıyor; yeniden başlatma yok.
+- String olarak taşınan başlıklar `LocalizedStringKey`'e sarıldı (bileşenler,
+  tur adımları).
+- **Çevrili olan:** onboarding, tur, sekme adları. **Kalan:** ~150 metin.
+- Kullanıcı kararları: kategori adları yazıldığı gibi kalacak (veritabanı
+  kaydı, çevrilmeyecek); mağaza metnine "yalnız Türk bankası ekstresi
+  destekleniyor" cümlesi girecek. Almanca eklenmeyecek.
+
+## Faz 15 — cihaz testinden çıkan düzeltmeler
+
+- Kategori kuralları cins adlarla genişletildi (MARKET, TOPLU TASIMA, KAHVE…);
+  gerçek ekstrelerde işyeri adları markadan çok cins adla geliyor. Kurallar
+  yalnız ilk açılışta tohumlanıyordu, artık eksikler mevcut deftere de yazılıyor
+  (`TransactionService.addMissingDefaultRules`).
+- İşyeri adı çıkarımı düzeltildi: tarih, IBAN, kart numarası ve banka alan
+  adları eleniyordu ("27", "9876549888661497qr" başlıkları).
+- İşlem satırındaki açıklama iki satırla sınırlı.
+- Manuel işlem ekranına "Yeni hesap ekle" düğmesi.
+
+## Faz 16 — ayrıştırma güvenliği ve genel okuyucu
+
+**Bitti:**
+- **Posta kodu hatası:** ekstre 2.529,15 TL yazarken uygulama 34.760,00 TL
+  fazla gider gösteriyordu. Kaynağı sayfa altbilgisi (`No:42/1 34760
+  Ümraniye/İstanbul`); devam satırı kuralı yalnız bir sonraki satırla sınırlandı
+  ve tutar sayılmak için kuruş şartı kondu (`AmountParser.isMoneyToken`).
+- **Toplam denetimi:** onay ekranında ekstrenin kendi yazdığı toplamlar
+  (`StatementTotals.declared`) okunan gider/gelirle yan yana. Otomatik reddetme
+  yok, gösterme var — hangi toplamın hangi satırlara karşılık geldiği bankadan
+  bankaya değişiyor.
+
+**Yarım (boru hattına bağlanmadı):**
+- `Pipeline/LayoutExtractor.swift` — PDFKit karakter konumlarından satır ve
+  sütun çıkarımı. Metin doğru çıkıyor (UTF-16 indeksleme ve boş konumlu glifler
+  düzeltildi), **satır gruplaması güvenilir değil**: bazı PDF'lerde farklı
+  satırların parçaları aynı satırda toplanıyor.
+- `Parsing/LayoutTableParser.swift` — tablodan işlem çıkarımı. Tutar ile bakiye
+  sütununu aritmetikle ayırıyor (bakiye farkı tutara eşitse doğru sütun), yön de
+  bakiye farkından geliyor.
+- **Sıradaki adım:** sözcük dikdörtgenlerini (minX, maxX, midY) gerçek
+  ekstrelerle dökmek ve dikey kümeleme eşiğini (`LayoutExtractor.lineTolerance`,
+  `columnGap`) kalibre etmek. Test dosyaları kullanıcının iCloud klasöründe.
+
+## Cihaz testinde çıkan, henüz çözülmemiş
+
+- QNB Finansbank, Vakıfbank, Yapı Kredi ekstreleri "format tanınmadı" veriyor.
+  Çözümü Faz 16'nın genel okuyucusu; banka banka parser yazmak ölçeklenmiyor ve
+  kullanıcıdan ekstre istemek mahremiyet vaadiyle çelişiyor.
+
+## Kullanıcıdan bekleyenler (yayını bloklayan)
+
+1. Destek e-posta adresi — `docs/SUPPORT.md` ve `docs/PRIVACY-POLICY.md` bölüm 11.
+2. GitHub Pages (Settings > Pages > main + `/docs`), iki URL App Store Connect'te zorunlu.
+3. İhracat beyanı onayı — `docs/EXPORT-COMPLIANCE.md` bölüm 4.
+4. App Store Connect: App Privacy formu, yaş sınırı anketi, ekran görüntüsü yükleme.
+5. `git push` — 50 commit yerelde.
