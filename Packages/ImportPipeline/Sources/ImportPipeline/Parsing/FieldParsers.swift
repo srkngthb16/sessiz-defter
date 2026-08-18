@@ -63,6 +63,24 @@ public enum AmountParser {
         return (Money(minorUnits: minorUnits), isNegative)
     }
 
+    /// Kuruşu olan sayı. Posta kodu, işlem numarası, şube kodu ve kart numarası
+    /// da sayıya çevrilebiliyor; ekstrede tutarlar ise daima kuruş taşıyor.
+    /// Bu ayrım olmadan sayfa altbilgisindeki "34760" tutar sanılıp deftere
+    /// 34.760,00 TL yazılmıştı.
+    public static func isMoneyToken(_ token: String) -> Bool {
+        var text = token.trimmingCharacters(in: .whitespaces)
+            .replacingOccurrences(of: "TL", with: "")
+            .replacingOccurrences(of: "₺", with: "")
+        for marker in ["+", "-", "\u{2212}"] {
+            if text.hasPrefix(marker) { text.removeFirst() }
+            if text.hasSuffix(marker) { text.removeLast() }
+        }
+        guard let separator = text.lastIndex(where: { $0 == "," || $0 == "." }),
+              text.distance(from: text.index(after: separator), to: text.endIndex) == 2
+        else { return false }
+        return text.allSatisfy { $0.isNumber || $0 == "," || $0 == "." }
+    }
+
     private static func normalize(whole: String, fraction: String) -> Int? {
         guard whole.allSatisfy(\.isNumber) || whole.isEmpty,
               fraction.allSatisfy(\.isNumber), fraction.count <= 2 else { return nil }
