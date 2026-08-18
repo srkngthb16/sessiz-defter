@@ -11,6 +11,8 @@ public struct ParseReport: Hashable, Sendable {
     public let skippedRows: [SkipReason: Int]
     public let formatIdentifier: String
     public let bankName: String
+    /// Ekstrenin kendi yazdığı toplamlar; okunanla karşılaştırmak için.
+    public let declaredTotals: [StatementTotals.Declared]
 
     public enum SkipReason: String, Hashable, Sendable, CaseIterable {
         case noDate = "Tarih okunamadı"
@@ -22,13 +24,14 @@ public struct ParseReport: Hashable, Sendable {
 
     public init(totalLines: Int, candidateLines: Int, parsedRows: Int,
                 skippedRows: [SkipReason: Int], formatIdentifier: String,
-                bankName: String) {
+                bankName: String, declaredTotals: [StatementTotals.Declared] = []) {
         self.totalLines = totalLines
         self.candidateLines = candidateLines
         self.parsedRows = parsedRows
         self.skippedRows = skippedRows
         self.formatIdentifier = formatIdentifier
         self.bankName = bankName
+        self.declaredTotals = declaredTotals
     }
 
     public var skippedTotal: Int { skippedRows.values.reduce(0, +) }
@@ -119,7 +122,8 @@ extension ParseReport {
             parsedRows: result.rows.count,
             skippedRows: skipped,
             formatIdentifier: result.formatIdentifier,
-            bankName: bankName)
+            bankName: bankName,
+            declaredTotals: StatementTotals.declared(in: text))
     }
 }
 

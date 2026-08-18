@@ -312,3 +312,32 @@ struct CardAmountSafetyTests {
         #expect(result.rows.first?.amount.minorUnits == 12_050)
     }
 }
+
+/// Ekstrenin kendi yazdığı toplamlar. Onay ekranında okunanla yan yana durup
+/// ayrıştırma hatasını kullanıcıya gösteriyorlar.
+@Suite("Ekstre toplamları")
+struct StatementTotalsTests {
+    @Test("Kart ekstresindeki dönem borcu okunur")
+    func kartToplami() throws {
+        let text = try Fixture.text("halkbank-paraf-2026-08")
+        let totals = StatementTotals.declared(in: text)
+        #expect(!totals.isEmpty)
+        #expect(totals.contains { $0.label == "Hesap bakiyesi" && $0.amount.minorUnits == 207_537 })
+    }
+
+    @Test("Aynı toplam iki kez yazılsa da bir kez listelenir")
+    func tekrarEden() {
+        let text = """
+        Hesap Bakiyesi : 1,931.92 TL
+        Hesap Bakiyesi : 1,931.92 TL
+        Toplam Borç: 16.393,14
+        """
+        let totals = StatementTotals.declared(in: text)
+        #expect(totals.count == 2)
+    }
+
+    @Test("Toplam satırı yoksa liste boş, hata değil")
+    func toplamsiz() {
+        #expect(StatementTotals.declared(in: "01.01.2026 ORNEK 10,00 TL").isEmpty)
+    }
+}

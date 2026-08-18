@@ -160,11 +160,60 @@ public struct ImportFlowView: View {
 
     // MARK: C3
 
+    /// Ekstrenin kendi yazdığı toplam ile okunan toplam yan yana. Karar
+    /// kullanıcının: hangi toplamın hangi satır kümesine karşılık geldiği
+    /// bankadan bankaya değişiyor (kimi faizi katıyor, kimi katmıyor), otomatik
+    /// karşılaştırma yanlış alarm üretirdi. Gözle bakmak üretmiyor — cihaz
+    /// testinde 34.760 TL'lik hatayı ancak kullanıcı ekstreyi elle açınca
+    /// gördük; bu kart onu ilk ekranda gösterirdi.
+    private func totalsCheckCard(report: ParseReport, draft: ImportDraft) -> some View {
+        let expense = draft.rows.filter { $0.direction == .expense }
+            .reduce(Money.zero) { $0 + $1.amount }
+        let income = draft.rows.filter { $0.direction == .income }
+            .reduce(Money.zero) { $0 + $1.amount }
+
+        return Card {
+            VStack(alignment: .leading, spacing: Spacing.s) {
+                Text("Toplam denetimi")
+                    .font(.sd.titleSection)
+                    .foregroundStyle(Color.text.primary)
+                Text("Ekstrenin yazdığı toplamlarla okunanları karşılaştırın. Tutmuyorsa içe aktarmadan önce satırlara bakın.")
+                    .font(.sd.meta)
+                    .foregroundStyle(Color.text.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                ForEach(report.declaredTotals) { total in
+                    totalRow("Ekstre · \(total.label)", total.amount, isRead: false)
+                }
+                Divider().overlay(Color.border.divider)
+                totalRow("Okunan gider", expense, isRead: true)
+                totalRow("Okunan gelir", income, isRead: true)
+            }
+        }
+    }
+
+    private func totalRow(_ title: String, _ amount: Money, isRead: Bool) -> some View {
+        HStack {
+            Text(title)
+                .font(.sd.meta)
+                .foregroundStyle(isRead ? Color.text.primary : Color.text.secondary)
+            Spacer(minLength: Spacing.s)
+            Text(Fmt.amount(amount))
+                .font(.sd.amountRow)
+                .foregroundStyle(Color.text.primary)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
     private var reviewStep: some View {
         Group {
             if let draft = model.draft {
                 VStack(spacing: 0) {
                     ReviewCounters(draft: draft)
+
+                    if let report = model.report, !report.declaredTotals.isEmpty {
+                        totalsCheckCard(report: report, draft: draft)
+                    }
 
                     if let report = model.report {
                         Card {
